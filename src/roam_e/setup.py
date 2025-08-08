@@ -1,0 +1,28 @@
+from setuptools import find_packages, setup
+
+package_name = 'roam_e'
+
+setup(
+    name=package_name,
+    version='0.0.1',
+    packages=find_packages(exclude=['test']),
+    data_files=[
+        ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
+        ('share/' + package_name, ['package.xml']),
+        ('share/' + package_name + '/launch', ['launch/sensors_viz.launch.py']),
+        ('share/' + package_name + '/rviz', ['rviz/sensors_viz.rviz']),
+    ],
+    install_requires=['setuptools', 'rclpy', 'rplidar', 'adafruit-blinka', 'adafruit-circuitpython-bno055'],
+    zip_safe=True,
+    maintainer='you',
+    maintainer_email='igorsouzavazz@gmail.com',
+    description='IMU (BNO055) and LiDAR (RPLidar A1) publisher nodes with RViz2 visualization',
+    license='MIT',
+    tests_require=['pytest'],
+    entry_points={
+        'console_scripts': [
+            'bno055_imu_node = roam_e.imu_bno055_node:main',
+            'rplidar_a1_node = roam_e.rplidar_a1_node:main',
+        ],
+    },
+)

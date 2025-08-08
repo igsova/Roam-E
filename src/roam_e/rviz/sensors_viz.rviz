@@ -1,0 +1,30 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+Visualization Manager:
+  Class: ""
+  Enabled: true
+  Global Options:
+    Fixed Frame: laser_frame
+    Frame Rate: 30
+  Displays:
+    - Class: rviz_default_plugins/LaserScan
+      Name: LiDAR
+      Enabled: true
+      Topic: /scan
+      Queue Size: 5
+      Size (m): 0.03
+      Color: 25; 255; 0
+    - Class: rviz_default_plugins/IMU
+      Name: IMU
+      Enabled: true
+      Topic: /imu
+      Queue Size: 5
+      Axes Length: 0.3
+      Axes Radius: 0.02
+  Tools:
+    - Class: rviz_default_plugins/MoveCamera
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 5
