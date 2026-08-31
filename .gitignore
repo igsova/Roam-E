@@ -1,0 +1,30 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# ROS 2 / colcon generated output
+build/
+install/
+log/
+
+# Editors and operating systems
+.DS_Store
+.vscode/
+.idea/
+*~
+
+# Superseded local motor-controller copies
+/motor_controller.ino
+/motor_controller_bk.ino
+/motor_controller_v*.ino
+/motor_controller/motor_controller_v*.py
+
+# Local IMU source backups
+/src/roam_e/roam_e/imu_bno055_node_bk.py
+/src/roam_e/roam_e/imu_bno055_node_old*.py
+
+# Superseded physical calibration
+/config/bno055_calibration_before_plate_rotation.json
