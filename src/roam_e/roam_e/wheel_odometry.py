@@ -16,6 +16,10 @@ class MotorTelemetry:
     right_ticks: int
     left_pwm: int
     right_pwm: int
+    left_target_ticks_per_second: int = None
+    right_target_ticks_per_second: int = None
+    left_measured_ticks_per_second: int = None
+    right_measured_ticks_per_second: int = None
 
 
 @dataclass(frozen=True)
@@ -40,12 +44,14 @@ def parse_motor_telemetry(line):
 
     if not fields or fields[0] != 'T':
         return None
-    if len(fields) != 6:
-        raise ValueError('telemetry must contain six comma-separated fields')
+    if len(fields) not in (6, 10):
+        raise ValueError(
+            'telemetry must contain six (v1) or ten (v2) fields'
+        )
 
     try:
         controller_time_ms, left_ticks, right_ticks, left_pwm, right_pwm = (
-            int(value, 10) for value in fields[1:]
+            int(value, 10) for value in fields[1:6]
         )
     except ValueError as error:
         raise ValueError('telemetry contains a non-integer field') from error
@@ -59,12 +65,28 @@ def parse_motor_telemetry(line):
     if not -255 <= left_pwm <= 255 or not -255 <= right_pwm <= 255:
         raise ValueError('PWM value is outside Arduino range')
 
+    extended = [None, None, None, None]
+    if len(fields) == 10:
+        try:
+            extended = [int(value, 10) for value in fields[6:10]]
+        except ValueError as error:
+            raise ValueError(
+                'extended telemetry contains a non-integer field'
+            ) from error
+
+        if not all(INT32_MIN <= value <= INT32_MAX for value in extended):
+            raise ValueError('wheel velocity is outside int32 range')
+
     return MotorTelemetry(
         controller_time_ms=controller_time_ms,
         left_ticks=left_ticks,
         right_ticks=right_ticks,
         left_pwm=left_pwm,
         right_pwm=right_pwm,
+        left_target_ticks_per_second=extended[0],
+        right_target_ticks_per_second=extended[1],
+        left_measured_ticks_per_second=extended[2],
+        right_measured_ticks_per_second=extended[3],
     )
 
 

@@ -36,6 +36,16 @@ class MotorTelemetryTest(unittest.TestCase):
             parse_motor_telemetry('READY,ROAM_E_MOTOR_CONTROLLER,1')
         )
 
+    def test_extended_velocity_telemetry_is_parsed(self):
+        parsed = parse_motor_telemetry(
+            'T,1234,-10,20,-80,90,300,310,295,305'
+        )
+
+        self.assertEqual(parsed.left_target_ticks_per_second, 300)
+        self.assertEqual(parsed.right_target_ticks_per_second, 310)
+        self.assertEqual(parsed.left_measured_ticks_per_second, 295)
+        self.assertEqual(parsed.right_measured_ticks_per_second, 305)
+
     def test_malformed_telemetry_is_rejected(self):
         for line in (
             'T,1,2,3,4',

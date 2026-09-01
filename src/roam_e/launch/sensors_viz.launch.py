@@ -25,6 +25,34 @@ def generate_launch_description():
     wheel_radius = LaunchConfiguration('wheel_radius')
     wheel_separation = LaunchConfiguration('wheel_separation')
     publish_odom_tf = LaunchConfiguration('publish_odom_tf')
+    enable_motor_control = LaunchConfiguration('enable_motor_control')
+    use_stamped_cmd_vel = LaunchConfiguration('use_stamped_cmd_vel')
+    cmd_vel_topic = LaunchConfiguration('cmd_vel_topic')
+    command_timeout = LaunchConfiguration('command_timeout')
+    command_rate = LaunchConfiguration('command_rate')
+    max_linear_velocity = LaunchConfiguration('max_linear_velocity')
+    max_angular_velocity = LaunchConfiguration('max_angular_velocity')
+    max_wheel_ticks_per_second = LaunchConfiguration(
+        'max_wheel_ticks_per_second'
+    )
+    velocity_pid_kp = LaunchConfiguration('velocity_pid_kp')
+    velocity_pid_ki = LaunchConfiguration('velocity_pid_ki')
+    velocity_feedforward_kv = LaunchConfiguration(
+        'velocity_feedforward_kv'
+    )
+    velocity_static_pwm = LaunchConfiguration('velocity_static_pwm')
+    left_forward_static_pwm = LaunchConfiguration(
+        'left_forward_static_pwm'
+    )
+    left_reverse_static_pwm = LaunchConfiguration(
+        'left_reverse_static_pwm'
+    )
+    right_forward_static_pwm = LaunchConfiguration(
+        'right_forward_static_pwm'
+    )
+    right_reverse_static_pwm = LaunchConfiguration(
+        'right_reverse_static_pwm'
+    )
 
     # Convert a hexadecimal or decimal string to an integer at launch time.
     imu_addr_int = PythonExpression(["str(int('", imu_addr, "', 0))"])
@@ -59,6 +87,49 @@ def generate_launch_description():
         DeclareLaunchArgument('wheel_radius', default_value='0.033875'),
         DeclareLaunchArgument('wheel_separation', default_value='0.173630'),
         DeclareLaunchArgument('publish_odom_tf', default_value='true'),
+        DeclareLaunchArgument(
+            'enable_motor_control',
+            default_value='false',
+            description=(
+                'Permit cmd_vel to drive the motors. Defaults to false so '
+                'the launch remains encoder-only and cannot move the robot.'
+            ),
+        ),
+        DeclareLaunchArgument(
+            'use_stamped_cmd_vel',
+            default_value='true',
+            description='Subscribe to TwistStamped instead of Twist.',
+        ),
+        DeclareLaunchArgument('cmd_vel_topic', default_value='cmd_vel'),
+        DeclareLaunchArgument('command_timeout', default_value='0.25'),
+        DeclareLaunchArgument('command_rate', default_value='20.0'),
+        DeclareLaunchArgument(
+            'max_linear_velocity', default_value='0.15'
+        ),
+        DeclareLaunchArgument(
+            'max_angular_velocity', default_value='1.5'
+        ),
+        DeclareLaunchArgument(
+            'max_wheel_ticks_per_second', default_value='1200.0'
+        ),
+        DeclareLaunchArgument('velocity_pid_kp', default_value='0.080'),
+        DeclareLaunchArgument('velocity_pid_ki', default_value='0.200'),
+        DeclareLaunchArgument(
+            'velocity_feedforward_kv', default_value='0.100'
+        ),
+        DeclareLaunchArgument('velocity_static_pwm', default_value='45'),
+        DeclareLaunchArgument(
+            'left_forward_static_pwm', default_value='45'
+        ),
+        DeclareLaunchArgument(
+            'left_reverse_static_pwm', default_value='36'
+        ),
+        DeclareLaunchArgument(
+            'right_forward_static_pwm', default_value='40'
+        ),
+        DeclareLaunchArgument(
+            'right_reverse_static_pwm', default_value='39'
+        ),
         DeclareLaunchArgument(
             'publish_joints',
             default_value=PythonExpression([
@@ -103,6 +174,52 @@ def generate_launch_description():
                 ),
                 'publish_odom_tf': ParameterValue(
                     publish_odom_tf, value_type=bool
+                ),
+                'enable_motor_control': ParameterValue(
+                    enable_motor_control, value_type=bool
+                ),
+                'use_stamped_cmd_vel': ParameterValue(
+                    use_stamped_cmd_vel, value_type=bool
+                ),
+                'cmd_vel_topic': cmd_vel_topic,
+                'command_timeout': ParameterValue(
+                    command_timeout, value_type=float
+                ),
+                'command_rate': ParameterValue(
+                    command_rate, value_type=float
+                ),
+                'max_linear_velocity': ParameterValue(
+                    max_linear_velocity, value_type=float
+                ),
+                'max_angular_velocity': ParameterValue(
+                    max_angular_velocity, value_type=float
+                ),
+                'max_wheel_ticks_per_second': ParameterValue(
+                    max_wheel_ticks_per_second, value_type=float
+                ),
+                'velocity_pid_kp': ParameterValue(
+                    velocity_pid_kp, value_type=float
+                ),
+                'velocity_pid_ki': ParameterValue(
+                    velocity_pid_ki, value_type=float
+                ),
+                'velocity_feedforward_kv': ParameterValue(
+                    velocity_feedforward_kv, value_type=float
+                ),
+                'velocity_static_pwm': ParameterValue(
+                    velocity_static_pwm, value_type=int
+                ),
+                'left_forward_static_pwm': ParameterValue(
+                    left_forward_static_pwm, value_type=int
+                ),
+                'left_reverse_static_pwm': ParameterValue(
+                    left_reverse_static_pwm, value_type=int
+                ),
+                'right_forward_static_pwm': ParameterValue(
+                    right_forward_static_pwm, value_type=int
+                ),
+                'right_reverse_static_pwm': ParameterValue(
+                    right_reverse_static_pwm, value_type=int
                 ),
             }],
             output='screen',
