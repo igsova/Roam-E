@@ -14,6 +14,7 @@ setup(
             [
                 'launch/sensors_viz.launch.py',
                 'launch/roam_e_imu.launch.py',
+                'launch/drive.launch.py',
             ],
         ),
         ('share/' + package_name + '/rviz', ['rviz/sensors_viz.rviz']),
@@ -29,7 +30,10 @@ setup(
     zip_safe=True,
     maintainer='you',
     maintainer_email='igorsouzavazz@gmail.com',
-    description='IMU (BNO055) and LiDAR (RPLidar A1) publisher nodes with RViz2 visualization',
+    description=(
+        'Sensor visualization, wheel odometry, and guarded differential '
+        'drive control for Roam-E'
+    ),
     license='MIT',
     tests_require=['pytest'],
     entry_points={

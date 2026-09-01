@@ -207,22 +207,23 @@ class EncoderOdometryNode(Node):
         self.transform_broadcaster = (
             TransformBroadcaster(self) if self.publish_odom_tf else None
         )
-        self.cmd_vel_subscription = None
-        if self.enable_motor_control:
-            message_type = (
-                TwistStamped if self.use_stamped_cmd_vel else Twist
-            )
-            callback = (
-                self._stamped_cmd_vel_callback
-                if self.use_stamped_cmd_vel
-                else self._cmd_vel_callback
-            )
-            self.cmd_vel_subscription = self.create_subscription(
-                message_type,
-                self.cmd_vel_topic,
-                callback,
-                10,
-            )
+        message_type = (
+            TwistStamped if self.use_stamped_cmd_vel else Twist
+        )
+        callback = (
+            self._stamped_cmd_vel_callback
+            if self.use_stamped_cmd_vel
+            else self._cmd_vel_callback
+        )
+        # Keep the standard velocity interface discoverable to tools such as
+        # Foxglove even while motor output is disarmed.  The callback and the
+        # serial writer both enforce the independent motor-output gate.
+        self.cmd_vel_subscription = self.create_subscription(
+            message_type,
+            self.cmd_vel_topic,
+            callback,
+            10,
+        )
 
         self.connection = None
         self.line_buffer = bytearray()
@@ -273,7 +274,7 @@ class EncoderOdometryNode(Node):
         else:
             self.get_logger().info(
                 'Encoder odometry is read-only: no motor commands will be '
-                'sent.'
+                f'sent. Commands on {self.cmd_vel_topic} are ignored.'
             )
 
         self.get_logger().info(
@@ -507,6 +508,9 @@ class EncoderOdometryNode(Node):
         self._accept_twist(message)
 
     def _accept_twist(self, twist):
+        if not self.enable_motor_control:
+            return
+
         now = time.monotonic()
         try:
             targets = twist_to_wheel_targets(

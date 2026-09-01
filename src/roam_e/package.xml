@@ -3,7 +3,7 @@
 <package format="3">
   <name>roam_e</name>
   <version>0.0.1</version>
-  <description>IMU (BNO055) and LiDAR (RPLidar A1) publisher nodes with RViz2 visualization</description>
+  <description>Sensor visualization, wheel odometry, and guarded differential drive control for Roam-E</description>
   <maintainer email="you@example.com">you</maintainer>
   <license>MIT</license>
 
@@ -20,6 +20,8 @@
   <exec_depend>diagnostic_msgs</exec_depend>
   <exec_depend>python3-smbus2</exec_depend>
   <exec_depend>python3-serial</exec_depend>
+  <exec_depend>foxglove_bridge</exec_depend>
+  <exec_depend>teleop_twist_keyboard</exec_depend>
 
   <export>
     <build_type>ament_python</build_type>

@@ -49,3 +49,42 @@ Set `use_stamped_cmd_vel:=false` only for a source that publishes the older
 unstamped `geometry_msgs/msg/Twist` form. Limits and initial controller gains
 are exposed as launch arguments; tune them using lifted-wheel tests before
 driving on the floor.
+
+## Keyboard and Foxglove driving
+
+The dedicated drive launch uses the common `geometry_msgs/msg/Twist` form so
+both Foxglove Teleop and `teleop_twist_keyboard` can publish on `/cmd_vel`.
+It starts disarmed unless the motor gate is explicitly enabled:
+
+```bash
+ros2 launch roam_e drive.launch.py arm_motors:=true
+```
+
+The drive launch starts the sensors and Foxglove bridge, limits the robot to
+0.08 m/s and 0.6 rad/s, and retains the 250 ms ROS command timeout plus the
+350 ms Nano watchdog.
+
+For keyboard control, open a second SSH terminal and run:
+
+```bash
+source /opt/ros/jazzy/setup.zsh
+source ~/Roam-E/install/setup.zsh
+ros2 run teleop_twist_keyboard teleop_twist_keyboard \
+  --ros-args -r cmd_vel:=/cmd_vel
+```
+
+Hold `i` for forward, `,` for reverse, `j`/`l` to turn, and press `k` (or any
+unmapped key) for an immediate stop. The keyboard package's larger requested
+speeds are clamped by the drive node. Releasing a key also causes the robot to
+stop within 250 ms when key repeat ends.
+
+In Foxglove, add a Teleop panel and configure:
+
+- Topic: `/cmd_vel`
+- Publish rate: `10 Hz`
+- Stop on release: enabled
+- Up/down: `linear.x` = `0.06` / `-0.06`
+- Left/right: `angular.z` = `0.4` / `-0.4`
+
+Use only one teleoperation source at a time. Stop the launch with `Ctrl-C` to
+send `STOP` and close the serial connection cleanly.
