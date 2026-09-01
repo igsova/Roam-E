@@ -84,8 +84,8 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'encoder_ticks_per_revolution', default_value='748'
         ),
-        DeclareLaunchArgument('wheel_radius', default_value='0.033875'),
-        DeclareLaunchArgument('wheel_separation', default_value='0.173630'),
+        DeclareLaunchArgument('wheel_radius', default_value='0.033975'),
+        DeclareLaunchArgument('wheel_separation', default_value='0.175150'),
         DeclareLaunchArgument('publish_odom_tf', default_value='true'),
         DeclareLaunchArgument(
             'enable_motor_control',

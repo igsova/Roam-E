@@ -66,8 +66,8 @@ class DifferentialDriveTrackerTest(unittest.TestCase):
     def setUp(self):
         self.tracker = DifferentialDriveTracker(
             ticks_per_revolution=748,
-            wheel_radius=0.033875,
-            wheel_separation=0.173630,
+            wheel_radius=0.033975,
+            wheel_separation=0.175150,
         )
 
     def test_one_wheel_revolution_drives_straight_by_circumference(self):
@@ -77,7 +77,7 @@ class DifferentialDriveTrackerTest(unittest.TestCase):
 
         self.assertAlmostEqual(update.left_position, 2.0 * math.pi)
         self.assertAlmostEqual(update.right_position, 2.0 * math.pi)
-        self.assertAlmostEqual(update.x, 2.0 * math.pi * 0.033875)
+        self.assertAlmostEqual(update.x, 2.0 * math.pi * 0.033975)
         self.assertAlmostEqual(update.y, 0.0)
         self.assertAlmostEqual(update.yaw, 0.0)
 

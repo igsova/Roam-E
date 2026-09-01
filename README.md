@@ -28,6 +28,10 @@ The floor-tested DRV8871 calibration is `FF,75,60,75,60`, with `Kv=0` and a
 hard PWM ceiling of 100. Repeat the low-speed and maximum-speed tests after
 changing the motors, bridge, battery, wheels, or robot mass.
 
+The floor- and IMU-calibrated odometry geometry is a `0.033975 m` effective
+wheel radius and `0.175150 m` effective wheel separation. These control values
+intentionally remain separate from the physical CAD dimensions in the URDF.
+
 Motor commands are disabled by default. The normal visualization launch is
 therefore read-only:
 

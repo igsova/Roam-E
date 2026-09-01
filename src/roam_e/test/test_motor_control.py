@@ -11,9 +11,9 @@ from roam_e.motor_control import (
 
 class TwistConversionTest(unittest.TestCase):
     def setUp(self):
-        self.metres_per_tick = 2.0 * math.pi * 0.033875 / 748
+        self.metres_per_tick = 2.0 * math.pi * 0.033975 / 748
         self.arguments = {
-            'wheel_separation': 0.173630,
+            'wheel_separation': 0.175150,
             'metres_per_tick': self.metres_per_tick,
             'max_linear_velocity': 0.15,
             'max_angular_velocity': 1.5,
