@@ -24,9 +24,9 @@ Both safety layers require continuously refreshed commands. ROS stops after
 250 ms without a fresh `cmd_vel`; the Nano independently removes motor power
 after 350 ms.
 
-The initial floor calibration is `FF,45,36,40,39`. These values are starting
-points for the current motors, bridge, battery, and tires; repeat low-speed
-tests after changing any of that hardware.
+The floor-tested DRV8871 calibration is `FF,75,60,75,60`, with `Kv=0` and a
+hard PWM ceiling of 100. Repeat the low-speed and maximum-speed tests after
+changing the motors, bridge, battery, wheels, or robot mass.
 
 Motor commands are disabled by default. The normal visualization launch is
 therefore read-only:
@@ -61,8 +61,9 @@ ros2 launch roam_e drive.launch.py arm_motors:=true
 ```
 
 The drive launch starts the sensors and Foxglove bridge, limits the robot to
-0.08 m/s and 0.6 rad/s, and retains the 250 ms ROS command timeout plus the
-350 ms Nano watchdog.
+0.20 m/s, 0.6 rad/s, and 700 wheel ticks/s, and retains the 250 ms ROS command
+timeout plus the 350 ms Nano watchdog. The Nano independently caps all motor
+output at PWM 100.
 
 For keyboard control, open a second SSH terminal and run:
 
@@ -85,6 +86,13 @@ In Foxglove, add a Teleop panel and configure:
 - Stop on release: enabled
 - Up/down: `linear.x` = `0.06` / `-0.06`
 - Left/right: `angular.z` = `0.4` / `-0.4`
+
+That is the Normal panel. Duplicate it for a Fast panel and change only:
+
+- Up/down: `linear.x` = `0.18` / `-0.18`
+
+The Fast value corresponds to the measured PWM-100 capability while leaving
+enough margin for the encoder controller to keep the wheels synchronized.
 
 Use only one teleoperation source at a time. Stop the launch with `Ctrl-C` to
 send `STOP` and close the serial connection cleanly.

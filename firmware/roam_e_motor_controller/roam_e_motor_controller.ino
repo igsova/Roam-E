@@ -2,14 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Motor driver pins
-const uint8_t PWMA = 10;
-const uint8_t AIN1 = 5;
-const uint8_t AIN2 = 4;
+// Two DRV8871 carriers, one per motor. Both inputs are PWM-capable so
+// forward and reverse use the same drive/coast modulation strategy.
+const uint8_t LEFT_IN1 = 10;
+const uint8_t LEFT_IN2 = 5;
 
-const uint8_t PWMB = 9;
-const uint8_t BIN1 = 7;
-const uint8_t BIN2 = 8;
+const uint8_t RIGHT_IN1 = 9;
+const uint8_t RIGHT_IN2 = 6;
 
 // Encoder pins
 const uint8_t ENCODER_A_A = 2;
@@ -20,8 +19,8 @@ const uint8_t ENCODER_B_B = 12;
 // Measured using CHANGE interrupts on encoder channel A (x2 decoding).
 const long ENCODER_TICKS_PER_REVOLUTION = 748;
 
-// Temporary protection limits while tuning the drive base.
-const int MAX_SAFE_PWM = 160;
+// Floor-tested ceiling for the DRV8871 drive modules.
+const int MAX_SAFE_PWM = 100;
 const long MAX_TARGET_TICKS_PER_SECOND = 2000;
 
 // A moving command must be refreshed before this expires.
@@ -31,16 +30,16 @@ const unsigned long MOTOR_WATCHDOG_MS = 350;
 const unsigned long VELOCITY_CONTROL_INTERVAL_MS = 20;
 const unsigned long TELEMETRY_INTERVAL_MS = 50;
 
-// Conservative starting values. They can be changed at runtime with:
+// Floor-tested DRV8871 starting values. They can be changed at runtime with:
 // PID,<kp_milli>,<ki_milli>,<kv_milli>,<static_pwm>
 // FF,<left_forward>,<left_reverse>,<right_forward>,<right_reverse>
 float velocityKp = 0.080f;
 float velocityKi = 0.200f;
-float velocityKv = 0.100f;
-int leftForwardStaticPwm = 45;
-int leftReverseStaticPwm = 36;
-int rightForwardStaticPwm = 40;
-int rightReverseStaticPwm = 39;
+float velocityKv = 0.000f;
+int leftForwardStaticPwm = 75;
+int leftReverseStaticPwm = 60;
+int rightForwardStaticPwm = 75;
+int rightReverseStaticPwm = 60;
 
 const float VELOCITY_FILTER_ALPHA = 0.35f;
 const float INTEGRAL_PWM_LIMIT = 45.0f;
@@ -106,13 +105,15 @@ void readNormalizedEncoders(long &left, long &right) {
 }
 
 void removeMotorPower() {
-  analogWrite(PWMA, 0);
-  analogWrite(PWMB, 0);
+  analogWrite(LEFT_IN1, 0);
+  analogWrite(LEFT_IN2, 0);
+  analogWrite(RIGHT_IN1, 0);
+  analogWrite(RIGHT_IN2, 0);
 
-  digitalWrite(AIN1, LOW);
-  digitalWrite(AIN2, LOW);
-  digitalWrite(BIN1, LOW);
-  digitalWrite(BIN2, LOW);
+  digitalWrite(LEFT_IN1, LOW);
+  digitalWrite(LEFT_IN2, LOW);
+  digitalWrite(RIGHT_IN1, LOW);
+  digitalWrite(RIGHT_IN2, LOW);
 
   currentLeftPwm = 0;
   currentRightPwm = 0;
@@ -134,30 +135,19 @@ void stopControl() {
   removeMotorPower();
 }
 
-void setLeftDirection(int pwm) {
+void setDrv8871Output(uint8_t in1, uint8_t in2, int pwm) {
   if (pwm > 0) {
-    digitalWrite(AIN1, LOW);
-    digitalWrite(AIN2, HIGH);
+    // Preserve the previous bridge polarity: IN1 low, PWM on IN2.
+    analogWrite(in1, 0);
+    analogWrite(in2, pwm);
   } else if (pwm < 0) {
-    digitalWrite(AIN1, HIGH);
-    digitalWrite(AIN2, LOW);
+    analogWrite(in2, 0);
+    analogWrite(in1, -pwm);
   } else {
-    digitalWrite(AIN1, LOW);
-    digitalWrite(AIN2, LOW);
-  }
-}
-
-void setRightDirection(int pwm) {
-  // Right motor polarity is reversed by its physical mounting.
-  if (pwm > 0) {
-    digitalWrite(BIN1, LOW);
-    digitalWrite(BIN2, HIGH);
-  } else if (pwm < 0) {
-    digitalWrite(BIN1, HIGH);
-    digitalWrite(BIN2, LOW);
-  } else {
-    digitalWrite(BIN1, LOW);
-    digitalWrite(BIN2, LOW);
+    analogWrite(in1, 0);
+    analogWrite(in2, 0);
+    digitalWrite(in1, LOW);
+    digitalWrite(in2, LOW);
   }
 }
 
@@ -182,15 +172,15 @@ void applyMotorOutput(int leftPwm, int rightPwm) {
 
   // Remove power briefly before reversing either motor.
   if (leftReversing || rightReversing) {
-    analogWrite(PWMA, 0);
-    analogWrite(PWMB, 0);
+    analogWrite(LEFT_IN1, 0);
+    analogWrite(LEFT_IN2, 0);
+    analogWrite(RIGHT_IN1, 0);
+    analogWrite(RIGHT_IN2, 0);
     delayMicroseconds(100);
   }
 
-  setLeftDirection(leftPwm);
-  setRightDirection(rightPwm);
-  analogWrite(PWMA, abs(leftPwm));
-  analogWrite(PWMB, abs(rightPwm));
+  setDrv8871Output(LEFT_IN1, LEFT_IN2, leftPwm);
+  setDrv8871Output(RIGHT_IN1, RIGHT_IN2, rightPwm);
 
   currentLeftPwm = leftPwm;
   currentRightPwm = rightPwm;
@@ -707,19 +697,15 @@ void publishTelemetry() {
 
 void setup() {
   // Preload all outputs LOW before enabling them.
-  digitalWrite(PWMA, LOW);
-  pinMode(PWMA, OUTPUT);
-  digitalWrite(AIN1, LOW);
-  pinMode(AIN1, OUTPUT);
-  digitalWrite(AIN2, LOW);
-  pinMode(AIN2, OUTPUT);
+  digitalWrite(LEFT_IN1, LOW);
+  pinMode(LEFT_IN1, OUTPUT);
+  digitalWrite(LEFT_IN2, LOW);
+  pinMode(LEFT_IN2, OUTPUT);
 
-  digitalWrite(PWMB, LOW);
-  pinMode(PWMB, OUTPUT);
-  digitalWrite(BIN1, LOW);
-  pinMode(BIN1, OUTPUT);
-  digitalWrite(BIN2, LOW);
-  pinMode(BIN2, OUTPUT);
+  digitalWrite(RIGHT_IN1, LOW);
+  pinMode(RIGHT_IN1, OUTPUT);
+  digitalWrite(RIGHT_IN2, LOW);
+  pinMode(RIGHT_IN2, OUTPUT);
 
   stopControl();
 

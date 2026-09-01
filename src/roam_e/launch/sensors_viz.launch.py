@@ -115,20 +115,20 @@ def generate_launch_description():
         DeclareLaunchArgument('velocity_pid_kp', default_value='0.080'),
         DeclareLaunchArgument('velocity_pid_ki', default_value='0.200'),
         DeclareLaunchArgument(
-            'velocity_feedforward_kv', default_value='0.100'
+            'velocity_feedforward_kv', default_value='0.000'
         ),
-        DeclareLaunchArgument('velocity_static_pwm', default_value='45'),
+        DeclareLaunchArgument('velocity_static_pwm', default_value='75'),
         DeclareLaunchArgument(
-            'left_forward_static_pwm', default_value='45'
-        ),
-        DeclareLaunchArgument(
-            'left_reverse_static_pwm', default_value='36'
+            'left_forward_static_pwm', default_value='75'
         ),
         DeclareLaunchArgument(
-            'right_forward_static_pwm', default_value='40'
+            'left_reverse_static_pwm', default_value='60'
         ),
         DeclareLaunchArgument(
-            'right_reverse_static_pwm', default_value='39'
+            'right_forward_static_pwm', default_value='75'
+        ),
+        DeclareLaunchArgument(
+            'right_reverse_static_pwm', default_value='60'
         ),
         DeclareLaunchArgument(
             'publish_joints',
