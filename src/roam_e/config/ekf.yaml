@@ -1,0 +1,42 @@
+ekf_filter_node:
+  ros__parameters:
+    frequency: 20.0
+    sensor_timeout: 0.2
+    two_d_mode: true
+    publish_tf: true
+    publish_acceleration: false
+    print_diagnostics: true
+    dynamic_process_noise_covariance: true
+
+    map_frame: map
+    odom_frame: odom
+    base_link_frame: base_footprint
+    world_frame: odom
+
+    # The encoder odometry pose is already integrated from these velocities.
+    # Fuse only body-frame velocity so the same encoder source is not counted
+    # twice. The measured zero lateral velocity is useful for this
+    # nonholonomic differential-drive base.
+    odom0: /wheel/odometry
+    odom0_config: [false, false, false,
+                   false, false, false,
+                   true,  true,  false,
+                   false, false, true,
+                   false, false, false]
+    odom0_queue_size: 10
+    odom0_differential: false
+    odom0_relative: false
+
+    # IMUPLUS has no magnetic north reference. Treat its initial yaw as zero,
+    # then fuse relative yaw and yaw rate. Linear acceleration is deliberately
+    # excluded until its noise and bias are characterized on the moving robot.
+    imu0: /imu/data
+    imu0_config: [false, false, false,
+                  false, false, true,
+                  false, false, false,
+                  false, false, true,
+                  false, false, false]
+    imu0_queue_size: 20
+    imu0_differential: false
+    imu0_relative: true
+    imu0_remove_gravitational_acceleration: false

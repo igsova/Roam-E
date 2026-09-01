@@ -54,6 +54,30 @@ unstamped `geometry_msgs/msg/Twist` form. Limits and initial controller gains
 are exposed as launch arguments; tune them using lifted-wheel tests before
 driving on the floor.
 
+## Local odometry fusion
+
+The normal sensor and drive launches start a `robot_localization` EKF. Raw
+encoder integration remains available on `/wheel/odometry`; the fused local
+estimate is published on `/odometry/filtered`. The EKF is the only publisher
+of the `odom -> base_footprint` transform. Dynamic process-noise scaling keeps
+the pose covariance from growing unnecessarily while the robot is stationary.
+
+The planar filter uses forward and lateral wheel velocity plus wheel yaw rate,
+and relative IMUPLUS yaw plus yaw rate. It intentionally excludes the
+encoder-integrated pose and IMU acceleration so correlated wheel measurements
+are not counted twice and uncharacterized acceleration bias does not enter the
+estimate.
+
+To diagnose the raw wheel estimate without the EKF, launch with:
+
+```bash
+ros2 launch roam_e sensors_viz.launch.py \
+  use_rviz:=false \
+  use_ekf:=false
+```
+
+In that fallback mode the encoder node resumes publishing the odometry TF.
+
 ## Keyboard and Foxglove driving
 
 The dedicated drive launch uses the common `geometry_msgs/msg/Twist` form so

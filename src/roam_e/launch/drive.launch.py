@@ -14,6 +14,7 @@ def generate_launch_description():
     use_rviz = LaunchConfiguration('use_rviz')
     use_foxglove = LaunchConfiguration('use_foxglove')
     foxglove_port = LaunchConfiguration('foxglove_port')
+    use_ekf = LaunchConfiguration('use_ekf')
     cmd_vel_topic = LaunchConfiguration('cmd_vel_topic')
     max_linear_velocity = LaunchConfiguration('max_linear_velocity')
     max_angular_velocity = LaunchConfiguration('max_angular_velocity')
@@ -31,6 +32,7 @@ def generate_launch_description():
         ),
         launch_arguments={
             'use_rviz': use_rviz,
+            'use_ekf': use_ekf,
             'enable_motor_control': arm_motors,
             # Foxglove Teleop supports geometry_msgs/msg/Twist.
             'use_stamped_cmd_vel': 'false',
@@ -75,6 +77,13 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument('use_rviz', default_value='false'),
         DeclareLaunchArgument('use_foxglove', default_value='true'),
+        DeclareLaunchArgument(
+            'use_ekf',
+            default_value='true',
+            description=(
+                'Fuse wheel odometry and IMU data into odometry/filtered.'
+            ),
+        ),
         DeclareLaunchArgument('foxglove_port', default_value='8765'),
         DeclareLaunchArgument('cmd_vel_topic', default_value='cmd_vel'),
         DeclareLaunchArgument(

@@ -17,6 +17,7 @@ setup(
                 'launch/drive.launch.py',
             ],
         ),
+        ('share/' + package_name + '/config', ['config/ekf.yaml']),
         ('share/' + package_name + '/rviz', ['rviz/sensors_viz.rviz']),
     ],
     install_requires=[

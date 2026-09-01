@@ -24,6 +24,8 @@ def generate_launch_description():
     )
     wheel_radius = LaunchConfiguration('wheel_radius')
     wheel_separation = LaunchConfiguration('wheel_separation')
+    use_ekf = LaunchConfiguration('use_ekf')
+    ekf_params_file = LaunchConfiguration('ekf_params_file')
     publish_odom_tf = LaunchConfiguration('publish_odom_tf')
     enable_motor_control = LaunchConfiguration('enable_motor_control')
     use_stamped_cmd_vel = LaunchConfiguration('use_stamped_cmd_vel')
@@ -56,6 +58,13 @@ def generate_launch_description():
 
     # Convert a hexadecimal or decimal string to an integer at launch time.
     imu_addr_int = PythonExpression(["str(int('", imu_addr, "', 0))"])
+    wheel_publish_odom_tf = PythonExpression([
+        "'false' if '",
+        use_ekf,
+        "'.lower() == 'true' else '",
+        publish_odom_tf,
+        "'",
+    ])
 
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -86,7 +95,29 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument('wheel_radius', default_value='0.033975'),
         DeclareLaunchArgument('wheel_separation', default_value='0.175150'),
-        DeclareLaunchArgument('publish_odom_tf', default_value='true'),
+        DeclareLaunchArgument(
+            'use_ekf',
+            default_value='true',
+            description=(
+                'Fuse wheel odometry and IMU data with robot_localization. '
+                'When enabled, the EKF is the sole odom TF publisher.'
+            ),
+        ),
+        DeclareLaunchArgument(
+            'ekf_params_file',
+            default_value=PathJoinSubstitution([
+                FindPackageShare('roam_e'),
+                'config',
+                'ekf.yaml',
+            ]),
+        ),
+        DeclareLaunchArgument(
+            'publish_odom_tf',
+            default_value='true',
+            description=(
+                'Publish raw wheel odom TF only when use_ekf is false.'
+            ),
+        ),
         DeclareLaunchArgument(
             'enable_motor_control',
             default_value='false',
@@ -173,7 +204,7 @@ def generate_launch_description():
                     wheel_separation, value_type=float
                 ),
                 'publish_odom_tf': ParameterValue(
-                    publish_odom_tf, value_type=bool
+                    wheel_publish_odom_tf, value_type=bool
                 ),
                 'enable_motor_control': ParameterValue(
                     enable_motor_control, value_type=bool
@@ -222,6 +253,15 @@ def generate_launch_description():
                     right_reverse_static_pwm, value_type=int
                 ),
             }],
+            output='screen',
+        ),
+
+        Node(
+            package='robot_localization',
+            executable='ekf_node',
+            name='ekf_filter_node',
+            condition=IfCondition(use_ekf),
+            parameters=[ekf_params_file],
             output='screen',
         ),
 
