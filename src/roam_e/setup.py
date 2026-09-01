@@ -18,7 +18,14 @@ setup(
         ),
         ('share/' + package_name + '/rviz', ['rviz/sensors_viz.rviz']),
     ],
-    install_requires=['setuptools', 'rclpy', 'rplidar', 'adafruit-blinka', 'adafruit-circuitpython-bno055'],
+    install_requires=[
+        'setuptools',
+        'rclpy',
+        'pyserial',
+        'rplidar',
+        'adafruit-blinka',
+        'adafruit-circuitpython-bno055',
+    ],
     zip_safe=True,
     maintainer='you',
     maintainer_email='igorsouzavazz@gmail.com',
@@ -28,6 +35,7 @@ setup(
     entry_points={
         'console_scripts': [
             'bno055_imu_node = roam_e.imu_bno055_node:main',
+            'encoder_odometry_node = roam_e.encoder_odometry_node:main',
             'rplidar_a1_node = roam_e.rplidar_a1_node:main',
         ],
     },
