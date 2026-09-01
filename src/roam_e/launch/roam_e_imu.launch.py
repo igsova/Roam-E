@@ -1,27 +1,30 @@
 #!/usr/bin/env python3
 
 from launch import LaunchDescription
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import PathJoinSubstitution
 from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
     return LaunchDescription(
         [
-            Node(
-                package='tf2_ros',
-                executable='static_transform_publisher',
-                name='base_to_imu_static_transform',
-                arguments=[
-                    '--x', '-0.030',
-                    '--y', '0.000',
-                    '--z', '0.105',
-                    '--roll', '3.141592653589793',
-                    '--pitch', '0.0',
-                    '--yaw', '0.0',
-                    '--frame-id', 'base_link',
-                    '--child-frame-id', 'imu_link',
-                ],
-                output='screen',
+            # The URDF owns base_link -> imu_link so standalone and combined
+            # launches cannot publish conflicting static transforms.
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(
+                    PathJoinSubstitution([
+                        FindPackageShare('roam_e_description'),
+                        'launch',
+                        'display.launch.py',
+                    ])
+                ),
+                launch_arguments={
+                    'rviz': 'false',
+                    'publish_joints': 'false',
+                }.items(),
             ),
             Node(
                 package='roam_e',

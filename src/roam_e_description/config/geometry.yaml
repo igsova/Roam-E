@@ -1,0 +1,21 @@
+# Coordinate convention: x forward, y left, z up; dimensions are metres.
+# Physical measurements override small discrepancies in the CAD model.
+wheel_radius: 0.033875
+wheel_separation: 0.173630
+
+# Fixed-frame origins relative to base_link. These were extracted from the
+# saved FreeCAD geometry after rotating CAD (x, y, z) into ROS (x, -z, y).
+laser_frame:
+  xyz: [0.017447, -0.000870, 0.176897]
+  rpy: [0.0, 0.0, 0.0]
+
+imu_mount_link:
+  xyz: [0.024045, 0.0, 0.102297]
+  rpy: [0.0, 0.0, 0.0]
+
+# The calibrated sensor frame is upside-down relative to its CAD mount.
+imu_link:
+  parent: imu_mount_link
+  xyz: [0.0, 0.0, 0.0]
+  rpy: [3.141592654, 0.0, 0.0]
+

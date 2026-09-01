@@ -5,14 +5,20 @@ import time
 
 import rclpy
 from diagnostic_msgs.msg import DiagnosticArray, DiagnosticStatus, KeyValue
+from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
-from sensor_msgs.msg import Imu, MagneticField, Temperature
+from sensor_msgs.msg import Imu, Temperature
 from smbus2 import SMBus
+
+from .imu_health import (
+    IMUPLUS_MODE,
+    fusion_state_is_healthy,
+    physical_calibration_is_ready,
+)
 
 
 CHIP_ID = 0x00
-MAG_DATA = 0x0E
 GYRO_DATA = 0x14
 TEMPERATURE = 0x34
 CALIB_STAT = 0x35
@@ -22,12 +28,7 @@ UNIT_SEL = 0x3B
 OPR_MODE = 0x3D
 
 EXPECTED_CHIP_ID = 0xA0
-NDOF_MODE = 0x0C
-FUSION_RUNNING = 0x05
-WINDOWS_UNITS = 0x00
-
 DEG_TO_RAD = math.pi / 180.0
-UT_TO_T = 1.0e-6
 SQRT_HALF = math.sqrt(0.5)
 
 # The BNO055 Windows orientation convention used by restore.py is north-west-up
@@ -49,11 +50,6 @@ LINEAR_ACCELERATION_COVARIANCE = [
     0.09, 0.0, 0.0,
     0.0, 0.09, 0.0,
     0.0, 0.0, 0.09,
-]
-MAGNETIC_FIELD_COVARIANCE = [
-    2.5e-11, 0.0, 0.0,
-    0.0, 2.5e-11, 0.0,
-    0.0, 0.0, 2.5e-11,
 ]
 
 
@@ -131,9 +127,6 @@ class BNO055ImuNode(Node):
         self.imu_publisher = self.create_publisher(
             Imu, 'imu/data', qos_profile_sensor_data
         )
-        self.mag_publisher = self.create_publisher(
-            MagneticField, 'imu/mag', qos_profile_sensor_data
-        )
         self.temperature_publisher = self.create_publisher(
             Temperature, 'imu/temperature', qos_profile_sensor_data
         )
@@ -151,10 +144,11 @@ class BNO055ImuNode(Node):
         self.get_logger().info(
             f'BNO055 ready: /dev/i2c-{self.bus_number}, '
             f'address=0x{self.address:02X}, frame={self.frame_id}, '
-            f'rate={self.publish_rate:.1f} Hz'
+            f'rate={self.publish_rate:.1f} Hz, mode=IMUPLUS'
         )
         self.get_logger().info(
-            'Orientation quaternion converted from BNO055 NWU to ROS ENU. '
+            'Relative orientation quaternion converted from BNO055 NWU to '
+            'ROS ENU; yaw is not magnetically north-referenced. '
             'Axis test requires base_link -> imu_link roll=pi.'
         )
 
@@ -203,12 +197,7 @@ class BNO055ImuNode(Node):
         if chip_id != EXPECTED_CHIP_ID:
             raise RuntimeError(f'Unexpected chip ID: 0x{chip_id:02X}')
 
-        if (
-            mode != NDOF_MODE
-            or status != FUSION_RUNNING
-            or error != 0
-            or units != WINDOWS_UNITS
-        ):
+        if not fusion_state_is_healthy(mode, status, error, units):
             raise RuntimeError(
                 'BNO055 is not healthy after restoration: '
                 f'mode=0x{mode:02X}, status=0x{status:02X}, '
@@ -227,7 +216,6 @@ class BNO055ImuNode(Node):
             # Gyro 0x14, Euler 0x1A, quaternion 0x20 and
             # linear acceleration 0x28 are contiguous (26 bytes).
             data = self._read_block(GYRO_DATA, 26)
-            mag = self._read_block(MAG_DATA, 6)
         except OSError as error:
             self._warn_read_error('Sensor sample failed', error)
             return
@@ -284,22 +272,7 @@ class BNO055ImuNode(Node):
         imu.linear_acceleration.z = signed_16(data[24], data[25]) / 100.0
         imu.linear_acceleration_covariance = LINEAR_ACCELERATION_COVARIANCE
 
-        magnetic = MagneticField()
-        magnetic.header.stamp = stamp
-        magnetic.header.frame_id = self.frame_id
-        magnetic.magnetic_field.x = (
-            signed_16(mag[0], mag[1]) / 16.0 * UT_TO_T
-        )
-        magnetic.magnetic_field.y = (
-            signed_16(mag[2], mag[3]) / 16.0 * UT_TO_T
-        )
-        magnetic.magnetic_field.z = (
-            signed_16(mag[4], mag[5]) / 16.0 * UT_TO_T
-        )
-        magnetic.magnetic_field_covariance = MAGNETIC_FIELD_COVARIANCE
-
         self.imu_publisher.publish(imu)
-        self.mag_publisher.publish(magnetic)
         self.last_sample_time = time.monotonic()
 
     def _publish_diagnostics(self):
@@ -317,7 +290,7 @@ class BNO055ImuNode(Node):
             status = self._read_register(SYS_STATUS)
             error = self._read_register(SYS_ERROR)
             units = self._read_register(UNIT_SEL)
-            system_cal, gyro_cal, accel_cal, mag_cal = (
+            _system_cal, gyro_cal, accel_cal, _mag_cal = (
                 calibration_values(calibration)
             )
 
@@ -328,20 +301,19 @@ class BNO055ImuNode(Node):
             temperature_message.variance = 0.0
             self.temperature_publisher.publish(temperature_message)
 
-            if (
-                mode != NDOF_MODE
-                or status != FUSION_RUNNING
-                or error != 0
-                or units != WINDOWS_UNITS
-            ):
+            if not fusion_state_is_healthy(mode, status, error, units):
                 diagnostic.level = DiagnosticStatus.ERROR
                 diagnostic.message = 'Fusion state is unhealthy'
-            elif gyro_cal < 3 or accel_cal < 3 or mag_cal < 3:
+            elif not physical_calibration_is_ready(gyro_cal, accel_cal):
                 diagnostic.level = DiagnosticStatus.WARN
-                diagnostic.message = 'Physical calibration incomplete'
+                diagnostic.message = (
+                    'Gyroscope or accelerometer calibration incomplete'
+                )
             else:
                 diagnostic.level = DiagnosticStatus.OK
-                diagnostic.message = 'Fusion running and sensors calibrated'
+                diagnostic.message = (
+                    'IMUPLUS fusion running; gyro and accelerometer calibrated'
+                )
 
             sample_age = (
                 time.monotonic() - self.last_sample_time
@@ -353,15 +325,19 @@ class BNO055ImuNode(Node):
                 diagnostic_value('system_status', f'0x{status:02X}'),
                 diagnostic_value('system_error', f'0x{error:02X}'),
                 diagnostic_value('unit_selection', f'0x{units:02X}'),
-                diagnostic_value('orientation_world_frame', 'ENU'),
+                diagnostic_value('fusion_mode', 'IMUPLUS'),
+                diagnostic_value('magnetometer_used', 'false'),
+                diagnostic_value('orientation_convention', 'ENU'),
+                diagnostic_value(
+                    'orientation_reference',
+                    'relative; yaw is not north-referenced',
+                ),
                 diagnostic_value(
                     'orientation_conversion',
                     'BNO055 Windows/NWU -> ROS ENU',
                 ),
-                diagnostic_value('calibration_system', system_cal),
                 diagnostic_value('calibration_gyroscope', gyro_cal),
                 diagnostic_value('calibration_accelerometer', accel_cal),
-                diagnostic_value('calibration_magnetometer', mag_cal),
                 diagnostic_value('temperature_c', temperature),
                 diagnostic_value('sample_age_s', f'{sample_age:.3f}'),
                 diagnostic_value('i2c_errors', self.i2c_errors),
@@ -395,7 +371,7 @@ def main(args=None):
     try:
         node = BNO055ImuNode()
         rclpy.spin(node)
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, ExternalShutdownException):
         pass
     finally:
         if node is not None:

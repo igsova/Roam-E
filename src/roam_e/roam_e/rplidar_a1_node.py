@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 import math, time, threading
 import rclpy
+from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 from sensor_msgs.msg import LaserScan
 from rplidar import RPLidar, RPLidarException
+
+from .lidar_scan import bin_measurements, scan_geometry
 
 class RPLidarA1Node(Node):
     def __init__(self):
@@ -25,11 +28,10 @@ class RPLidarA1Node(Node):
                          history=HistoryPolicy.KEEP_LAST, depth=1)
         self.pub_scan = self.create_publisher(LaserScan, 'scan', qos)
 
-        self.angle_min = 0.0
-        self.angle_max = 2.0 * math.pi
-        self.num_bins = int(round((self.angle_max - self.angle_min) / self.angle_increment))
+        self.num_bins, self.angle_min, self.angle_max = scan_geometry(self.angle_increment)
 
         self.lidar = None
+        self._previous_scan_time_ns = None
         self._stop = threading.Event()
         self._reader = threading.Thread(target=self._read_loop, daemon=True)
         self._reader.start()
@@ -46,6 +48,7 @@ class RPLidarA1Node(Node):
         try:
             self.lidar = RPLidar(self.port, baudrate=115200, timeout=3)
             self.lidar.start_motor()
+            self._previous_scan_time_ns = None
         except RPLidarException as e:
             self.get_logger().error(f"Error connecting to RPLidar: {e}")
             self.lidar = None
@@ -58,23 +61,27 @@ class RPLidarA1Node(Node):
                 for scan in self.lidar.iter_scans(max_buf_meas=2000):
                     if self._stop.is_set():
                         break
-                    now = self.get_clock().now().to_msg()
-                    ranges = [float('inf')] * self.num_bins
-                    intensities = [0.0] * self.num_bins
-                    for (_, angle_deg, dist_mm) in scan:
-                        idx = int((math.radians(angle_deg) - self.angle_min) / self.angle_increment)
-                        if 0 <= idx < self.num_bins:
-                            d = (dist_mm / 1000.0) if dist_mm and dist_mm > 0 else float('inf')
-                            if self.range_min <= d <= self.range_max:
-                                ranges[idx] = d
+                    now = self.get_clock().now()
+                    scan_time = 0.0
+                    if self._previous_scan_time_ns is not None:
+                        scan_time = (now.nanoseconds - self._previous_scan_time_ns) / 1e9
+                    self._previous_scan_time_ns = now.nanoseconds
+
+                    ranges, intensities = bin_measurements(
+                        scan,
+                        num_bins=self.num_bins,
+                        angle_increment=self.angle_increment,
+                        range_min=self.range_min,
+                        range_max=self.range_max,
+                    )
                     msg = LaserScan()
-                    msg.header.stamp = now
+                    msg.header.stamp = now.to_msg()
                     msg.header.frame_id = self.frame_id
                     msg.angle_min = self.angle_min
                     msg.angle_max = self.angle_max
                     msg.angle_increment = self.angle_increment
-                    msg.time_increment = 0.0
-                    msg.scan_time = 0.0
+                    msg.time_increment = scan_time / max(self.num_bins - 1, 1)
+                    msg.scan_time = scan_time
                     msg.range_min = self.range_min
                     msg.range_max = self.range_max
                     msg.ranges = ranges
@@ -116,11 +123,12 @@ def main():
     node = RPLidarA1Node()
     try:
         rclpy.spin(node)
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, ExternalShutdownException):
         pass
-    node.destroy_node()
-    rclpy.shutdown()
+    finally:
+        node.destroy_node()
+        if rclpy.ok():
+            rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
-

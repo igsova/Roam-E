@@ -34,7 +34,7 @@ CALIBRATION_START = 0x55
 CALIBRATION_LENGTH = 22
 
 CONFIG_MODE = 0x00
-NDOF_MODE = 0x0C
+IMUPLUS_MODE = 0x08
 
 
 def parse_number(value, default):
@@ -329,7 +329,7 @@ def main():
 
         print("Calibration register readback verified.")
 
-        write_register(bus, OPR_MODE, NDOF_MODE)
+        write_register(bus, OPR_MODE, IMUPLUS_MODE)
         configuration_active = False
         time.sleep(1.0)
 
@@ -337,9 +337,9 @@ def main():
         status = read_register(bus, SYS_STATUS)
         error = read_register(bus, SYS_ERROR)
 
-        if mode != NDOF_MODE:
+        if mode != IMUPLUS_MODE:
             raise RuntimeError(
-                f"BNO055 did not enter NDOF mode: 0x{mode:02X}"
+                f"BNO055 did not enter IMUPLUS mode: 0x{mode:02X}"
             )
 
         if status != 0x05:
@@ -367,10 +367,10 @@ def main():
 
             print(
                 f"SYS={system} GYR={gyro} "
-                f"ACC={accel} MAG={mag}"
+                f"ACC={accel} MAG={mag} (unused)"
             )
 
-            if gyro == 3 and accel == 3 and mag == 3:
+            if gyro == 3 and accel == 3:
                 ready = True
                 break
 
@@ -379,12 +379,14 @@ def main():
         if not ready:
             raise RuntimeError(
                 "Offsets were written correctly, but the physical "
-                "sensor calibration did not reach GYR=3 ACC=3 MAG=3"
+                "sensor calibration did not reach GYR=3 ACC=3"
             )
 
         print()
         print("CALIBRATION RESTORE VERIFIED")
         print(f"Mode:   0x{mode:02X}")
+        print("Fusion: IMUPLUS (gyroscope + accelerometer)")
+        print("Yaw:    Relative; magnetometer disabled")
         print(f"Status: 0x{status:02X}")
         print(f"Error:  0x{error:02X}")
         print(f"SHA-256: {readback_sha}")
@@ -400,11 +402,11 @@ def main():
 
             print(
                 f"{sample:02d}: "
-                f"heading={heading:8.2f}° "
+                f"relative_heading={heading:8.2f}° "
                 f"roll={roll:8.2f}° "
                 f"pitch={pitch:8.2f}° | "
                 f"SYS={system} GYR={gyro} "
-                f"ACC={accel} MAG={mag}"
+                f"ACC={accel} MAG={mag} (unused)"
             )
 
             time.sleep(0.2)
@@ -415,7 +417,7 @@ def main():
                 bus.write_byte_data(
                     ADDRESS,
                     OPR_MODE,
-                    NDOF_MODE,
+                    IMUPLUS_MODE,
                 )
             except OSError:
                 pass
@@ -433,4 +435,3 @@ if __name__ == "__main__":
         print()
         print(f"RESTORE FAILED: {error}")
         raise SystemExit(1)
-
