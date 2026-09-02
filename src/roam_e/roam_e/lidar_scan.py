@@ -18,6 +18,18 @@ def scan_geometry(angle_increment):
     return num_bins, angle_min, angle_max
 
 
+def rplidar_angle_to_ros(angle_deg):
+    """Convert a native RPLidar heading to a ROS planar scan angle.
+
+    The RPLidar A1 reports zero opposite the ROS +X direction and advances
+    clockwise. ROS angles start at +X and advance counter-clockwise, so both
+    differences are handled by pi minus native_angle.
+    """
+    return (
+        math.pi - math.radians(angle_deg)
+    ) % FULL_TURN_RADIANS
+
+
 def bin_measurements(
     measurements,
     *,
@@ -35,7 +47,7 @@ def bin_measurements(
         if not math.isfinite(angle_deg):
             continue
 
-        angle = math.radians(angle_deg) % FULL_TURN_RADIANS
+        angle = rplidar_angle_to_ros(angle_deg)
         index = int(angle / angle_increment)
         if not 0 <= index < num_bins:
             continue

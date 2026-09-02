@@ -6,10 +6,14 @@ keeping more than one mapping run.
 
 Current checkpoints:
 
-- `roam_e_first`: initial whole-area mapping trial.
-- `living_room_perimeter`: living-room perimeter checkpoint intended for
-  continued apartment mapping.
-- `office_01`: standalone office map.
+- `office_02`: current standalone office map and the default for AMCL
+  localization. It was captured after correcting the RPLidar angle
+  convention and has been validated against live scans.
+- `roam_e_first`, `living_room_perimeter`, and `office_01`: historical
+  development captures made before the RPLidar native clockwise/rear-zero
+  angles were converted to ROS counter-clockwise/+X angles. These maps are
+  retained for reference only and must not be used for localization or
+  resumed for mapping.
 
 Each name must retain all four files. The `.pgm` and `.yaml` pair is the static
 occupancy map used by Nav2. The `.posegraph` and `.data` pair is the lossless

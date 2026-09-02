@@ -244,3 +244,63 @@ To check the transform from a terminal:
 ```bash
 timeout 5 ros2 run tf2_ros tf2_echo map base_footprint
 ```
+
+## Localizing in a saved map
+
+Use AMCL when the robot may have been carried to an unknown position while it
+was powered off. Unlike SLAM pose-graph continuation, this mode loads the
+static occupancy map and estimates the robot pose without adding new map
+cells.
+
+Start the localization stack with the required map. Motor output remains
+disabled unless it is explicitly armed:
+
+```bash
+cd ~/Roam-E
+source /opt/ros/jazzy/setup.zsh
+source install/setup.zsh
+
+ros2 launch roam_e localization.launch.py arm_motors:=true
+```
+
+The launch defaults to `maps/office_02.yaml`, the first map captured after
+correcting the RPLidar native clockwise/rear-zero angles to ROS
+counter-clockwise/+X angles. Historical maps captured before that correction
+are retained as development records but must not be used or resumed for
+localization.
+
+Leave the Teleop controls untouched until both lifecycle nodes report
+`active`:
+
+```bash
+ros2 lifecycle get /map_server
+ros2 lifecycle get /amcl
+```
+
+From a second sourced terminal, request global localization. AMCL will
+distribute pose hypotheses throughout all free cells in the loaded map, so no
+initial coordinates are required:
+
+```bash
+ros2 service call /reinitialize_global_localization \
+  std_srvs/srv/Empty "{}"
+```
+
+In Foxglove, use `map` as the fixed frame and display `/map`, `/scan`,
+`/particle_cloud`, `/amcl_pose`, the URDF, and transforms. Use the Teleop panel
+to rotate slowly in place, initially around `0.2 rad/s`, so AMCL can compare
+several LiDAR views with the map. Do not drive forward until:
+
+- The particle cloud has collapsed to one compact cluster.
+- The live `/scan` points align with the saved walls.
+- `/amcl_pose` is stable and the robot model is in the correct location.
+
+If several clusters remain or the scan is misaligned, stop, call
+`/reinitialize_global_localization` again, and rotate through views containing
+distinctive geometry. A small or symmetric room can be ambiguous, and moved
+furniture or people visible to the LiDAR can slow convergence.
+
+Once localized, AMCL publishes `map -> odom` while the EKF continues to
+publish `odom -> base_footprint`. Carrying the robot again invalidates that
+estimate; request global localization again after any such move. Stop the
+launch with `Ctrl-C` when finished.

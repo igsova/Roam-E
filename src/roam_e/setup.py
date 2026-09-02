@@ -16,11 +16,12 @@ setup(
                 'launch/roam_e_imu.launch.py',
                 'launch/drive.launch.py',
                 'launch/mapping.launch.py',
+                'launch/localization.launch.py',
             ],
         ),
         (
             'share/' + package_name + '/config',
-            ['config/ekf.yaml', 'config/slam.yaml'],
+            ['config/ekf.yaml', 'config/slam.yaml', 'config/amcl.yaml'],
         ),
         ('share/' + package_name + '/rviz', ['rviz/sensors_viz.rviz']),
     ],
