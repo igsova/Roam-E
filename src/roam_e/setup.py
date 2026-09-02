@@ -15,9 +15,13 @@ setup(
                 'launch/sensors_viz.launch.py',
                 'launch/roam_e_imu.launch.py',
                 'launch/drive.launch.py',
+                'launch/mapping.launch.py',
             ],
         ),
-        ('share/' + package_name + '/config', ['config/ekf.yaml']),
+        (
+            'share/' + package_name + '/config',
+            ['config/ekf.yaml', 'config/slam.yaml'],
+        ),
         ('share/' + package_name + '/rviz', ['rviz/sensors_viz.rviz']),
     ],
     install_requires=[
