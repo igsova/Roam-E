@@ -3,6 +3,22 @@
 wheel_radius: 0.033875
 wheel_separation: 0.173630
 
+# Convex navigation outline extracted from the CAD chassis and both wheel
+# meshes in the base_footprint x/y plane. Nav2 adds 10 mm of padding to this
+# physical outline. Keep this list synchronized with config/nav2.yaml.
+navigation_footprint:
+  points:
+    - [-0.043, -0.026]
+    - [-0.033, -0.102]
+    - [0.033, -0.102]
+    - [0.090, -0.043]
+    - [0.098, 0.000]
+    - [0.090, 0.043]
+    - [0.033, 0.102]
+    - [-0.033, 0.102]
+    - [-0.043, 0.026]
+  padding: 0.01
+
 # Fixed-frame origins relative to base_link. These were extracted from the
 # saved FreeCAD geometry after rotating CAD (x, y, z) into ROS (x, -z, y).
 laser_frame:
@@ -18,4 +34,3 @@ imu_link:
   parent: imu_mount_link
   xyz: [0.0, 0.0, 0.0]
   rpy: [3.141592654, 0.0, 0.0]
-

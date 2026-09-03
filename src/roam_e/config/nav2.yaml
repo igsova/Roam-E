@@ -1,0 +1,226 @@
+bt_navigator:
+  ros__parameters:
+    global_frame: map
+    robot_base_frame: base_footprint
+    odom_topic: /odometry/filtered
+    bt_loop_duration: 10
+    default_server_timeout: 20
+    wait_for_service_timeout: 1000
+    action_server_result_timeout: 900.0
+    navigators: ["navigate_to_pose"]
+    navigate_to_pose:
+      plugin: "nav2_bt_navigator::NavigateToPoseNavigator"
+    error_code_names:
+      - compute_path_error_code
+      - follow_path_error_code
+
+controller_server:
+  ros__parameters:
+    controller_frequency: 10.0
+    costmap_update_timeout: 0.5
+    min_x_velocity_threshold: 0.001
+    min_y_velocity_threshold: 0.5
+    min_theta_velocity_threshold: 0.001
+    failure_tolerance: 0.3
+    progress_checker_plugins: ["progress_checker"]
+    goal_checker_plugins: ["goal_checker"]
+    controller_plugins: ["FollowPath"]
+
+    progress_checker:
+      plugin: "nav2_controller::SimpleProgressChecker"
+      required_movement_radius: 0.05
+      movement_time_allowance: 12.0
+
+    goal_checker:
+      plugin: "nav2_controller::SimpleGoalChecker"
+      xy_goal_tolerance: 0.08
+      yaw_goal_tolerance: 0.12
+      stateful: true
+
+    FollowPath:
+      plugin: "nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController"
+      desired_linear_vel: 0.08
+      lookahead_dist: 0.18
+      min_lookahead_dist: 0.12
+      max_lookahead_dist: 0.30
+      lookahead_time: 1.5
+      rotate_to_heading_angular_vel: 0.30
+      transform_tolerance: 0.20
+      use_velocity_scaled_lookahead_dist: true
+      min_approach_linear_velocity: 0.025
+      approach_velocity_scaling_dist: 0.30
+      use_collision_detection: true
+      max_allowed_time_to_collision_up_to_carrot: 1.0
+      use_regulated_linear_velocity_scaling: false
+      use_cost_regulated_linear_velocity_scaling: false
+      use_rotate_to_heading: true
+      allow_reversing: false
+      rotate_to_heading_min_angle: 0.35
+      max_angular_accel: 0.60
+      max_robot_pose_search_dist: 2.0
+      stateful: true
+
+local_costmap:
+  local_costmap:
+    ros__parameters:
+      update_frequency: 5.0
+      publish_frequency: 2.0
+      global_frame: odom
+      robot_base_frame: base_footprint
+      transform_tolerance: 0.30
+      rolling_window: true
+      width: 2
+      height: 2
+      resolution: 0.05
+      footprint: "[[-0.043, -0.026], [-0.033, -0.102], [0.033, -0.102], [0.090, -0.043], [0.098, 0.000], [0.090, 0.043], [0.033, 0.102], [-0.033, 0.102], [-0.043, 0.026]]"
+      footprint_padding: 0.01
+      plugins: ["obstacle_layer", "inflation_layer"]
+
+      obstacle_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        enabled: true
+        observation_sources: scan
+        scan:
+          topic: /scan
+          data_type: "LaserScan"
+          clearing: true
+          marking: true
+          obstacle_min_range: 0.15
+          obstacle_max_range: 4.0
+          raytrace_min_range: 0.15
+          raytrace_max_range: 6.0
+          max_obstacle_height: 2.0
+
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        inflation_radius: 0.22
+        cost_scaling_factor: 5.0
+
+      always_send_full_costmap: true
+
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      update_frequency: 1.0
+      publish_frequency: 1.0
+      global_frame: map
+      robot_base_frame: base_footprint
+      transform_tolerance: 0.30
+      resolution: 0.05
+      track_unknown_space: true
+      footprint: "[[-0.043, -0.026], [-0.033, -0.102], [0.033, -0.102], [0.090, -0.043], [0.098, 0.000], [0.090, 0.043], [0.033, 0.102], [-0.033, 0.102], [-0.043, 0.026]]"
+      footprint_padding: 0.01
+      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
+
+      static_layer:
+        plugin: "nav2_costmap_2d::StaticLayer"
+        map_subscribe_transient_local: true
+
+      obstacle_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        enabled: true
+        observation_sources: scan
+        scan:
+          topic: /scan
+          data_type: "LaserScan"
+          clearing: true
+          marking: true
+          obstacle_min_range: 0.15
+          obstacle_max_range: 4.0
+          raytrace_min_range: 0.15
+          raytrace_max_range: 6.0
+          max_obstacle_height: 2.0
+
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        inflation_radius: 0.22
+        cost_scaling_factor: 5.0
+
+      always_send_full_costmap: true
+
+planner_server:
+  ros__parameters:
+    expected_planner_frequency: 2.0
+    costmap_update_timeout: 1.0
+    planner_plugins: ["GridBased"]
+    GridBased:
+      plugin: "nav2_navfn_planner::NavfnPlanner"
+      tolerance: 0.10
+      use_astar: true
+      allow_unknown: true
+
+behavior_server:
+  ros__parameters:
+    local_costmap_topic: local_costmap/costmap_raw
+    global_costmap_topic: global_costmap/costmap_raw
+    local_footprint_topic: local_costmap/published_footprint
+    global_footprint_topic: global_costmap/published_footprint
+    cycle_frequency: 10.0
+    behavior_plugins: ["spin", "backup", "wait"]
+    spin:
+      plugin: "nav2_behaviors::Spin"
+    backup:
+      plugin: "nav2_behaviors::BackUp"
+    wait:
+      plugin: "nav2_behaviors::Wait"
+    local_frame: odom
+    global_frame: map
+    robot_base_frame: base_footprint
+    transform_tolerance: 0.20
+    simulate_ahead_time: 1.0
+    max_rotational_vel: 0.35
+    min_rotational_vel: 0.08
+    rotational_acc_lim: 0.60
+
+velocity_smoother:
+  ros__parameters:
+    smoothing_frequency: 20.0
+    scale_velocities: false
+    feedback: "CLOSED_LOOP"
+    max_velocity: [0.08, 0.0, 0.35]
+    min_velocity: [-0.06, 0.0, -0.35]
+    max_accel: [0.10, 0.0, 0.60]
+    max_decel: [-0.25, 0.0, -1.00]
+    odom_topic: /odometry/filtered
+    odom_duration: 0.20
+    deadband_velocity: [0.0, 0.0, 0.0]
+    velocity_timeout: 0.50
+
+collision_monitor:
+  ros__parameters:
+    base_frame_id: base_footprint
+    odom_frame_id: odom
+    cmd_vel_in_topic: cmd_vel_smoothed
+    cmd_vel_out_topic: cmd_vel
+    state_topic: collision_monitor_state
+    transform_tolerance: 0.20
+    source_timeout: 0.50
+    base_shift_correction: true
+    stop_pub_timeout: 1.0
+    polygons: ["StopZone", "SlowdownZone"]
+
+    StopZone:
+      type: "polygon"
+      points: "[[0.19, 0.15], [0.19, -0.15], [-0.13, -0.15], [-0.13, 0.15]]"
+      action_type: "stop"
+      min_points: 3
+      visualize: true
+      polygon_pub_topic: collision_monitor/stop_zone
+      enabled: true
+
+    SlowdownZone:
+      type: "polygon"
+      points: "[[0.38, 0.26], [0.38, -0.26], [-0.23, -0.26], [-0.23, 0.26]]"
+      action_type: "slowdown"
+      min_points: 3
+      slowdown_ratio: 0.35
+      visualize: true
+      polygon_pub_topic: collision_monitor/slowdown_zone
+      enabled: true
+
+    observation_sources: ["scan"]
+    scan:
+      type: "scan"
+      topic: /scan
+      enabled: true
+      source_timeout: 0.50

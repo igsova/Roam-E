@@ -17,11 +17,17 @@ setup(
                 'launch/drive.launch.py',
                 'launch/mapping.launch.py',
                 'launch/localization.launch.py',
+                'launch/navigation.launch.py',
             ],
         ),
         (
             'share/' + package_name + '/config',
-            ['config/ekf.yaml', 'config/slam.yaml', 'config/amcl.yaml'],
+            [
+                'config/ekf.yaml',
+                'config/slam.yaml',
+                'config/amcl.yaml',
+                'config/nav2.yaml',
+            ],
         ),
         ('share/' + package_name + '/rviz', ['rviz/sensors_viz.rviz']),
     ],
@@ -46,6 +52,7 @@ setup(
         'console_scripts': [
             'bno055_imu_node = roam_e.imu_bno055_node:main',
             'encoder_odometry_node = roam_e.encoder_odometry_node:main',
+            'goal_pose_bridge = roam_e.goal_pose_bridge:main',
             'rplidar_a1_node = roam_e.rplidar_a1_node:main',
         ],
     },

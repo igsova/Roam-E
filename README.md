@@ -304,3 +304,179 @@ Once localized, AMCL publishes `map -> odom` while the EKF continues to
 publish `odom -> base_footprint`. Carrying the robot again invalidates that
 estimate; request global localization again after any such move. Stop the
 launch with `Ctrl-C` when finished.
+
+## Autonomous office navigation
+
+The navigation launch reuses the `office_02` map, AMCL, EKF odometry, LiDAR,
+robot description, and Foxglove bridge. It adds a lightweight Nav2 stack for
+the Raspberry Pi: NavFn planning, Regulated Pure Pursuit path following, a
+velocity smoother, and Collision Monitor. It starts with motor output
+disabled:
+
+```bash
+cd ~/Roam-E
+source /opt/ros/jazzy/setup.zsh
+source install/setup.zsh
+ros2 launch roam_e navigation.launch.py
+```
+
+The costmaps use the CAD-derived chassis-and-wheel polygon rather than a
+circle. Its physical extent is approximately `141 mm` front-to-back and
+`203 mm` across the wheels, with another `10 mm` of Nav2 padding. Collision
+Monitor independently applies a slowdown zone around that footprint and a
+smaller stop zone. Its command path is:
+
+```text
+Nav2 controller or recovery behavior
+  -> /cmd_vel_nav
+  -> velocity smoother
+  -> /cmd_vel_smoothed
+  -> Collision Monitor
+  -> /cmd_vel
+  -> guarded motor controller
+```
+
+First confirm the map and AMCL lifecycle nodes are active:
+
+```bash
+ros2 lifecycle get /map_server
+ros2 lifecycle get /amcl
+```
+
+Then localize the robot as described above. For an approximate known pose,
+use Foxglove's `2D pose estimate` publisher on `/initialpose`. For an unknown
+pose, call global localization and use a short, supervised rotation to let
+AMCL converge. The global costmap intentionally waits for AMCL to create the
+`map -> odom` transform.
+
+The navigation lifecycle manager also waits for the complete
+`map -> base_footprint` transform. As soon as AMCL accepts the initial pose,
+the goal bridge requests Nav2 startup automatically. This avoids leaving the
+planner and navigator inactive when the Raspberry Pi takes longer than usual
+to initialize. Use `autostart:=false` only when lifecycle transitions will be
+managed manually.
+
+Once the scan aligns with the map, confirm the navigation lifecycle nodes are
+active before sending a goal:
+
+```bash
+for node in controller_server planner_server behavior_server \
+  bt_navigator velocity_smoother collision_monitor
+do
+  ros2 lifecycle get "/$node"
+done
+```
+
+In Foxglove, use `map` as the fixed frame and display these topics:
+
+- `/map` and `/scan`
+- `/global_costmap/costmap` and `/local_costmap/costmap`
+- `/global_costmap/published_footprint` and
+  `/local_costmap/published_footprint`
+- `/plan` and `/local_plan`
+- `/collision_monitor/stop_zone`, `/collision_monitor/slowdown_zone`, and
+  `/collision_monitor_state`
+
+For click-to-go control, add Foxglove's `2D pose` publisher, set its topic to
+`/goal_pose`, and click-drag on free space to set both position and heading.
+The Roam-E goal bridge forwards that `PoseStamped` message to Nav2's
+`/navigate_to_pose` action. With motors disarmed, this is a safe way to check
+that the global path, local costmap, and collision zones appear. The
+controller will report lack of progress because the robot cannot move; stop
+the launch after the visualization check.
+
+Do not use the Foxglove Teleop panel on `/cmd_vel` while autonomous navigation
+is running. That is the final post-monitor topic, so a second publisher there
+would compete with the safety chain. Stop the navigation launch before using
+the separate manual `drive.launch.py` workflow.
+
+Only after the footprint, scans, costmaps, plan, and localization all look
+correct should the launch be restarted with motor output armed:
+
+```bash
+ros2 launch roam_e navigation.launch.py arm_motors:=true
+```
+
+Keep a hand at the robot's physical power cutoff and begin with a clear,
+straight `0.5 m` goal at the configured maximum of `0.08 m/s`. Then test, in
+order: a requested final heading, an obstacle in the slowdown zone, an
+obstacle in the stop zone, replanning around an obstacle, a blocked-goal
+failure, and global localization from several carried starting poses.
+Collision Monitor is an additional software layer, not a certified emergency
+stop and not a substitute for a physical power cutoff around people or pets.
+
+## Raspberry Pi 5 migration
+
+The supported target is a Raspberry Pi 5 with 8 GB of RAM running the 64-bit
+Ubuntu 24.04 Server image. Use active cooling and a stable 5 V / 5 A supply on
+the robot. Do not move the old Pi 3 filesystem or its generated `build/` and
+`install/` directories to the Pi 5; start with a clean OS and rebuild there.
+
+Before replacing the Pi, create a migration backup on the working robot:
+
+```bash
+cd ~/Roam-E
+scripts/setup/backup_robot_state.sh
+```
+
+The archive is written outside the repository under `~/roam-e-backups`. It
+contains maps, calibration, firmware, the BNO055 systemd unit, Raspberry Pi
+boot settings, stable device names, package inventories, and checksums. It
+deliberately excludes Wi-Fi credentials, SSH private keys, build products,
+and ROS logs. Copy both the `.tar.gz` file and its `.sha256` file to another
+computer before removing the old storage.
+
+On a fresh Pi 5, create the same `robot` account, configure networking and
+SSH, then clone and bootstrap the repository:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y git
+git clone https://github.com/igsova/Roam-E.git ~/Roam-E
+cd ~/Roam-E
+scripts/setup/bootstrap_pi5.sh --upgrade-os
+sudo reboot
+```
+
+The bootstrap is safe to rerun. It verifies Ubuntu Noble on 64-bit ARM,
+installs the official ROS 2 Jazzy apt source, ROS Base and all dependencies
+declared by the workspace, installs the validated Python hardware drivers,
+creates the small calibration virtual environment, enables I2C bus 3 on GPIO
+17/27, adds the current user to the hardware groups, builds the workspace,
+and installs the BNO055 calibration restore service. It never launches the
+robot and never arms or commands the motors.
+
+After reconnecting the Arduino Nano, RPLidar, and BNO055, run the non-moving
+validation:
+
+```bash
+cd ~/Roam-E
+scripts/setup/validate_hardware.sh
+```
+
+The persistent USB names should still be:
+
+- Arduino Nano: `/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0`
+- RPLidar: `/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0`
+- BNO055: `/dev/i2c-3`, address `0x29`
+
+If either USB identifier changes, update the defaults in
+`sensors_viz.launch.py` rather than switching to unstable `/dev/ttyUSB*`
+names. Once the static validation passes, start the ordinary stack with motor
+output disabled and check live messages from another terminal:
+
+```bash
+# Terminal 1
+cd ~/Roam-E
+source /opt/ros/jazzy/setup.bash
+source install/setup.bash
+ros2 launch roam_e sensors_viz.launch.py use_rviz:=false
+
+# Terminal 2
+cd ~/Roam-E
+scripts/setup/validate_hardware.sh --runtime
+```
+
+Only proceed to supervised motor and navigation tests after the static and
+runtime checks pass. The migration backup is a recovery copy; the committed
+`office_02` map and BNO055 calibration also arrive with the Git clone.
