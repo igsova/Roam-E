@@ -99,6 +99,8 @@ class BNO055ImuNode(Node):
         self.declare_parameter('i2c_addr', 0x29)
         self.declare_parameter('frame_id', 'imu_link')
         self.declare_parameter('publish_rate_hz', 20.0)
+        self.declare_parameter('startup_timeout_s', 8.0)
+        self.declare_parameter('startup_retry_period_s', 0.25)
 
         self.bus_number = int(self.get_parameter('i2c_bus').value)
         self.address = int(self.get_parameter('i2c_addr').value)
@@ -106,9 +108,21 @@ class BNO055ImuNode(Node):
         self.publish_rate = float(
             self.get_parameter('publish_rate_hz').value
         )
+        self.startup_timeout = float(
+            self.get_parameter('startup_timeout_s').value
+        )
+        self.startup_retry_period = float(
+            self.get_parameter('startup_retry_period_s').value
+        )
 
         if not 0.0 < self.publish_rate <= 20.0:
             raise ValueError('publish_rate_hz must be in (0, 20]')
+        if self.startup_timeout <= 0.0:
+            raise ValueError('startup_timeout_s must be greater than zero')
+        if self.startup_retry_period <= 0.0:
+            raise ValueError(
+                'startup_retry_period_s must be greater than zero'
+            )
 
         self.i2c_errors = 0
         self.consecutive_errors = 0
@@ -188,21 +202,66 @@ class BNO055ImuNode(Node):
         )
 
     def _verify_ready(self):
-        chip_id = self._read_register(CHIP_ID)
-        mode = self._read_register(OPR_MODE)
-        status = self._read_register(SYS_STATUS)
-        error = self._read_register(SYS_ERROR)
-        units = self._read_register(UNIT_SEL)
+        deadline = time.monotonic() + self.startup_timeout
+        last_state = None
+        last_read_error = None
+        waiting_logged = False
 
-        if chip_id != EXPECTED_CHIP_ID:
-            raise RuntimeError(f'Unexpected chip ID: 0x{chip_id:02X}')
+        while True:
+            try:
+                chip_id = self._read_register(CHIP_ID)
+                mode = self._read_register(OPR_MODE)
+                status = self._read_register(SYS_STATUS)
+                error = self._read_register(SYS_ERROR)
+                units = self._read_register(UNIT_SEL)
+                last_state = (chip_id, mode, status, error, units)
+                last_read_error = None
 
-        if not fusion_state_is_healthy(mode, status, error, units):
+                if (
+                    chip_id == EXPECTED_CHIP_ID
+                    and fusion_state_is_healthy(
+                        mode,
+                        status,
+                        error,
+                        units,
+                    )
+                ):
+                    return
+            except OSError as read_error:
+                last_read_error = read_error
+
+            now = time.monotonic()
+            if now >= deadline:
+                break
+
+            if not waiting_logged:
+                self.get_logger().warning(
+                    'BNO055 startup state is not ready; waiting up to '
+                    f'{self.startup_timeout:.1f} seconds for calibration '
+                    'restoration and IMUPLUS fusion.'
+                )
+                waiting_logged = True
+
+            time.sleep(min(self.startup_retry_period, deadline - now))
+
+        if last_state is None:
             raise RuntimeError(
-                'BNO055 is not healthy after restoration: '
-                f'mode=0x{mode:02X}, status=0x{status:02X}, '
-                f'error=0x{error:02X}, units=0x{units:02X}'
+                'BNO055 was not readable during its startup window: '
+                f'{last_read_error}'
             )
+
+        chip_id, mode, status, error, units = last_state
+        if chip_id != EXPECTED_CHIP_ID:
+            raise RuntimeError(
+                'Unexpected BNO055 chip ID after startup retries: '
+                f'0x{chip_id:02X}'
+            )
+
+        raise RuntimeError(
+            'BNO055 is not healthy after restoration and startup retries: '
+            f'mode=0x{mode:02X}, status=0x{status:02X}, '
+            f'error=0x{error:02X}, units=0x{units:02X}'
+        )
 
     def _warn_read_error(self, operation, error):
         now = time.monotonic()

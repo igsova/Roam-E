@@ -85,6 +85,42 @@ printf 'Bootstrapping %s on %s (%s).\n' \
     "${ROAM_E_PROJECT_ROOT}" "${ROAM_E_OS_CODENAME}" "${ROAM_E_ARCH}"
 sudo -v
 
+# Some Raspberry Pi Ubuntu Server images ship with the Noble release and
+# security pockets enabled, but omit noble-updates. Mixing base development
+# packages with already-updated runtime libraries then makes ROS dependencies
+# such as liblz4-dev and libzstd-dev impossible to install. Enable the updates
+# pocket before the first package operation.
+ROAM_E_UBUNTU_SOURCES=/etc/apt/sources.list.d/ubuntu.sources
+noble_updates_configured() {
+    grep -RhEq \
+        '(^Suites:.*noble-updates)|(^[[:space:]]*deb .* noble-updates([[:space:]]|$))' \
+        /etc/apt/sources.list /etc/apt/sources.list.d 2>/dev/null
+}
+
+if ! noble_updates_configured; then
+    if [[ ! -f "${ROAM_E_UBUNTU_SOURCES}" ]]; then
+        printf 'Ubuntu package sources do not enable noble-updates, and %s is missing.\n' \
+            "${ROAM_E_UBUNTU_SOURCES}" >&2
+        exit 1
+    fi
+
+    printf 'Enabling the Ubuntu noble-updates package pocket.\n'
+    if [[ ! -f "${ROAM_E_UBUNTU_SOURCES}.roam-e-before-bootstrap" ]]; then
+        sudo cp --preserve=mode,timestamps \
+            "${ROAM_E_UBUNTU_SOURCES}" \
+            "${ROAM_E_UBUNTU_SOURCES}.roam-e-before-bootstrap"
+    fi
+    sudo sed -i -E \
+        '/^Suites:[[:space:]]+noble([[:space:]]|$)/ { /noble-updates/! s/$/ noble-updates/; }' \
+        "${ROAM_E_UBUNTU_SOURCES}"
+
+    if ! noble_updates_configured; then
+        printf 'Could not enable noble-updates in %s.\n' \
+            "${ROAM_E_UBUNTU_SOURCES}" >&2
+        exit 1
+    fi
+fi
+
 sudo apt-get update
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
     locales \
@@ -176,7 +212,7 @@ fi
     'pyserial==3.5' \
     'smbus2==0.6.1'
 
-for ROAM_E_GROUP in dialout i2c gpio; do
+for ROAM_E_GROUP in dialout i2c gpio video; do
     if getent group "${ROAM_E_GROUP}" >/dev/null; then
         sudo usermod -aG "${ROAM_E_GROUP}" "${USER}"
     fi

@@ -439,12 +439,14 @@ sudo reboot
 ```
 
 The bootstrap is safe to rerun. It verifies Ubuntu Noble on 64-bit ARM,
+enables the `noble-updates` package pocket when a fresh Pi image omits it,
 installs the official ROS 2 Jazzy apt source, ROS Base and all dependencies
 declared by the workspace, installs the validated Python hardware drivers,
 creates the small calibration virtual environment, enables I2C bus 3 on GPIO
-17/27, adds the current user to the hardware groups, builds the workspace,
-and installs the BNO055 calibration restore service. It never launches the
-robot and never arms or commands the motors.
+17/27, adds the current user to the hardware groups (including `video` for
+non-root `vcgencmd` checks), builds the workspace, and installs the BNO055
+calibration restore service. It never launches the robot and never arms or
+commands the motors.
 
 After reconnecting the Arduino Nano, RPLidar, and BNO055, run the non-moving
 validation:
@@ -453,6 +455,12 @@ validation:
 cd ~/Roam-E
 scripts/setup/validate_hardware.sh
 ```
+
+The BNO055 ROS node tolerates an eight-second startup window while the boot
+restore service finishes switching the sensor into IMUPLUS fusion. The
+runtime validator likewise allows the RPLidar up to 20 seconds for its first
+scan because its USB handshake and reconnect cycle can outlast ordinary ROS
+topic discovery.
 
 The persistent USB names should still be:
 

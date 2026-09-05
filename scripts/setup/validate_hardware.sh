@@ -80,8 +80,12 @@ if command -v vcgencmd >/dev/null 2>&1; then
     ROAM_E_THROTTLED="$(vcgencmd get_throttled 2>/dev/null || true)"
     if [[ "${ROAM_E_THROTTLED}" == 'throttled=0x0' ]]; then
         pass "no current or historical Pi throttling flags"
-    elif [[ -n "${ROAM_E_THROTTLED}" ]]; then
+    elif [[ "${ROAM_E_THROTTLED}" == throttled=0x* ]]; then
         warn "Pi power/thermal flags: ${ROAM_E_THROTTLED}"
+    elif [[ -e /dev/vcio ]]; then
+        warn 'vcgencmd cannot access /dev/vcio; log out after joining video'
+    else
+        warn 'vcgencmd is installed but the Pi firmware interface is absent'
     fi
 fi
 
@@ -111,6 +115,13 @@ if id -nG | tr ' ' '\n' | grep -qx i2c; then
     pass 'user belongs to i2c'
 else
     fail 'user is not in i2c; log out after bootstrap or add the group'
+fi
+if getent group video >/dev/null; then
+    if id -nG | tr ' ' '\n' | grep -qx video; then
+        pass 'user belongs to video (vcgencmd access)'
+    else
+        warn 'user is not in video; rerun bootstrap and log out'
+    fi
 fi
 
 if systemctl is-enabled --quiet roam-e-bno055-restore.service 2>/dev/null; then
@@ -177,18 +188,21 @@ fi
 if [[ "${ROAM_E_RUNTIME_CHECKS}" == true ]]; then
     printf '\nRuntime topic checks (no publishers are started):\n'
     ROAM_E_TOPICS=(
-        /scan
-        /imu/data
-        /wheel/odometry
-        /odometry/filtered
-        /diagnostics
+        '/scan:20'
+        '/imu/data:10'
+        '/wheel/odometry:10'
+        '/odometry/filtered:10'
+        '/diagnostics:10'
     )
-    for ROAM_E_TOPIC in "${ROAM_E_TOPICS[@]}"; do
-        if timeout 8 ros2 topic echo "${ROAM_E_TOPIC}" --once \
+    for ROAM_E_TOPIC_CHECK in "${ROAM_E_TOPICS[@]}"; do
+        ROAM_E_TOPIC="${ROAM_E_TOPIC_CHECK%%:*}"
+        ROAM_E_TOPIC_TIMEOUT="${ROAM_E_TOPIC_CHECK##*:}"
+        if timeout "${ROAM_E_TOPIC_TIMEOUT}" \
+                ros2 topic echo "${ROAM_E_TOPIC}" --once \
                 >/dev/null 2>&1; then
             pass "message received on ${ROAM_E_TOPIC}"
         else
-            fail "no message received on ${ROAM_E_TOPIC} within 8 seconds"
+            fail "no message received on ${ROAM_E_TOPIC} within ${ROAM_E_TOPIC_TIMEOUT} seconds"
         fi
     done
 
