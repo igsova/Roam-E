@@ -340,8 +340,9 @@ launch with `Ctrl-C` when finished.
 The navigation launch reuses the `office_02` map, AMCL, EKF odometry, LiDAR,
 robot description, and Foxglove bridge. It adds a lightweight Nav2 stack for
 the Raspberry Pi: NavFn planning, Regulated Pure Pursuit path following, a
-velocity smoother, and Collision Monitor. It starts with motor output
-disabled:
+velocity smoother, and Collision Monitor. Its progress checker accepts both
+translation and rotation, and controller action acknowledgements tolerate
+short Raspberry Pi load spikes. It starts with motor output disabled:
 
 ```bash
 cd ~/Roam-E
@@ -365,6 +366,15 @@ Nav2 controller or recovery behavior
   -> /cmd_vel
   -> guarded motor controller
 ```
+
+The RPLIDAR A1 scan is filtered below `0.15 m`, creating a close-range blind
+area. The forward stop boundary is therefore `0.30 m` from `base_footprint`
+(about `0.20 m` beyond the robot's nose), and slowdown begins at `0.50 m`.
+The slowdown retains 75% of the requested velocity, which keeps the configured
+`0.08 m/s` navigation speed at the drivetrain's tested `0.06 m/s` reliable
+motion floor.
+These zones stop an approaching obstacle while it is still reliably visible;
+they cannot detect an object placed directly inside the LiDAR blind area.
 
 First confirm the map and AMCL lifecycle nodes are active:
 

@@ -29,10 +29,17 @@ def test_costmaps_share_the_cad_footprint():
 
 def test_first_navigation_speed_is_conservative():
     config = load_navigation_parameters()
+    navigator = config['bt_navigator']['ros__parameters']
     controller = config['controller_server']['ros__parameters']
     smoother = config['velocity_smoother']['ros__parameters']
 
+    assert navigator['default_server_timeout'] >= 1000
     assert controller['FollowPath']['desired_linear_vel'] <= 0.08
+    assert controller['FollowPath']['min_approach_linear_velocity'] >= 0.06
+    assert controller['progress_checker']['plugin'] == (
+        'nav2_controller::PoseProgressChecker'
+    )
+    assert controller['progress_checker']['required_movement_angle'] <= 0.15
     assert smoother['max_velocity'][0] <= 0.08
     assert smoother['max_velocity'][2] <= 0.35
 
@@ -40,6 +47,8 @@ def test_first_navigation_speed_is_conservative():
 def test_collision_monitor_is_the_only_final_cmd_vel_output():
     config = load_navigation_parameters()
     monitor = config['collision_monitor']['ros__parameters']
+    stop_points = yaml.safe_load(monitor['StopZone']['points'])
+    slowdown_points = yaml.safe_load(monitor['SlowdownZone']['points'])
 
     assert monitor['cmd_vel_in_topic'] == 'cmd_vel_smoothed'
     assert monitor['cmd_vel_out_topic'] == 'cmd_vel'
@@ -47,6 +56,9 @@ def test_collision_monitor_is_the_only_final_cmd_vel_output():
     assert monitor['polygons'] == ['StopZone', 'SlowdownZone']
     assert monitor['StopZone']['action_type'] == 'stop'
     assert monitor['SlowdownZone']['action_type'] == 'slowdown'
+    assert monitor['SlowdownZone']['slowdown_ratio'] >= 0.75
+    assert max(point[0] for point in stop_points) >= 0.30
+    assert max(point[0] for point in slowdown_points) >= 0.50
 
 
 def test_navigation_startup_waits_for_localization_transform():
