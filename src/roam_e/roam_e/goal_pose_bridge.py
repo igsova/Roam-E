@@ -3,7 +3,6 @@ from rclpy.duration import Duration
 from rclpy.node import Node
 from rclpy.time import Time
 import rclpy
-import time
 
 from geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped
 from nav2_msgs.action import NavigateToPose
@@ -32,7 +31,6 @@ class GoalPoseBridge(Node):
         self.declare_parameter('base_frame', 'base_footprint')
         self.declare_parameter('startup_check_period', 0.5)
         self.declare_parameter('amcl_pose_topic', 'amcl_pose')
-        self.declare_parameter('localization_pose_timeout', 2.0)
         self.declare_parameter('max_x_variance', 0.04)
         self.declare_parameter('max_y_variance', 0.04)
         self.declare_parameter('max_yaw_variance', 0.09)
@@ -69,10 +67,6 @@ class GoalPoseBridge(Node):
             ).value,
             max_yaw_jump=self.get_parameter('max_yaw_jump').value,
         )
-        self._localization_pose_timeout = float(
-            self.get_parameter('localization_pose_timeout').value
-        )
-        self._last_localization_time = None
         self._localization_ready = False
         self.create_subscription(
             PoseWithCovarianceStamped,
@@ -113,7 +107,6 @@ class GoalPoseBridge(Node):
             )
 
     def _on_localization(self, message):
-        self._last_localization_time = time.monotonic()
         pose = message.pose.pose
         quality = self._localization_tracker.update(
             x=pose.position.x,
@@ -148,12 +141,10 @@ class GoalPoseBridge(Node):
             self._active_goal_handle.cancel_goal_async()
 
     def _localization_is_ready(self):
-        if (
-            self._last_localization_time is None
-            or time.monotonic() - self._last_localization_time
-            > self._localization_pose_timeout
-        ):
-            self._set_localization_ready(False)
+        # AMCL publishes amcl_pose when its filter updates, not as a
+        # stationary heartbeat. Keep a verified estimate latched between
+        # updates; a later imprecise or inconsistent estimate still revokes
+        # the gate in _on_localization().
         return self._localization_ready
 
     def _maybe_start_navigation(self):

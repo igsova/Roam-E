@@ -104,3 +104,30 @@ def test_short_covariance_is_rejected():
 
     assert not quality.converged
     assert math.isinf(quality.x_variance)
+
+
+def test_converged_quality_stays_latched_until_a_new_bad_estimate():
+    subject = tracker(required_samples=2)
+    subject.update(
+        x=0.0,
+        y=0.0,
+        yaw=0.0,
+        covariance=covariance(),
+    )
+    converged = subject.update(
+        x=0.01,
+        y=0.0,
+        yaw=0.01,
+        covariance=covariance(),
+    )
+
+    assert converged.converged
+    assert subject.quality.converged
+
+    revoked = subject.update(
+        x=0.01,
+        y=0.0,
+        yaw=0.01,
+        covariance=covariance(yaw=0.5),
+    )
+    assert not revoked.converged
