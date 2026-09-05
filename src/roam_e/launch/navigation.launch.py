@@ -1,5 +1,6 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import (
     EnvironmentVariable,
@@ -17,6 +18,7 @@ def generate_launch_description():
     foxglove_port = LaunchConfiguration('foxglove_port')
     use_sim_time = LaunchConfiguration('use_sim_time')
     autostart = LaunchConfiguration('autostart')
+    auto_localize = LaunchConfiguration('auto_localize')
     map_file = LaunchConfiguration('map')
     amcl_params_file = LaunchConfiguration('amcl_params_file')
     navigation_params_file = LaunchConfiguration('navigation_params_file')
@@ -107,6 +109,45 @@ def generate_launch_description():
         remappings=tf_remappings,
     )
 
+    safety_lifecycle_manager = Node(
+        package='nav2_lifecycle_manager',
+        executable='lifecycle_manager',
+        name='lifecycle_manager_safety',
+        output='screen',
+        parameters=[{
+            'use_sim_time': ParameterValue(
+                use_sim_time,
+                value_type=bool,
+            ),
+            # These map-independent command guards must be active before an
+            # automatic localization maneuver can publish any velocity.
+            'autostart': True,
+            'bond_timeout': 15.0,
+            'node_names': [
+                'velocity_smoother',
+                'collision_monitor',
+            ],
+        }],
+    )
+
+    auto_localization_node = Node(
+        package='roam_e',
+        executable='auto_localization_node',
+        name='auto_localization_node',
+        output='screen',
+        condition=IfCondition(auto_localize),
+        parameters=[{
+            'use_sim_time': ParameterValue(
+                use_sim_time,
+                value_type=bool,
+            ),
+            'allow_motion': ParameterValue(
+                arm_motors,
+                value_type=bool,
+            ),
+        }],
+    )
+
     goal_pose_bridge = Node(
         package='roam_e',
         executable='goal_pose_bridge',
@@ -139,9 +180,8 @@ def generate_launch_description():
                 use_sim_time,
                 value_type=bool,
             ),
-            # GoalPoseBridge starts this manager only after AMCL supplies the
-            # map -> base_footprint transform. Starting earlier can leave the
-            # low-power Pi with a partially active Nav2 stack.
+            # GoalPoseBridge starts this manager only after AMCL covariance
+            # is low and stable. The safety nodes use their separate manager.
             'autostart': False,
             # The 1 GB Pi can pause several seconds while all Nav2 plugins and
             # Foxglove discovery are busy. Avoid treating that as a crash.
@@ -151,8 +191,6 @@ def generate_launch_description():
                 'planner_server',
                 'behavior_server',
                 'bt_navigator',
-                'velocity_smoother',
-                'collision_monitor',
             ],
         }],
     )
@@ -170,6 +208,14 @@ def generate_launch_description():
         DeclareLaunchArgument('foxglove_port', default_value='8765'),
         DeclareLaunchArgument('use_sim_time', default_value='false'),
         DeclareLaunchArgument('autostart', default_value='true'),
+        DeclareLaunchArgument(
+            'auto_localize',
+            default_value='false',
+            description=(
+                'Run one automatic global-localization search. Physical '
+                'motion occurs only when arm_motors is also true.'
+            ),
+        ),
         DeclareLaunchArgument(
             'map',
             default_value=PathJoinSubstitution([
@@ -203,6 +249,8 @@ def generate_launch_description():
         bt_navigator,
         velocity_smoother,
         collision_monitor,
+        safety_lifecycle_manager,
+        auto_localization_node,
         goal_pose_bridge,
         lifecycle_manager,
     ])

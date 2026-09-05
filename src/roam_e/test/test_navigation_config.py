@@ -7,6 +7,7 @@ PACKAGE_ROOT = Path(__file__).resolve().parents[1]
 NAVIGATION_CONFIG = PACKAGE_ROOT / 'config' / 'nav2.yaml'
 NAVIGATION_LAUNCH = PACKAGE_ROOT / 'launch' / 'navigation.launch.py'
 GOAL_BRIDGE = PACKAGE_ROOT / 'roam_e' / 'goal_pose_bridge.py'
+AUTO_LOCALIZER = PACKAGE_ROOT / 'roam_e' / 'auto_localization_node.py'
 
 
 def load_navigation_parameters():
@@ -55,9 +56,29 @@ def test_navigation_startup_waits_for_localization_transform():
     assert "'autostart': False" in launch_source
     assert "'start_navigation_when_localized': ParameterValue(" in launch_source
     assert 'can_transform(' in bridge_source
+    assert 'ConvergenceTracker(' in bridge_source
+    assert 'if not localization_ready:' in bridge_source
     assert 'ManageLifecycleNodes.Request.STARTUP' in bridge_source
     assert "self._base_frame = self.get_parameter('base_frame').value" in (
         bridge_source
     )
     assert 'except RuntimeError:' in bridge_source
     assert 'if rclpy.ok():' in bridge_source
+
+
+def test_safety_chain_starts_before_automatic_localization_motion():
+    launch_source = NAVIGATION_LAUNCH.read_text(encoding='utf-8')
+    localizer_source = AUTO_LOCALIZER.read_text(encoding='utf-8')
+
+    assert "name='lifecycle_manager_safety'" in launch_source
+    assert "'node_names': [\n                'velocity_smoother'," in (
+        launch_source
+    )
+    assert "condition=IfCondition(auto_localize)" in launch_source
+    assert "'allow_motion': ParameterValue(" in launch_source
+    assert "default_value='false'" in launch_source
+    assert "'cmd_vel_topic', 'cmd_vel_nav'" in localizer_source
+    assert "'collision_monitor/get_state'" in localizer_source
+    assert 'State.PRIMARY_STATE_ACTIVE' in localizer_source
+    assert 'qos_profile_sensor_data' in localizer_source
+    assert "self._publish_stop()" in localizer_source

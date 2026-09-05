@@ -50,6 +50,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'auto_localization_node = '
+            'roam_e.auto_localization_node:main',
             'bno055_imu_node = roam_e.imu_bno055_node:main',
             'encoder_odometry_node = roam_e.encoder_odometry_node:main',
             'goal_pose_bridge = roam_e.goal_pose_bridge:main',

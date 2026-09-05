@@ -287,18 +287,48 @@ ros2 service call /reinitialize_global_localization \
 ```
 
 In Foxglove, use `map` as the fixed frame and display `/map`, `/scan`,
-`/particle_cloud`, `/amcl_pose`, the URDF, and transforms. Use the Teleop panel
-to rotate slowly in place, initially around `0.2 rad/s`, so AMCL can compare
-several LiDAR views with the map. Do not drive forward until:
+`/particle_cloud`, `/amcl_pose`, the URDF, and transforms. A stationary scan
+may leave several plausible hypotheses. Because the RPLidar already captures
+360 degrees, a short translation provides more new information than only
+rotating the chassis. Keep the same particle set while gathering multiple
+views: move about `0.20 m`, stop for scan updates, turn about 90 degrees, and
+move again only if needed. Do not call global localization between those
+motions, because doing so discards the evidence accumulated so far.
+
+Do not accept localization until:
 
 - The particle cloud has collapsed to one compact cluster.
 - The live `/scan` points align with the saved walls.
 - `/amcl_pose` is stable and the robot model is in the correct location.
 
-If several clusters remain or the scan is misaligned, stop, call
-`/reinitialize_global_localization` again, and rotate through views containing
-distinctive geometry. A small or symmetric room can be ambiguous, and moved
-furniture or people visible to the LiDAR can slow convergence.
+If several clusters remain or the scan is misaligned after the complete
+search, stop and call `/reinitialize_global_localization` before starting a
+new attempt. A small or symmetric room can be ambiguous, and moved furniture
+or people visible to the LiDAR can slow convergence.
+
+The navigation launch can perform this sequence automatically. Automatic
+motion is deliberately opt-in and requires both flags:
+
+```bash
+ros2 launch roam_e navigation.launch.py \
+  arm_motors:=true \
+  auto_localize:=true
+```
+
+Use that mode only with supervision and clear space around the robot. It
+starts the velocity smoother and Collision Monitor before requesting motion,
+runs one AMCL global search, and tests covariance while stopped. If necessary,
+it drives a guarded `0.20 m` leg, turns left about 90 degrees, and uses a
+second `0.20 m` leg only when the estimate still has not converged. Every
+motion has odometry, sensor-freshness, stall, and time limits. The routine
+stops immediately when three precise and consistent AMCL estimates arrive,
+then clears both costmaps. If localization fails or an obstacle stops motion,
+the robot remains stopped and navigation goals remain locked.
+
+Its status appears in `/diagnostics` as `Roam-E automatic localization`.
+Running with `auto_localize:=true` but leaving `arm_motors:=false` performs the
+global search without physical motion and reports that a changed viewpoint is
+required if a stationary scan cannot converge.
 
 Once localized, AMCL publishes `map -> odom` while the EKF continues to
 publish `odom -> base_footprint`. Carrying the robot again invalidates that
@@ -345,16 +375,20 @@ ros2 lifecycle get /amcl
 
 Then localize the robot as described above. For an approximate known pose,
 use Foxglove's `2D pose estimate` publisher on `/initialpose`. For an unknown
-pose, call global localization and use a short, supervised rotation to let
-AMCL converge. The global costmap intentionally waits for AMCL to create the
-`map -> odom` transform.
+pose, either run the manual multi-view procedure or relaunch with the explicit
+automatic-localization flags. The global costmap waits until AMCL covariance
+is low and stable rather than starting as soon as any `map -> odom` transform
+appears. This prevents a poor early hypothesis from producing shifted ghost
+walls in the global obstacle layer.
 
-The navigation lifecycle manager also waits for the complete
-`map -> base_footprint` transform. As soon as AMCL accepts the initial pose,
-the goal bridge requests Nav2 startup automatically. This avoids leaving the
-planner and navigator inactive when the Raspberry Pi takes longer than usual
-to initialize. Use `autostart:=false` only when lifecycle transitions will be
-managed manually.
+The velocity smoother and Collision Monitor have a separate lifecycle manager
+and start before localization, allowing guarded search motion without enabling
+map-dependent navigation. The planner, controller, behavior server, and BT
+navigator remain inactive until the goal bridge observes three precise,
+consistent AMCL estimates and the complete `map -> base_footprint` transform.
+New goals are rejected, and an active goal is cancelled, if localization
+quality is subsequently lost. Use `autostart:=false` only when lifecycle
+transitions will be managed manually.
 
 Once the scan aligns with the map, confirm the navigation lifecycle nodes are
 active before sending a goal:
