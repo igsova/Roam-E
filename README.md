@@ -3,6 +3,11 @@
 ROS 2 Jazzy software and Arduino Nano firmware for the Roam-E differential
 drive robot.
 
+## Documentation
+
+- [RGB-D camera setup](CAMERA_CAPTURE.md): Linux packages, USB access and the
+  simultaneous VGA RGB/depth capture configuration.
+
 ## Drive base
 
 The Nano owns the time-critical wheel velocity loops and the Raspberry Pi
