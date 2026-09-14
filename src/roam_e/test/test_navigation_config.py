@@ -1,4 +1,5 @@
 from pathlib import Path
+import xml.etree.ElementTree as ET
 
 import yaml
 
@@ -8,6 +9,10 @@ NAVIGATION_CONFIG = PACKAGE_ROOT / 'config' / 'nav2.yaml'
 NAVIGATION_LAUNCH = PACKAGE_ROOT / 'launch' / 'navigation.launch.py'
 GOAL_BRIDGE = PACKAGE_ROOT / 'roam_e' / 'goal_pose_bridge.py'
 AUTO_LOCALIZER = PACKAGE_ROOT / 'roam_e' / 'auto_localization_node.py'
+BOUNDED_NAVIGATION_TREE = (
+    PACKAGE_ROOT / 'behavior_trees' / 'navigate_to_pose_bounded.xml'
+)
+SETUP_FILE = PACKAGE_ROOT / 'setup.py'
 
 
 def load_navigation_parameters():
@@ -94,3 +99,34 @@ def test_safety_chain_starts_before_automatic_localization_motion():
     assert 'State.PRIMARY_STATE_ACTIVE' in localizer_source
     assert 'qos_profile_sensor_data' in localizer_source
     assert "self._publish_stop()" in localizer_source
+
+
+def test_navigation_recovery_is_bounded_and_does_not_move_blindly():
+    tree = ET.parse(BOUNDED_NAVIGATION_TREE).getroot()
+    recovery = tree.find(
+        ".//BehaviorTree/RecoveryNode[@name='NavigateRecovery']"
+    )
+
+    assert recovery is not None
+    assert int(recovery.attrib['number_of_retries']) == 1
+    assert tree.findall('.//BackUp') == []
+    assert tree.findall('.//Spin') == []
+    assert tree.findall('.//ClearEntireCostmap')
+
+
+def test_goal_timeout_and_bounded_tree_are_installed_and_wired():
+    launch_source = NAVIGATION_LAUNCH.read_text(encoding='utf-8')
+    bridge_source = GOAL_BRIDGE.read_text(encoding='utf-8')
+    setup_source = SETUP_FILE.read_text(encoding='utf-8')
+
+    assert "'navigation_bt_xml'" in launch_source
+    assert "'default_nav_to_pose_bt_xml': ParameterValue(" in launch_source
+    assert "'navigation_goal_timeout'" in launch_source
+    assert "'goal_timeout': ParameterValue(" in launch_source
+    assert "default_value='180.0'" in launch_source
+    assert "self.declare_parameter('goal_timeout', 180.0)" in bridge_source
+    assert 'def _enforce_goal_timeout(self):' in bridge_source
+    assert 'time.monotonic()' in bridge_source
+    assert 'goal_handle.cancel_goal_async()' in bridge_source
+    assert "'share/' + package_name + '/behavior_trees'" in setup_source
+    assert "'behavior_trees/navigate_to_pose_bounded.xml'" in setup_source

@@ -218,6 +218,40 @@ for ROAM_E_GROUP in dialout i2c gpio video; do
     fi
 done
 
+# The Astra Pro depth interface is vendor-specific rather than video4linux.
+# Restrict access to members of the video group instead of making the USB
+# device writable by every local user.
+ROAM_E_ORBBEC_UDEV_RULE=/etc/udev/rules.d/56-orbbec.rules
+ROAM_E_ORBBEC_UDEV_ENTRY='SUBSYSTEM=="usb", ATTR{idVendor}=="2bc5", ATTR{idProduct}=="0403", MODE:="0660", GROUP:="video"'
+if [[ ! -f "${ROAM_E_ORBBEC_UDEV_RULE}" ]] || \
+        ! grep -qxF "${ROAM_E_ORBBEC_UDEV_ENTRY}" \
+            "${ROAM_E_ORBBEC_UDEV_RULE}"; then
+    printf '%s\n' "${ROAM_E_ORBBEC_UDEV_ENTRY}" \
+        | sudo tee "${ROAM_E_ORBBEC_UDEV_RULE}" >/dev/null
+    sudo udevadm control --reload-rules
+fi
+
+# Direct libuvc RGB capture needs access to the distinct 0502 USB interface.
+ROAM_E_RGB_UDEV_RULE=/etc/udev/rules.d/57-roam-astra-rgb.rules
+ROAM_E_RGB_UDEV_ENTRY='SUBSYSTEM=="usb", ATTR{idVendor}=="2bc5", ATTR{idProduct}=="0502", MODE:="0660", GROUP:="video"'
+if [[ ! -f "${ROAM_E_RGB_UDEV_RULE}" ]]; then
+    printf '%s\n' "${ROAM_E_RGB_UDEV_ENTRY}" \
+        | sudo tee "${ROAM_E_RGB_UDEV_RULE}" >/dev/null
+    sudo udevadm control --reload-rules
+elif ! grep -qxF "${ROAM_E_RGB_UDEV_ENTRY}" "${ROAM_E_RGB_UDEV_RULE}"; then
+    printf 'Existing RGB USB rule differs; review %s manually.\n' "${ROAM_E_RGB_UDEV_RULE}"
+fi
+
+# Orbbec's legacy ARM64 SDK does not provide the SONAME symlink expected by
+# the ROS openni2 wrapper. Add it when the separately supplied SDK is present.
+ROAM_E_OPENNI2_SDK_DIR="${HOME}/OpenNI-Linux-Arm64-2.3.0.65/Samples/Bin"
+if [[ -f "${ROAM_E_OPENNI2_SDK_DIR}/libOpenNI2.so" ]]; then
+    ln -sfn libOpenNI2.so "${ROAM_E_OPENNI2_SDK_DIR}/libOpenNI2.so.0"
+else
+    printf 'Astra depth SDK not found at %s; camera setup was skipped.\n' \
+        "${ROAM_E_OPENNI2_SDK_DIR}"
+fi
+
 ROAM_E_BOOT_CONFIG=/boot/firmware/config.txt
 if [[ ! -f "${ROAM_E_BOOT_CONFIG}" ]]; then
     printf 'Expected Raspberry Pi boot configuration at %s.\n' \

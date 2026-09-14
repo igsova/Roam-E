@@ -1,3 +1,5 @@
+import time
+
 from rclpy.action import ActionClient
 from rclpy.duration import Duration
 from rclpy.node import Node
@@ -37,6 +39,7 @@ class GoalPoseBridge(Node):
         self.declare_parameter('required_stable_samples', 3)
         self.declare_parameter('max_position_jump', 0.15)
         self.declare_parameter('max_yaw_jump', 0.35)
+        self.declare_parameter('goal_timeout', 180.0)
 
         goal_topic = self.get_parameter('goal_topic').value
         action_name = self.get_parameter('action_name').value
@@ -48,6 +51,12 @@ class GoalPoseBridge(Node):
             action_name,
         )
         self._active_goal_handle = None
+        self._active_goal_started_at = None
+        self._goal_cancel_requested = False
+        self._goal_timeout = float(self.get_parameter('goal_timeout').value)
+        if self._goal_timeout <= 0.0:
+            raise ValueError('goal_timeout must be greater than zero')
+        self.create_timer(0.25, self._enforce_goal_timeout)
         self.create_subscription(PoseStamped, goal_topic, self._on_goal, 10)
         self._localization_tracker = ConvergenceTracker(
             max_x_variance=self.get_parameter(
@@ -137,8 +146,7 @@ class GoalPoseBridge(Node):
             'Localization quality gate was lost; rejecting new navigation '
             'goals and cancelling the active goal, if any.'
         )
-        if self._active_goal_handle is not None:
-            self._active_goal_handle.cancel_goal_async()
+        self._cancel_active_goal('Cancelling goal after localization loss.')
 
     def _localization_is_ready(self):
         # AMCL publishes amcl_pose when its filter updates, not as a
@@ -219,8 +227,7 @@ class GoalPoseBridge(Node):
             )
             return
 
-        if self._active_goal_handle is not None:
-            self._active_goal_handle.cancel_goal_async()
+        self._cancel_active_goal('Cancelling the previous navigation goal.')
 
         goal = NavigateToPose.Goal()
         goal.pose = pose
@@ -233,12 +240,21 @@ class GoalPoseBridge(Node):
         )
 
     def _on_goal_response(self, future):
-        goal_handle = future.result()
+        try:
+            goal_handle = future.result()
+        except Exception as error:  # noqa: BLE001 - ROS future exceptions vary
+            self.get_logger().error(f'Failed to send navigation goal: {error}')
+            return
         if not goal_handle.accepted:
             self.get_logger().warning('Nav2 rejected the goal.')
             return
 
         self._active_goal_handle = goal_handle
+        self._active_goal_started_at = time.monotonic()
+        self._goal_cancel_requested = False
+        self.get_logger().info(
+            f'Navigation goal accepted; timeout is {self._goal_timeout:.1f} s.'
+        )
         result_future = goal_handle.get_result_async()
         result_future.add_done_callback(
             lambda result, handle=goal_handle: self._on_result(
@@ -248,12 +264,75 @@ class GoalPoseBridge(Node):
         )
 
     def _on_result(self, future, goal_handle):
-        result = future.result()
-        self.get_logger().info(
-            f'NavigateToPose finished with status {result.status}.'
-        )
+        try:
+            result = future.result()
+        except Exception as error:  # noqa: BLE001 - ROS future exceptions vary
+            self.get_logger().error(
+                f'Failed to receive NavigateToPose result: {error}'
+            )
+            result = None
+        if result is not None:
+            self.get_logger().info(
+                f'NavigateToPose finished with status {result.status}.'
+            )
         if self._active_goal_handle == goal_handle:
             self._active_goal_handle = None
+            self._active_goal_started_at = None
+            self._goal_cancel_requested = False
+
+    def _enforce_goal_timeout(self):
+        if self._active_goal_handle is None:
+            return
+        if self._active_goal_started_at is None:
+            return
+        if self._goal_cancel_requested:
+            return
+
+        elapsed = time.monotonic() - self._active_goal_started_at
+        if elapsed < self._goal_timeout:
+            return
+
+        self._cancel_active_goal(
+            f'Navigation goal exceeded the {self._goal_timeout:.1f} s '
+            'mission timeout; cancelling it.'
+        )
+
+    def _cancel_active_goal(self, reason):
+        goal_handle = self._active_goal_handle
+        if goal_handle is None or self._goal_cancel_requested:
+            return
+
+        self._goal_cancel_requested = True
+        self.get_logger().warning(reason)
+        cancel_future = goal_handle.cancel_goal_async()
+        cancel_future.add_done_callback(
+            lambda response, handle=goal_handle: self._on_cancel_response(
+                response,
+                handle,
+            )
+        )
+
+    def _on_cancel_response(self, future, goal_handle):
+        if self._active_goal_handle != goal_handle:
+            return
+        try:
+            response = future.result()
+        except Exception as error:  # noqa: BLE001 - ROS future exceptions vary
+            self.get_logger().error(f'Goal cancellation failed: {error}')
+            self._goal_cancel_requested = False
+            return
+
+        if not response.goals_canceling:
+            self.get_logger().warning(
+                'Nav2 did not accept the goal cancellation request.'
+            )
+            self._goal_cancel_requested = False
+            return
+
+        self.get_logger().info(
+            'Nav2 accepted the goal cancellation request; waiting for the '
+            'terminal result.'
+        )
 
 
 def main(args=None):

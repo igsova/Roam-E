@@ -38,6 +38,13 @@
   <exec_depend>python3-serial</exec_depend>
   <exec_depend>foxglove_bridge</exec_depend>
   <exec_depend>teleop_twist_keyboard</exec_depend>
+  <exec_depend>openni2_camera</exec_depend>
+  <exec_depend>v4l2_camera</exec_depend>
+  <exec_depend>compressed_image_transport</exec_depend>
+  <exec_depend>compressed_depth_image_transport</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-opencv</exec_depend>
+  <exec_depend>libuvc-dev</exec_depend>
 
   <export>
     <build_type>ament_python</build_type>

@@ -429,6 +429,34 @@ that the global path, local costmap, and collision zones appear. The
 controller will report lack of progress because the robot cannot move; stop
 the launch after the visualization check.
 
+Camera setup, Linux packages, USB access rules, the separate legacy depth SDK,
+and the verified simultaneous VGA RGB/depth configuration are documented in
+[CAMERA_CAPTURE.md](CAMERA_CAPTURE.md).
+
+Roam-E uses a bounded navigation behavior tree for supervised indoor tests.
+When the controller cannot make progress, it may clear its local costmap and
+retry once. If the complete navigation pipeline still fails, it clears both
+costmaps once and makes one final pipeline attempt. It then reports failure;
+the tree never commands an automatic spin or reverse recovery. The Foxglove
+goal bridge independently requests cancellation after an accepted goal has
+remained active for 180 seconds. This requires Nav2 to respond; it is not a
+hard motor stop and does not cover goals sent directly to the action server.
+This timeout can be adjusted for a launch when deliberately
+testing a longer route, for example:
+
+```bash
+ros2 launch roam_e navigation.launch.py \
+  arm_motors:=true \
+  auto_localize:=true \
+  navigation_goal_timeout:=240.0
+```
+
+For a blocked-route test, leave the obstacle in place until Nav2 reports that
+the goal failed. Verify a safe stop, bounded costmap-recovery attempts, and
+eventual failure without a spin or reverse recovery. The bounded-tree/timeout
+changes have automated configuration checks, but their physical blocked-route
+retest is still pending.
+
 Do not use the Foxglove Teleop panel on `/cmd_vel` while autonomous navigation
 is running. That is the final post-monitor topic, so a second publisher there
 would compete with the safety chain. Stop the navigation launch before using

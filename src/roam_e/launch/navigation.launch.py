@@ -22,6 +22,10 @@ def generate_launch_description():
     map_file = LaunchConfiguration('map')
     amcl_params_file = LaunchConfiguration('amcl_params_file')
     navigation_params_file = LaunchConfiguration('navigation_params_file')
+    navigation_bt_xml = LaunchConfiguration('navigation_bt_xml')
+    navigation_goal_timeout = LaunchConfiguration(
+        'navigation_goal_timeout'
+    )
 
     localization_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -87,7 +91,12 @@ def generate_launch_description():
         executable='bt_navigator',
         name='bt_navigator',
         output='screen',
-        parameters=common_parameters,
+        parameters=common_parameters + [{
+            'default_nav_to_pose_bt_xml': ParameterValue(
+                navigation_bt_xml,
+                value_type=str,
+            ),
+        }],
         remappings=tf_remappings,
     )
 
@@ -167,6 +176,10 @@ def generate_launch_description():
                 value_type=bool,
             ),
             'lifecycle_manager_name': 'lifecycle_manager_navigation',
+            'goal_timeout': ParameterValue(
+                navigation_goal_timeout,
+                value_type=float,
+            ),
         }],
     )
 
@@ -241,6 +254,27 @@ def generate_launch_description():
                 'config',
                 'nav2.yaml',
             ]),
+        ),
+        DeclareLaunchArgument(
+            'navigation_bt_xml',
+            default_value=PathJoinSubstitution([
+                FindPackageShare('roam_e'),
+                'behavior_trees',
+                'navigate_to_pose_bounded.xml',
+            ]),
+            description=(
+                'Behavior tree used for NavigateToPose goals. The default '
+                'performs one costmap recovery cycle and never commands an '
+                'automatic spin or reverse maneuver.'
+            ),
+        ),
+        DeclareLaunchArgument(
+            'navigation_goal_timeout',
+            default_value='180.0',
+            description=(
+                'Seconds before requesting cancellation of an accepted '
+                'Foxglove goal; not a hard motor-stop guarantee.'
+            ),
         ),
         localization_launch,
         controller_server,
