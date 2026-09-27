@@ -28,6 +28,7 @@ setup(
                 'config/slam.yaml',
                 'config/amcl.yaml',
                 'config/nav2.yaml',
+                'config/astra_rgb_640x480.yaml',
             ],
         ),
         (

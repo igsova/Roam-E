@@ -2,6 +2,7 @@ from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
     IncludeLaunchDescription,
+    GroupAction,
     SetEnvironmentVariable,
 )
 from launch.conditions import IfCondition
@@ -46,7 +47,7 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'start_color',
             default_value='true',
-            description='Start the separate V4L2 color stream.',
+            description='Start the separate libuvc color stream.',
         ),
         DeclareLaunchArgument(
             'use_foxglove',
@@ -61,6 +62,14 @@ def generate_launch_description():
         DeclareLaunchArgument('color_height', default_value='480'),
         DeclareLaunchArgument('color_preview_fps', default_value='5.0'),
         DeclareLaunchArgument('color_decode_fps', default_value='2.0'),
+        DeclareLaunchArgument(
+            'color_calibration_file',
+            default_value=PathJoinSubstitution([
+                FindPackageShare('roam_e'), 'config', 'astra_rgb_640x480.yaml']),
+            description='Measured RGB-only calibration; must match capture resolution.',
+        ),
+        DeclareLaunchArgument('rectify_color', default_value='true',
+                              description='Publish rectified RGB on demand, using image_proc.'),
 
         # The ROS wrapper is linked against libOpenNI2.so.0. The legacy
         # Orbbec SDK and its driver must take precedence over Ubuntu's OpenNI2
@@ -113,8 +122,22 @@ def generate_launch_description():
                 'preview_fps': ParameterValue(LaunchConfiguration('color_preview_fps'), value_type=float),
                 'decode_fps': ParameterValue(LaunchConfiguration('color_decode_fps'), value_type=float),
                 'camera_frame_id': 'camera_rgb_optical_frame',
+                'calibration_file': ParameterValue(
+                    LaunchConfiguration('color_calibration_file'), value_type=str),
             }],
         ),
+
+        # The official rectifier subscribes lazily: no decoded RGB or remapping
+        # work unless an image_rect consumer (including compressed) connects.
+        GroupAction(condition=IfCondition(start_color), actions=[
+            Node(
+                package='image_proc', executable='rectify_node',
+                namespace='camera/color', name='color_rectify', output='screen',
+                condition=IfCondition(LaunchConfiguration('rectify_color')),
+                parameters=[{'image_transport': 'raw', 'queue_size': 5, 'interpolation': 1}],
+                remappings=[('image', 'image_raw'), ('image_rect', 'image_rect')],
+            ),
+        ]),
 
         # compressed_depth_image_transport preserves metric depth, but its
         # custom wire format is not rendered by Foxglove's Image panel. This
@@ -151,6 +174,7 @@ def generate_launch_description():
                 'address': '127.0.0.1',
                 'topic_whitelist': (
                     "['^/camera/color/image_raw/compressed$', "
+                    "'^/camera/color/image_rect/compressed$', "
                     "'^/camera/depth_preview/compressed$', "
                     "'^/camera/color/camera_info$', "
                     "'^/camera/depth_raw/camera_info$', "

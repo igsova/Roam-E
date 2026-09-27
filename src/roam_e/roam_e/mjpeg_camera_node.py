@@ -1,4 +1,4 @@
-"""Native UVC JPEG passthrough; optional low-rate decoding, no re-encoding.
+"""Native UVC JPEG passthrough with optional calibrated CameraInfo.
 
 Timestamps are host receive times, not hardware exposure timestamps. Camera
 calibration and RGB/depth synchronization must be established before SLAM.
@@ -10,9 +10,11 @@ import math
 import cv2
 import numpy as np
 import rclpy
+from rcl_interfaces.msg import ParameterDescriptor
 from rclpy.node import Node
 from rclpy.qos import qos_profile_sensor_data
-from sensor_msgs.msg import CompressedImage, Image
+from sensor_msgs.msg import CameraInfo, CompressedImage, Image
+from roam_e.rgb_calibration import load_rgb_calibration, camera_info_for_frame
 from roam_e.uvc_capture import UvcCapture
 
 
@@ -37,8 +39,9 @@ class MjpegCamera(Node):
                            ('height', 480), ('capture_fps', 30.0),
                            ('preview_fps', 5.0), ('decode_fps', 2.0),
                            ('usb_payload_bytes', 800),
-                           ('camera_frame_id', 'camera_rgb_optical_frame')]:
-            self.declare_parameter(key, value)
+                           ('camera_frame_id', 'camera_rgb_optical_frame'),
+                           ('calibration_file', '')]:
+            self.declare_parameter(key, value, ParameterDescriptor(read_only=True))
         p = lambda name: self.get_parameter(name).value
         self.preview_fps, self.decode_fps = p('preview_fps'), p('decode_fps')
         if (not all(math.isfinite(v) for v in
@@ -46,6 +49,11 @@ class MjpegCamera(Node):
                 or self.preview_fps <= 0 or self.decode_fps < 0 or p('capture_fps') <= 0):
             raise ValueError('Rates must be positive; decode_fps may be zero')
         self.frame_id = p('camera_frame_id')
+        self.width, self.height = p('width'), p('height')
+        self.calibration = (load_rgb_calibration(p('calibration_file'), (self.width, self.height))
+                            if p('calibration_file') else None)
+        self.info = (self.create_publisher(CameraInfo, 'camera_info', qos_profile_sensor_data)
+                     if self.calibration is not None else None)
         self.compressed = self.create_publisher(
             CompressedImage, 'image_raw/compressed', qos_profile_sensor_data)
         self.raw = self.create_publisher(Image, 'image_raw', qos_profile_sensor_data)
@@ -60,7 +68,12 @@ class MjpegCamera(Node):
         self.worker.start()
         self.create_timer(0.01, self.publish_latest)
         self.create_timer(30.0, self.report_capture)
-        self.get_logger().info('Native MJPEG capture; host receive timestamps; no calibration published')
+        if self.calibration is not None:
+            self.get_logger().info(f'RGB calibration loaded: {p("calibration_file")}; '
+                                   'CameraInfo shares image stamps; depth alignment is unverified')
+        else:
+            self.get_logger().warning('No RGB calibration file; CameraInfo will not be published')
+        self.get_logger().info('Native MJPEG capture; host receive timestamps, not exposure synchronization')
 
     def capture(self):
         last_frame = time.monotonic()
@@ -98,26 +111,35 @@ class MjpegCamera(Node):
             return
         stamp, data = item
         now = time.monotonic()
+        published = False
         if now - self.last_preview >= 1.0 / self.preview_fps:
             msg = CompressedImage()
             msg.header.stamp, msg.header.frame_id = stamp, self.frame_id
             msg.format, msg.data = 'jpeg', data
             self.compressed.publish(msg)
             self.last_preview = now
+            published = True
         if (self.decode_fps > 0 and self.raw.get_subscription_count() > 0
                 and now - self.last_decode >= 1.0 / self.decode_fps):
             try:
                 rgb = decode_rgb(data)
             except ValueError:
                 self.invalid += 1
-                return
-            msg = Image()
-            msg.header.stamp, msg.header.frame_id = stamp, self.frame_id
-            msg.height, msg.width = rgb.shape[:2]
-            msg.encoding, msg.step = 'rgb8', rgb.shape[1] * 3
-            msg.data = rgb.tobytes()
-            self.raw.publish(msg)
-            self.last_decode = now
+            else:
+                if rgb.shape[:2] != (self.height, self.width):
+                    raise RuntimeError('Decoded RGB dimensions do not match capture/calibration')
+                msg = Image()
+                msg.header.stamp, msg.header.frame_id = stamp, self.frame_id
+                msg.height, msg.width = rgb.shape[:2]
+                msg.encoding, msg.step = 'rgb8', rgb.shape[1] * 3
+                msg.data = rgb.tobytes()
+                self.raw.publish(msg)
+                self.last_decode = now
+                published = True
+        # Raw decoding and JPEG preview may have different schedules. Publish
+        # once for their union, so neither stream misses matching metadata.
+        if published and self.info is not None:
+            self.info.publish(camera_info_for_frame(self.calibration, stamp, self.frame_id))
 
     def report_capture(self):
         self.get_logger().info(

@@ -28,6 +28,12 @@ def test_astra_launch_uses_verified_depth_and_color_drivers():
     assert "default_value='8765'" in source
     assert "'address': '127.0.0.1'" in source
     assert "'^/camera/color/image_raw/compressed$'" in source
+    assert "'^/camera/color/image_rect/compressed$'" in source
+    assert "'color_calibration_file'" in source
+    assert "'astra_rgb_640x480.yaml'" in source
+    assert "'rectify_color', default_value='true'" in source
+    assert "package='image_proc', executable='rectify_node'" in source
+    assert "('image', 'image_raw')" in source
     assert "executable='depth_preview_node'" in source
     assert "'input_topic': '/camera/depth_raw/image'" in source
     assert "'output_topic': '/camera/depth_preview/compressed'" in source
@@ -59,6 +65,10 @@ def test_astra_launch_is_installed_with_runtime_dependencies():
     )
     assert '<exec_depend>python3-numpy</exec_depend>' in package_source
     assert '<exec_depend>python3-opencv</exec_depend>' in package_source
+    assert '<exec_depend>python3-yaml</exec_depend>' in package_source
+    assert '<exec_depend>rcl_interfaces</exec_depend>' in package_source
+    assert '<exec_depend>image_proc</exec_depend>' in package_source
+    assert "'config/astra_rgb_640x480.yaml'" in setup_source
     assert 'depth_preview_node = roam_e.depth_preview_node:main' in setup_source
 
 

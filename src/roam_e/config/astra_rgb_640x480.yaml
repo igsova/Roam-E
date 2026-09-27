@@ -1,0 +1,25 @@
+# Roam-E Astra Pro separate RGB camera: 640x480, calibrated 2026-09-18.
+# 35 mm chessboard, 7x7 inner corners; 17 distinct views; CALIB_FIX_K3.
+# RMS 0.508 px; leave-one-view-out pooled RMS 0.517 px, maximum 0.866 px.
+# RGB-only bench calibration. Does NOT establish RGB-depth alignment/timing.
+# Source data remains private; see scripts/camera/README.md for provenance.
+image_width: 640
+image_height: 480
+camera_name: astra_pro_rgb_640x480
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [580.3540663780394, 0.0, 320.6065557590073, 0.0, 574.6679420733766, 249.58757782033555, 0.0, 0.0, 1.0]
+distortion_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [0.08958982788966331, -0.23124634202504485, -0.001668866508207286, -0.00033786008003159647, 0.0]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [580.3540663780394, 0.0, 320.6065557590073, 0.0, 0.0, 574.6679420733766, 249.58757782033555, 0.0, 0.0, 0.0, 1.0, 0.0]
