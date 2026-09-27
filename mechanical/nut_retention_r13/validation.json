@@ -1,0 +1,1118 @@
+{
+  "revision": "R13",
+  "status": "digital mesh and sampled assembly-path checks passed",
+  "measured_nut_retention": [
+    {
+      "joint": "H1",
+      "surface_samples": [
+        {
+          "depth_mm": 0.2,
+          "flat": 0,
+          "radius_mm": 2.649992736721263
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 1,
+          "radius_mm": 2.649999079169581
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 2,
+          "radius_mm": 2.6500016051620867
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 3,
+          "radius_mm": 2.6500045979109608
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 4,
+          "radius_mm": 2.6500016051620867
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 5,
+          "radius_mm": 2.649999079169581
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 0,
+          "radius_mm": 2.649992736721263
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 1,
+          "radius_mm": 2.649999079169581
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 2,
+          "radius_mm": 2.6500016051620867
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 3,
+          "radius_mm": 2.6500045979109608
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 4,
+          "radius_mm": 2.6500016051620867
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 5,
+          "radius_mm": 2.649999079169581
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 0,
+          "radius_mm": 2.804994602179051
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 1,
+          "radius_mm": 2.804996884835884
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 2,
+          "radius_mm": 2.80500505569455
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 3,
+          "radius_mm": 2.8050065342283363
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 4,
+          "radius_mm": 2.80500505569455
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 5,
+          "radius_mm": 2.804996884835884
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 0,
+          "radius_mm": 2.9406249999113214
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 1,
+          "radius_mm": 2.940621065788356
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 2,
+          "radius_mm": 2.94062663294195
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 3,
+          "radius_mm": 2.940630938200169
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 4,
+          "radius_mm": 2.94062663294195
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 5,
+          "radius_mm": 2.940621065788356
+        }
+      ],
+      "nut_floor_depth_mm": -1.1920928955078125e-05,
+      "intentional_nominal_nut_interference_volume_mm3": 0.3778424286738369
+    },
+    {
+      "joint": "H2",
+      "surface_samples": [
+        {
+          "depth_mm": 0.2,
+          "flat": 0,
+          "radius_mm": 2.649992736721263
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 1,
+          "radius_mm": 2.649999188995392
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 2,
+          "radius_mm": 2.650001714987793
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 3,
+          "radius_mm": 2.6500045979109608
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 4,
+          "radius_mm": 2.650001714987793
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 5,
+          "radius_mm": 2.649999188995392
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 0,
+          "radius_mm": 2.649992736721263
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 1,
+          "radius_mm": 2.649999188995392
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 2,
+          "radius_mm": 2.650001714987793
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 3,
+          "radius_mm": 2.6500045979109608
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 4,
+          "radius_mm": 2.650001714987793
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 5,
+          "radius_mm": 2.649999188995392
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 0,
+          "radius_mm": 2.804994602179051
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 1,
+          "radius_mm": 2.804995120964858
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 2,
+          "radius_mm": 2.804998856219836
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 3,
+          "radius_mm": 2.805000516331563
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 4,
+          "radius_mm": 2.8049985449487775
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 5,
+          "radius_mm": 2.804995120964858
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 0,
+          "radius_mm": 2.9406189626386996
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 1,
+          "radius_mm": 2.9406203729862823
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 2,
+          "radius_mm": 2.9406217585902663
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 3,
+          "radius_mm": 2.940630938200169
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 4,
+          "radius_mm": 2.9406212637317757
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 5,
+          "radius_mm": 2.9406203729862823
+        }
+      ],
+      "nut_floor_depth_mm": -1.1920928955078125e-05,
+      "intentional_nominal_nut_interference_volume_mm3": 0.37784747890311987
+    },
+    {
+      "joint": "H3",
+      "surface_samples": [
+        {
+          "depth_mm": 0.2,
+          "flat": 0,
+          "radius_mm": 2.649992736721263
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 1,
+          "radius_mm": 2.649999079169581
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 2,
+          "radius_mm": 2.6500016051620867
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 3,
+          "radius_mm": 2.6500045979109608
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 4,
+          "radius_mm": 2.6500016051620867
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 5,
+          "radius_mm": 2.649999079169581
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 0,
+          "radius_mm": 2.649992736721263
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 1,
+          "radius_mm": 2.649999079169581
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 2,
+          "radius_mm": 2.6500016051620867
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 3,
+          "radius_mm": 2.6500045979109608
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 4,
+          "radius_mm": 2.6500016051620867
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 5,
+          "radius_mm": 2.649999079169581
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 0,
+          "radius_mm": 2.804994602179051
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 1,
+          "radius_mm": 2.8050024617737424
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 2,
+          "radius_mm": 2.8050024617737424
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 3,
+          "radius_mm": 2.8050065342283363
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 4,
+          "radius_mm": 2.8050024617737424
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 5,
+          "radius_mm": 2.8049994787618484
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 0,
+          "radius_mm": 2.9406189626386996
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 1,
+          "radius_mm": 2.940621065788356
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 2,
+          "radius_mm": 2.940621065788356
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 3,
+          "radius_mm": 2.940630938200169
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 4,
+          "radius_mm": 2.940621065788356
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 5,
+          "radius_mm": 2.940621065788356
+        }
+      ],
+      "nut_floor_depth_mm": -1.1920928955078125e-05,
+      "intentional_nominal_nut_interference_volume_mm3": 0.3778417942204102
+    },
+    {
+      "joint": "H4",
+      "surface_samples": [
+        {
+          "depth_mm": 0.2,
+          "flat": 0,
+          "radius_mm": 2.649999765580826
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 1,
+          "radius_mm": 2.65000179735707
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 2,
+          "radius_mm": 2.65000179735707
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 3,
+          "radius_mm": 2.6500002048839297
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 4,
+          "radius_mm": 2.65000179735707
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 5,
+          "radius_mm": 2.65000179735707
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 0,
+          "radius_mm": 2.649999765580826
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 1,
+          "radius_mm": 2.6499966355441043
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 2,
+          "radius_mm": 2.65000179735707
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 3,
+          "radius_mm": 2.6500002048839297
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 4,
+          "radius_mm": 2.65000179735707
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 5,
+          "radius_mm": 2.6499966355441043
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 0,
+          "radius_mm": 2.8050002050606886
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 1,
+          "radius_mm": 2.8049985449487775
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 2,
+          "radius_mm": 2.8049985449487775
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 3,
+          "radius_mm": 2.8050003088176503
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 4,
+          "radius_mm": 2.8049985449487775
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 5,
+          "radius_mm": 2.8049985449487775
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 0,
+          "radius_mm": 2.940623119450686
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 1,
+          "radius_mm": 2.940618863666914
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 2,
+          "radius_mm": 2.9406246782536662
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 3,
+          "radius_mm": 2.9406225256207623
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 4,
+          "radius_mm": 2.9406246782536662
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 5,
+          "radius_mm": 2.940618863666914
+        }
+      ],
+      "nut_floor_depth_mm": -1.1920928955078125e-05,
+      "intentional_nominal_nut_interference_volume_mm3": 0.37785337689724274
+    },
+    {
+      "joint": "H5",
+      "surface_samples": [
+        {
+          "depth_mm": 0.2,
+          "flat": 0,
+          "radius_mm": 2.6499986673227482
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 1,
+          "radius_mm": 2.649999079169581
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 2,
+          "radius_mm": 2.649999079169581
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 3,
+          "radius_mm": 2.6499986673227482
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 4,
+          "radius_mm": 2.649999628298591
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 5,
+          "radius_mm": 2.649999628298591
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 0,
+          "radius_mm": 2.6499986673227482
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 1,
+          "radius_mm": 2.649999079169581
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 2,
+          "radius_mm": 2.649999079169581
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 3,
+          "radius_mm": 2.6499986673227482
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 4,
+          "radius_mm": 2.6499995184727982
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 5,
+          "radius_mm": 2.6499995184727982
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 0,
+          "radius_mm": 2.8050065342283363
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 1,
+          "radius_mm": 2.804999790032803
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 2,
+          "radius_mm": 2.8049991674908594
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 3,
+          "radius_mm": 2.8050065342283363
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 4,
+          "radius_mm": 2.805000101303723
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 5,
+          "radius_mm": 2.805000101303723
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 0,
+          "radius_mm": 2.940630938200169
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 1,
+          "radius_mm": 2.9406260391127357
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 2,
+          "radius_mm": 2.940626336027358
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 3,
+          "radius_mm": 2.940630938200169
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 4,
+          "radius_mm": 2.9406279195715035
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 5,
+          "radius_mm": 2.9406279195715035
+        }
+      ],
+      "nut_floor_depth_mm": 0.0,
+      "intentional_nominal_nut_interference_volume_mm3": 0.3872134958649367
+    },
+    {
+      "joint": "H6",
+      "surface_samples": [
+        {
+          "depth_mm": 0.2,
+          "flat": 0,
+          "radius_mm": 2.6499986673227482
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 1,
+          "radius_mm": 2.649999079169581
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 2,
+          "radius_mm": 2.649996772826494
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 3,
+          "radius_mm": 2.6499866962801804
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 4,
+          "radius_mm": 2.649997212130094
+        },
+        {
+          "depth_mm": 0.2,
+          "flat": 5,
+          "radius_mm": 2.649999628298591
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 0,
+          "radius_mm": 2.6499986673227482
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 1,
+          "radius_mm": 2.649999079169581
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 2,
+          "radius_mm": 2.649996772826494
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 3,
+          "radius_mm": 2.6499866962801804
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 4,
+          "radius_mm": 2.649997212130094
+        },
+        {
+          "depth_mm": 1.5,
+          "flat": 5,
+          "radius_mm": 2.6499995184727982
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 0,
+          "radius_mm": 2.8050065342283363
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 1,
+          "radius_mm": 2.8050007238454593
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 2,
+          "radius_mm": 2.805002383956081
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 3,
+          "radius_mm": 2.804994602179051
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 4,
+          "radius_mm": 2.8050003088176503
+        },
+        {
+          "depth_mm": 2.4,
+          "flat": 5,
+          "radius_mm": 2.805000931359341
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 0,
+          "radius_mm": 2.9406428147418895
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 1,
+          "radius_mm": 2.9406282164859356
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 2,
+          "radius_mm": 2.9406289092861617
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 3,
+          "radius_mm": 2.940630938200169
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 4,
+          "radius_mm": 2.9406281175144615
+        },
+        {
+          "depth_mm": 2.75,
+          "flat": 5,
+          "radius_mm": 2.940628414428874
+        }
+      ],
+      "nut_floor_depth_mm": 0.0,
+      "intentional_nominal_nut_interference_volume_mm3": 0.38723786812354
+    }
+  ],
+  "material_changes": {
+    "P15B | Removable hood side panel R13": {
+      "net_added_volume_mm3": 6.659254203514138,
+      "original_surface_containment_samples": 10180,
+      "max_original_surface_outside_new_solid_mm": 0.0006063556845958828,
+      "surface_tolerance_mm": 0.01
+    },
+    "P15D | Rear slide-on hood R13": {
+      "net_added_volume_mm3": 6.65890375507297,
+      "original_surface_containment_samples": 20721,
+      "max_original_surface_outside_new_solid_mm": 0.0006912987863552655,
+      "surface_tolerance_mm": 0.01
+    }
+  },
+  "max_new_surface_error_outside_pockets_mm": 0.03557178715709597,
+  "new_surface_tessellation_tolerance_mm": 0.05,
+  "retention_type": "PETG interference ribs. Retaining force, repeated insertion life and physical print fit untested.",
+  "unchanged_R12_objects": 844,
+  "unexpected_original_changes": [],
+  "removed_for_assembly_screws_and_washers": [
+    "R12 H5 | M3x12 screw",
+    "R12 H5 | M3 washer",
+    "R12 H6 | M3x12 screw",
+    "R12 H6 | M3 washer",
+    "K-1_-55 | M3x16 screw",
+    "K-1_-55 | washer",
+    "K-1_55 | M3x16 screw",
+    "K-1_55 | washer",
+    "K1_-55 | M3x16 screw",
+    "K1_-55 | washer",
+    "K1_55 | M3x16 screw",
+    "K1_55 | washer",
+    "H1 | M3x12 screw",
+    "H1 | M3 washer",
+    "H2 | M3x12 screw",
+    "H2 | M3 washer",
+    "H3 | M3x12 screw",
+    "H3 | M3 washer",
+    "R10 H4 | M3x12 screw",
+    "R10 H4 | M3 washer"
+  ],
+  "sampled_removal_paths": [
+    {
+      "part": "P15B | Removable hood side panel R13",
+      "direction": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "offset_range_mm": [
+        0,
+        240
+      ],
+      "step_mm": 0.5,
+      "sample_count": 481,
+      "moving_objects": [
+        "P15B | Removable hood side panel R13",
+        "P12 | Hood locating sleeve.002",
+        "P12 | Hood locating sleeve.003",
+        "H1 | M3 captive nut",
+        "H2 | M3 captive nut",
+        "H3 | M3 captive nut"
+      ],
+      "stationary_objects": 454,
+      "retained_stationary_cover_hardware": [
+        "K-1_55 | M3x16 screw",
+        "K-1_55 | washer",
+        "K-1_-55 | M3x16 screw",
+        "K-1_-55 | washer"
+      ],
+      "full_exit_gap_mm": 220.0000011920929,
+      "collisions": []
+    },
+    {
+      "part": "P15C | Front slide-on smiling hood R12",
+      "direction": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "offset_range_mm": [
+        0,
+        240
+      ],
+      "step_mm": 0.5,
+      "sample_count": 481,
+      "moving_objects": [
+        "P15C | Front slide-on smiling hood R12",
+        "Smile | Rounded dark surround",
+        "Smile | Cyan illuminated curve",
+        "P12 | Hood locating sleeve",
+        "P14 | Removable service-port plug",
+        "P14 | Removable service-port plug.002"
+      ],
+      "stationary_objects": 446,
+      "retained_stationary_cover_hardware": [
+        "K-1_55 | M3x16 screw",
+        "K-1_55 | washer"
+      ],
+      "full_exit_gap_mm": 122.479989528656,
+      "collisions": []
+    },
+    {
+      "part": "P15D | Rear slide-on hood R13",
+      "direction": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "offset_range_mm": [
+        0,
+        240
+      ],
+      "step_mm": 0.5,
+      "sample_count": 481,
+      "moving_objects": [
+        "P15D | Rear slide-on hood R13",
+        "R10 H4 | M3 captive nut",
+        "R12 H5 | M3 captive nut",
+        "R12 H6 | M3 captive nut",
+        "P12 | Hood locating sleeve.001",
+        "P14 | Removable service-port plug.001",
+        "P14 | Removable service-port plug.003"
+      ],
+      "stationary_objects": 437,
+      "retained_stationary_cover_hardware": [],
+      "full_exit_gap_mm": 151.50000132620335,
+      "collisions": []
+    }
+  ],
+  "assembly_order": "Preload H4/H5/H6 nuts in rear P15D; rear P15D and its holding K screw; front P15C and its holding K screw; P15B; remaining hardware including H5/H6 from outside.",
+  "protected_vertex_samples_outside_nut_pockets": 2937,
+  "max_protected_vertex_error_mm": 4.2981520209650625e-05,
+  "H4_vertical_tool_access_6mm_diameter": "clear",
+  "side_driver_access_6mm_diameter": {
+    "H5": [],
+    "H6": []
+  },
+  "new_hardware_against_fixed_robot": {
+    "R12 H5 | M3x12 screw": [],
+    "R12 H5 | M3 captive nut": [],
+    "R12 H5 | M3 washer": [],
+    "R12 H6 | M3x12 screw": [],
+    "R12 H6 | M3 captive nut": [],
+    "R12 H6 | M3 washer": [],
+    "R10 H4 | M3x12 screw": [],
+    "R10 H4 | M3 washer": [],
+    "R10 H4 | M3 captive nut": []
+  },
+  "contact_QA_tolerance": "P12 sleeve QA copies shrink 0.2% only to separate intentional sleeve/frame face contact; all delivered geometry unchanged.",
+  "limits": [
+    "Sampled 0.5 mm mesh motion, not continuous collision detection or a physical-fit guarantee.",
+    "Unmodeled wires, connector bend radii, manufacturing tolerances and flexible printed parts are not simulated.",
+    "Fit Q13 PETG nut-retention coupons first. Deliberate rib/nut interference is not a measured retention force or lifetime guarantee.",
+    "Dry-fit covers with power disconnected. Never force a cover against optics.",
+    "Nominal bounding-box bed fit is not sliced toolpath/support validation. Support quantity and print time unmeasured."
+  ],
+  "unchanged_STL_ids": [
+    "P01",
+    "P02",
+    "P03",
+    "P05",
+    "P06L",
+    "P07L",
+    "P06R",
+    "P07R",
+    "P09",
+    "P10",
+    "P11",
+    "P12",
+    "P14",
+    "C01",
+    "C03",
+    "C05",
+    "C06",
+    "C07",
+    "S01",
+    "S02",
+    "S03",
+    "S04",
+    "S07",
+    "S08",
+    "S09",
+    "F01",
+    "F02",
+    "F03",
+    "F04",
+    "P17",
+    "P18",
+    "P19",
+    "C02",
+    "C08",
+    "F05",
+    "P04",
+    "C09",
+    "P20",
+    "F06",
+    "P16A",
+    "P16B",
+    "Q07A",
+    "Q11C",
+    "P15C",
+    "Q12C"
+  ],
+  "new_STL_checks": {
+    "P15B": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 42548.99447005249,
+      "dimensions_mm": [
+        88.04109954833984,
+        171.2927703857422,
+        30.00000762939453
+      ],
+      "min_z_mm": 0.0,
+      "flat_bed_contact_area_mm2": 0
+    },
+    "P15D": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 94779.57227356524,
+      "dimensions_mm": [
+        207.81927490234375,
+        107.99999618530273,
+        88.80001068115234
+      ],
+      "min_z_mm": 0.0,
+      "flat_bed_contact_area_mm2": 9094.518054426531
+    },
+    "Q13B_light": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 2045.9781384543548,
+      "dimensions_mm": [
+        10.036727905273438,
+        21.999996185302734,
+        23.99999237060547
+      ],
+      "min_z_mm": 0.0,
+      "flat_bed_contact_area_mm2": 0.5328344404697418
+    },
+    "Q13B_standard": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 2046.4239604339216,
+      "dimensions_mm": [
+        10.036727905273438,
+        21.999996185302734,
+        23.99999237060547
+      ],
+      "min_z_mm": 0.0,
+      "flat_bed_contact_area_mm2": 0.5328344404697418
+    },
+    "Q13B_firm": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 2046.8792004983584,
+      "dimensions_mm": [
+        10.036727905273438,
+        21.999996185302734,
+        23.99999237060547
+      ],
+      "min_z_mm": 0.0,
+      "flat_bed_contact_area_mm2": 0.5328344404697418
+    },
+    "Q13R_light": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 2480.9741788431775,
+      "dimensions_mm": [
+        19.99999237060547,
+        25.0,
+        10.033950805664062
+      ],
+      "min_z_mm": 0.0,
+      "flat_bed_contact_area_mm2": 255.99988567829132
+    },
+    "Q13R_standard": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 2481.420031669699,
+      "dimensions_mm": [
+        19.99999237060547,
+        25.0,
+        10.033950805664062
+      ],
+      "min_z_mm": 0.0,
+      "flat_bed_contact_area_mm2": 255.99988567829132
+    },
+    "Q13R_firm": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 2481.8752707838794,
+      "dimensions_mm": [
+        19.99999237060547,
+        25.0,
+        10.033950805664062
+      ],
+      "min_z_mm": 0.0,
+      "flat_bed_contact_area_mm2": 255.99988567829132
+    },
+    "Q13D_light": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 3746.338591298369,
+      "dimensions_mm": [
+        9.095382690429688,
+        32.0,
+        26.00000762939453
+      ],
+      "min_z_mm": 0.0,
+      "flat_bed_contact_area_mm2": 39.518532514572144
+    },
+    "Q13D_standard": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 3746.7844025693785,
+      "dimensions_mm": [
+        9.095382690429688,
+        32.0,
+        26.00000762939453
+      ],
+      "min_z_mm": 0.0,
+      "flat_bed_contact_area_mm2": 39.518532514572144
+    },
+    "Q13D_firm": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 3747.2395768359597,
+      "dimensions_mm": [
+        9.095382690429688,
+        32.0,
+        26.00000762939453
+      ],
+      "min_z_mm": 0.0,
+      "flat_bed_contact_area_mm2": 39.518532514572144
+    }
+  },
+  "source_R12_sha256": "e85e2d19b9e23c0910b336c5fe3c8ae1d8996f7eeebdfc7bf779d8d887ccf9f7"
+}

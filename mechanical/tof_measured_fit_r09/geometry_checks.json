@@ -1,0 +1,674 @@
+{
+  "revision": "R09 measured ToF fit",
+  "source_R08_sha256": "394d4d04c08211b63ec5bb336b2ba02ccb18e1ac9e3128629e54c619759548d2",
+  "base_R07_sha256": "32c4501c5ca0ea0c35d5bf83cec4751f6d80d40aa51d2a2c941e8aa27f81f6d3",
+  "measured_inputs": {
+    "PCB_short_dimension_mm": 10.66,
+    "sensor_edge_to_pin_row_centre_mm": 4.8,
+    "pin_projection_estimate_mm": 1.0
+  },
+  "derived_design": {
+    "optical_package_short_dimension_mm": 2.4,
+    "sensor_centre_to_row_centre_mm": 6.0,
+    "row_moved_toward_optics_mm": 1.9,
+    "PCB_pin_side_edge_mm": -7.5600000000000005,
+    "pocket_pin_side_edge_mm": -7.86,
+    "pocket_short_dimension_mm": 11.26,
+    "channel_width_mm": 16.2,
+    "channel_height_mm": 4.2,
+    "clearance_from_PCB_mm": 2.0,
+    "remaining_outside_skin_mm": 1.2,
+    "aperture_to_channel_edge_gap_mm": 2.0999999999999996
+  },
+  "remaining_assumptions": {
+    "PCB_length_mm": 25.0,
+    "PCB_thickness_mm": 1.6,
+    "optical_side_PCB_edge_from_sensor_centre_mm": 3.1,
+    "ear_centres_local_mm": [
+      [
+        -10,
+        -3.2
+      ],
+      [
+        10,
+        -3.2
+      ]
+    ],
+    "note": "These old datums are retained, not inferred to be measured by the two new dimensions. Print P19 first."
+  },
+  "stations": [
+    {
+      "station": "Front_L",
+      "PCB_width_mm": 10.659995794296265,
+      "header_row_v_mm": [
+        -5.999993324279785,
+        -5.999993324279785,
+        -5.999993562698364,
+        -5.999993562698364,
+        -5.999993562698364,
+        -5.999993562698364
+      ],
+      "min_solder_clearance_mm": 2.0000009865504875,
+      "max_solder_clearance_mm": 2.0000138604002067,
+      "min_closed_skin_mm": 1.1999809487967568,
+      "PCB_pin_edge_clearance_mm": 0.29999911096785425,
+      "unchanged_support_probe_distances_mm": [
+        0.0999985283289273,
+        0.10001022050872205,
+        0.0999985283289273
+      ],
+      "solder_envelope_intersection_mm3": 0.0,
+      "matrix": [
+        [
+          0.980871319770813,
+          6.610203495682754e-09,
+          -0.19465741515159607,
+          -0.680558979511261
+        ],
+        [
+          -0.19465741515159607,
+          7.565841997347889e-08,
+          -0.980871319770813,
+          -1.0106525421142578
+        ],
+        [
+          8.243714155753423e-09,
+          1.0,
+          7.549790126404332e-08,
+          0.3999999761581421
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "station": "Front_C",
+      "PCB_width_mm": 10.660001516342163,
+      "header_row_v_mm": [
+        -5.999999046325684,
+        -5.999999046325684,
+        -5.999999046325684,
+        -5.999999046325684,
+        -5.999999046325684,
+        -5.999999046325684
+      ],
+      "min_solder_clearance_mm": 1.9999980829879767,
+      "max_solder_clearance_mm": 1.9999980829879767,
+      "min_closed_skin_mm": 1.2000028755180345,
+      "PCB_pin_edge_clearance_mm": 0.29999911096785425,
+      "unchanged_support_probe_distances_mm": [
+        0.10000467229364085,
+        0.10000467229364085,
+        0.10000467229364085
+      ],
+      "solder_envelope_intersection_mm3": 0.0,
+      "matrix": [
+        [
+          0.9999999403953552,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          7.549790126404332e-08,
+          -0.9999999403953552,
+          -1.0429999828338623
+        ],
+        [
+          0.0,
+          1.0,
+          7.549789415861596e-08,
+          0.3999999761581421
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "station": "Front_R",
+      "PCB_width_mm": 10.659995794296265,
+      "header_row_v_mm": [
+        -5.999993562698364,
+        -5.999993562698364,
+        -5.999993562698364,
+        -5.999993562698364,
+        -5.999993324279785,
+        -5.999993324279785
+      ],
+      "min_solder_clearance_mm": 2.0000009865504875,
+      "max_solder_clearance_mm": 2.0000138604002067,
+      "min_closed_skin_mm": 1.1999809487967568,
+      "PCB_pin_edge_clearance_mm": 0.29999911096785425,
+      "unchanged_support_probe_distances_mm": [
+        0.0999985283289273,
+        0.0999985283289273,
+        0.10001022050872205
+      ],
+      "solder_envelope_intersection_mm3": 0.0,
+      "matrix": [
+        [
+          0.980871319770813,
+          -6.610203495682754e-09,
+          0.19465741515159607,
+          0.680558979511261
+        ],
+        [
+          0.19465741515159607,
+          7.565841997347889e-08,
+          -0.980871319770813,
+          -1.0106525421142578
+        ],
+        [
+          -8.243714155753423e-09,
+          1.0,
+          7.549790126404332e-08,
+          0.3999999761581421
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "station": "Rear_L",
+      "PCB_width_mm": 10.660001754760742,
+      "header_row_v_mm": [
+        -5.999999523162842,
+        -5.999999523162842,
+        -5.999999523162842,
+        -5.999999523162842,
+        -5.999999284744263,
+        -5.999999284744263
+      ],
+      "min_solder_clearance_mm": 2.0000009865504875,
+      "max_solder_clearance_mm": 2.0000138604002067,
+      "min_closed_skin_mm": 1.199979789198712,
+      "PCB_pin_edge_clearance_mm": 0.29999911096785425,
+      "unchanged_support_probe_distances_mm": [
+        0.0999985283289273,
+        0.0999985283289273,
+        0.10001022050872205
+      ],
+      "solder_envelope_intersection_mm3": 0.0,
+      "matrix": [
+        [
+          -0.9808712601661682,
+          6.610206160218013e-09,
+          -0.19465745985507965,
+          -0.680558979511261
+        ],
+        [
+          -0.19465745985507965,
+          -7.565841997347889e-08,
+          0.9808712601661682,
+          1.0106525421142578
+        ],
+        [
+          -8.243715043931843e-09,
+          1.0,
+          7.549790126404332e-08,
+          0.3999999761581421
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "station": "Rear_C",
+      "PCB_width_mm": 10.660001516342163,
+      "header_row_v_mm": [
+        -5.999999046325684,
+        -5.999999046325684,
+        -5.999999046325684,
+        -5.999999046325684,
+        -5.999999046325684,
+        -5.999999046325684
+      ],
+      "min_solder_clearance_mm": 1.9999980829879767,
+      "max_solder_clearance_mm": 1.9999980829880113,
+      "min_closed_skin_mm": 1.200002875517998,
+      "PCB_pin_edge_clearance_mm": 0.29999911096785425,
+      "unchanged_support_probe_distances_mm": [
+        0.100004672293642,
+        0.10000467229364085,
+        0.10000467229364085
+      ],
+      "solder_envelope_intersection_mm3": 0.0,
+      "matrix": [
+        [
+          -0.9999999403953552,
+          -1.1399865765455465e-14,
+          1.5099578831723193e-07,
+          0.0
+        ],
+        [
+          1.5099578831723193e-07,
+          -7.549790126404332e-08,
+          0.9999999403953552,
+          1.0429999828338623
+        ],
+        [
+          0.0,
+          1.0,
+          7.549789415861596e-08,
+          0.3999999761581421
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "station": "Rear_R",
+      "PCB_width_mm": 10.660001754760742,
+      "header_row_v_mm": [
+        -5.999999284744263,
+        -5.999999284744263,
+        -5.999999523162842,
+        -5.999999523162842,
+        -5.999999523162842,
+        -5.999999523162842
+      ],
+      "min_solder_clearance_mm": 2.0000009865504875,
+      "max_solder_clearance_mm": 2.0000138604002067,
+      "min_closed_skin_mm": 1.199979789198712,
+      "PCB_pin_edge_clearance_mm": 0.29999911096785425,
+      "unchanged_support_probe_distances_mm": [
+        0.0999985283289273,
+        0.10001022050872205,
+        0.0999985283289273
+      ],
+      "solder_envelope_intersection_mm3": 0.0,
+      "matrix": [
+        [
+          -0.9808712601661682,
+          -6.610206160218013e-09,
+          0.19465745985507965,
+          0.680558979511261
+        ],
+        [
+          0.19465745985507965,
+          -7.565841997347889e-08,
+          0.9808712601661682,
+          1.0106525421142578
+        ],
+        [
+          8.243715043931843e-09,
+          1.0,
+          7.549790126404332e-08,
+          0.3999999761581421
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "station": "Left",
+      "PCB_width_mm": 10.660001754760742,
+      "header_row_v_mm": [
+        -5.999999523162842,
+        -5.999999523162842,
+        -5.999999523162842,
+        -5.999999523162842,
+        -5.999999523162842,
+        -5.999999523162842
+      ],
+      "min_solder_clearance_mm": 1.9999889706031688,
+      "max_solder_clearance_mm": 2.000000926349783,
+      "min_closed_skin_mm": 1.1999986220482848,
+      "PCB_pin_edge_clearance_mm": 0.29999911096785425,
+      "unchanged_support_probe_distances_mm": [
+        0.10000480662426028,
+        0.10000480662426028,
+        0.10000480662426028
+      ],
+      "solder_envelope_intersection_mm3": 0.0,
+      "matrix": [
+        [
+          -0.015530362725257874,
+          -4.370611961235227e-08,
+          -0.9998793601989746,
+          -1.1618685722351074
+        ],
+        [
+          -0.9998793601989746,
+          6.788537509905268e-10,
+          0.015530362725257874,
+          0.2500441074371338
+        ],
+        [
+          0.0,
+          1.0,
+          -4.371138473402425e-08,
+          0.3999999761581421
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "station": "Right",
+      "PCB_width_mm": 10.660001754760742,
+      "header_row_v_mm": [
+        -5.999999523162842,
+        -5.999999523162842,
+        -5.999999523162842,
+        -5.999999523162842,
+        -5.999999523162842,
+        -5.999999523162842
+      ],
+      "min_solder_clearance_mm": 1.9999889706031688,
+      "max_solder_clearance_mm": 2.000000926349783,
+      "min_closed_skin_mm": 1.1999986220482848,
+      "PCB_pin_edge_clearance_mm": 0.29999911096785425,
+      "unchanged_support_probe_distances_mm": [
+        0.0999928864218284,
+        0.0999928864218284,
+        0.10000480662426028
+      ],
+      "solder_envelope_intersection_mm3": 0.0,
+      "matrix": [
+        [
+          -0.015530362725257874,
+          4.370611961235227e-08,
+          0.9998793601989746,
+          1.1618685722351074
+        ],
+        [
+          0.9998793601989746,
+          6.788537509905268e-10,
+          0.015530362725257874,
+          0.2500441074371338
+        ],
+        [
+          0.0,
+          1.0,
+          -4.371138473402425e-08,
+          0.3999999761581421
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  ],
+  "addition_clashes": [],
+  "reference_clashes": [],
+  "optical_ray_obstructions": [],
+  "preserved_R07_surfaces": [
+    {
+      "part": "P16A | Main ToF skirt R07",
+      "vertices_checked": 7773,
+      "max_error_mm": 0.0
+    },
+    {
+      "part": "P16B | Removable ToF side panel R07",
+      "vertices_checked": 1666,
+      "max_error_mm": 0.0
+    }
+  ],
+  "panel_separation": [
+    {
+      "offset_x_mm": 0,
+      "intersection_mm3": 0.0
+    },
+    {
+      "offset_x_mm": 1,
+      "intersection_mm3": 0.0
+    },
+    {
+      "offset_x_mm": 3,
+      "intersection_mm3": 0.0
+    },
+    {
+      "offset_x_mm": 7,
+      "intersection_mm3": 0.0
+    },
+    {
+      "offset_x_mm": 12,
+      "intersection_mm3": 0.0
+    },
+    {
+      "offset_x_mm": 20,
+      "intersection_mm3": 0.0
+    },
+    {
+      "offset_x_mm": 40,
+      "intersection_mm3": 0.0
+    }
+  ],
+  "allowed_original_changes": [
+    "P16A | Main ToF skirt R07",
+    "P16B | Removable ToF side panel R07",
+    "P19 | ToF fit-test pocket",
+    "ToF Front_C | Header pad 0",
+    "ToF Front_C | Header pad 1",
+    "ToF Front_C | Header pad 2",
+    "ToF Front_C | Header pad 3",
+    "ToF Front_C | Header pad 4",
+    "ToF Front_C | Header pad 5",
+    "ToF Front_C | Inward header pin 0",
+    "ToF Front_C | Inward header pin 1",
+    "ToF Front_C | Inward header pin 2",
+    "ToF Front_C | Inward header pin 3",
+    "ToF Front_C | Inward header pin 4",
+    "ToF Front_C | Inward header pin 5",
+    "ToF Front_C | Reference PCB 25x12.6",
+    "ToF Front_L | Header pad 0",
+    "ToF Front_L | Header pad 1",
+    "ToF Front_L | Header pad 2",
+    "ToF Front_L | Header pad 3",
+    "ToF Front_L | Header pad 4",
+    "ToF Front_L | Header pad 5",
+    "ToF Front_L | Inward header pin 0",
+    "ToF Front_L | Inward header pin 1",
+    "ToF Front_L | Inward header pin 2",
+    "ToF Front_L | Inward header pin 3",
+    "ToF Front_L | Inward header pin 4",
+    "ToF Front_L | Inward header pin 5",
+    "ToF Front_L | Reference PCB 25x12.6",
+    "ToF Front_R | Header pad 0",
+    "ToF Front_R | Header pad 1",
+    "ToF Front_R | Header pad 2",
+    "ToF Front_R | Header pad 3",
+    "ToF Front_R | Header pad 4",
+    "ToF Front_R | Header pad 5",
+    "ToF Front_R | Inward header pin 0",
+    "ToF Front_R | Inward header pin 1",
+    "ToF Front_R | Inward header pin 2",
+    "ToF Front_R | Inward header pin 3",
+    "ToF Front_R | Inward header pin 4",
+    "ToF Front_R | Inward header pin 5",
+    "ToF Front_R | Reference PCB 25x12.6",
+    "ToF Left | Header pad 0",
+    "ToF Left | Header pad 1",
+    "ToF Left | Header pad 2",
+    "ToF Left | Header pad 3",
+    "ToF Left | Header pad 4",
+    "ToF Left | Header pad 5",
+    "ToF Left | Inward header pin 0",
+    "ToF Left | Inward header pin 1",
+    "ToF Left | Inward header pin 2",
+    "ToF Left | Inward header pin 3",
+    "ToF Left | Inward header pin 4",
+    "ToF Left | Inward header pin 5",
+    "ToF Left | Reference PCB 25x12.6",
+    "ToF Rear_C | Header pad 0",
+    "ToF Rear_C | Header pad 1",
+    "ToF Rear_C | Header pad 2",
+    "ToF Rear_C | Header pad 3",
+    "ToF Rear_C | Header pad 4",
+    "ToF Rear_C | Header pad 5",
+    "ToF Rear_C | Inward header pin 0",
+    "ToF Rear_C | Inward header pin 1",
+    "ToF Rear_C | Inward header pin 2",
+    "ToF Rear_C | Inward header pin 3",
+    "ToF Rear_C | Inward header pin 4",
+    "ToF Rear_C | Inward header pin 5",
+    "ToF Rear_C | Reference PCB 25x12.6",
+    "ToF Rear_L | Header pad 0",
+    "ToF Rear_L | Header pad 1",
+    "ToF Rear_L | Header pad 2",
+    "ToF Rear_L | Header pad 3",
+    "ToF Rear_L | Header pad 4",
+    "ToF Rear_L | Header pad 5",
+    "ToF Rear_L | Inward header pin 0",
+    "ToF Rear_L | Inward header pin 1",
+    "ToF Rear_L | Inward header pin 2",
+    "ToF Rear_L | Inward header pin 3",
+    "ToF Rear_L | Inward header pin 4",
+    "ToF Rear_L | Inward header pin 5",
+    "ToF Rear_L | Reference PCB 25x12.6",
+    "ToF Rear_R | Header pad 0",
+    "ToF Rear_R | Header pad 1",
+    "ToF Rear_R | Header pad 2",
+    "ToF Rear_R | Header pad 3",
+    "ToF Rear_R | Header pad 4",
+    "ToF Rear_R | Header pad 5",
+    "ToF Rear_R | Inward header pin 0",
+    "ToF Rear_R | Inward header pin 1",
+    "ToF Rear_R | Inward header pin 2",
+    "ToF Rear_R | Inward header pin 3",
+    "ToF Rear_R | Inward header pin 4",
+    "ToF Rear_R | Inward header pin 5",
+    "ToF Rear_R | Reference PCB 25x12.6",
+    "ToF Right | Header pad 0",
+    "ToF Right | Header pad 1",
+    "ToF Right | Header pad 2",
+    "ToF Right | Header pad 3",
+    "ToF Right | Header pad 4",
+    "ToF Right | Header pad 5",
+    "ToF Right | Inward header pin 0",
+    "ToF Right | Inward header pin 1",
+    "ToF Right | Inward header pin 2",
+    "ToF Right | Inward header pin 3",
+    "ToF Right | Inward header pin 4",
+    "ToF Right | Inward header pin 5",
+    "ToF Right | Reference PCB 25x12.6"
+  ],
+  "renamed_reference_PCBS": {
+    "ToF Front_L | Reference PCB 25x12.6": "ToF Front_L | Reference PCB 25x10.66 R09",
+    "ToF Front_C | Reference PCB 25x12.6": "ToF Front_C | Reference PCB 25x10.66 R09",
+    "ToF Front_R | Reference PCB 25x12.6": "ToF Front_R | Reference PCB 25x10.66 R09",
+    "ToF Rear_L | Reference PCB 25x12.6": "ToF Rear_L | Reference PCB 25x10.66 R09",
+    "ToF Rear_C | Reference PCB 25x12.6": "ToF Rear_C | Reference PCB 25x10.66 R09",
+    "ToF Rear_R | Reference PCB 25x12.6": "ToF Rear_R | Reference PCB 25x10.66 R09",
+    "ToF Left | Reference PCB 25x12.6": "ToF Left | Reference PCB 25x10.66 R09",
+    "ToF Right | Reference PCB 25x12.6": "ToF Right | Reference PCB 25x10.66 R09"
+  },
+  "unexpected_original_changes": [],
+  "unchanged_original_objects": 729,
+  "contact_check_tolerance": "P17 QA copies separated 0.02 mm inward along sensor normal; other component QA copies contracted 0.2%, to distinguish intended contact from interference. Delivered models unscaled and unmoved.",
+  "solid_checks": {
+    "P16A | Main ToF skirt R07": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 125347.24939136674,
+      "dimensions_mm": [
+        213.5325698852539,
+        213.29998779296875,
+        87.0
+      ],
+      "min_z_mm": 13.0
+    },
+    "P16B | Removable ToF side panel R07": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 44532.22646590944,
+      "dimensions_mm": [
+        35.68256378173828,
+        178.89422607421875,
+        87.0
+      ],
+      "min_z_mm": 13.0
+    },
+    "P19 | ToF fit-test pocket": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 5716.764097937592,
+      "dimensions_mm": [
+        42.999996185302734,
+        26.99999713897705,
+        10.349995136260986
+      ],
+      "min_z_mm": -7.99998664855957
+    }
+  },
+  "unchanged_STL_ids": [
+    "P01",
+    "P02",
+    "P03",
+    "P05",
+    "P06L",
+    "P07L",
+    "P06R",
+    "P07R",
+    "P09",
+    "P10",
+    "P11",
+    "P12",
+    "P14",
+    "C01",
+    "C03",
+    "C05",
+    "C06",
+    "C07",
+    "S01",
+    "S02",
+    "S03",
+    "S04",
+    "S07",
+    "S08",
+    "S09",
+    "F01",
+    "F02",
+    "F03",
+    "F04",
+    "P17",
+    "P18",
+    "C02",
+    "C08",
+    "F05",
+    "P04",
+    "C09",
+    "P20",
+    "F06",
+    "P15A",
+    "P15B",
+    "Q07A",
+    "Q07B"
+  ]
+}

@@ -1,0 +1,650 @@
+[
+  {
+    "id": "P16C",
+    "label": "front_skirt",
+    "quantity": 1,
+    "file": "01_rigid/P16C_front_skirt_R17_qty1.stl",
+    "folder": "01_rigid",
+    "sources": [
+      "P16C | Front ToF skirt R17"
+    ],
+    "revision": "R17 prototype",
+    "reimport_check": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 71888.85633854315,
+      "dimensions_mm": [
+        211.35000610351562,
+        102.45001220703125,
+        87.0
+      ],
+      "min_z_mm": 0.0
+    },
+    "sha256": "ac461df7711276eb3c89e7c9c697a2c7cb1129145fc6a7b6977b35f0ec723065",
+    "export_rotation_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "note": "Front skirt, bottom down. Replaces part of P16A. New S3/S4 bolts connect to rear section.",
+    "support": "Inspect sliced supports, especially ToF recesses, wheel arch, guide/nut pockets and rocker counterbores. No support-free claim.",
+    "brim_2mm_fits_nominal_K1C": true,
+    "brim_4mm_fits_K1C": true
+  },
+  {
+    "id": "P16D",
+    "label": "rear_skirt",
+    "quantity": 1,
+    "file": "01_rigid/P16D_rear_skirt_R17_qty1.stl",
+    "folder": "01_rigid",
+    "sources": [
+      "P16D | Rear ToF skirt R17"
+    ],
+    "revision": "R17 prototype",
+    "reimport_check": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 57627.09442883076,
+      "dimensions_mm": [
+        213.53256225585938,
+        122.64999389648438,
+        87.0
+      ],
+      "min_z_mm": 0.0
+    },
+    "sha256": "e246c30476ceee78c60786e686ceead9f744730db52cf6d031649e9e3b48d61c",
+    "export_rotation_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "note": "Rear skirt, bottom down. Includes left ToF station and two retained M3 nuts. Fits with 2mm brim geometrically; inspect exclusions.",
+    "support": "Inspect sliced supports, especially ToF recesses, wheel arch, guide/nut pockets and rocker counterbores. No support-free claim.",
+    "brim_2mm_fits_nominal_K1C": true,
+    "brim_4mm_fits_K1C": false
+  },
+  {
+    "id": "P16B",
+    "label": "wheel_switch_panel",
+    "quantity": 1,
+    "file": "01_rigid/P16B_wheel_switch_panel_R17_qty1.stl",
+    "folder": "01_rigid",
+    "sources": [
+      "P16B | Wheel-switch side panel R17"
+    ],
+    "revision": "R17 prototype",
+    "reimport_check": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 43991.10661247521,
+      "dimensions_mm": [
+        35.68256378173828,
+        178.89422607421875,
+        87.0
+      ],
+      "min_z_mm": 0.0
+    },
+    "sha256": "7d5998d337db42a0c33a48ac5fd13620f23ceb644c48fbcfadf28413bd0e153d",
+    "export_rotation_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "note": "Right panel, bottom down; WHEELS switch. Retained S1/S2 axes with PETG nut ribs. Inspect wheel/ToF and switch supports.",
+    "support": "Inspect sliced supports, especially ToF recesses, wheel arch, guide/nut pockets and rocker counterbores. No support-free claim.",
+    "brim_2mm_fits_nominal_K1C": true,
+    "brim_4mm_fits_K1C": true
+  },
+  {
+    "id": "P05",
+    "label": "curved_battery_drawer",
+    "quantity": 1,
+    "file": "01_rigid/P05_curved_battery_drawer_R17_qty1.stl",
+    "folder": "01_rigid",
+    "sources": [
+      "P05 | Curved switched battery drawer R17"
+    ],
+    "revision": "R17 prototype",
+    "reimport_check": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 91269.81606212092,
+      "dimensions_mm": [
+        174.0,
+        104.0,
+        45.0
+      ],
+      "min_z_mm": 0.0
+    },
+    "sha256": "caf661b6116a5f360e0b63099d1cbccc954b8683a5c8b91759bfaf4d5412b99a",
+    "export_rotation_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "note": "Curved battery drawer; BATTERY switch. Reprint both matching P06 guides. Tray/rail axes unchanged.",
+    "support": "Inspect sliced supports, especially ToF recesses, wheel arch, guide/nut pockets and rocker counterbores. No support-free claim.",
+    "brim_2mm_fits_nominal_K1C": true,
+    "brim_4mm_fits_K1C": true
+  },
+  {
+    "id": "P06L",
+    "label": "curved_drawer_guide_L",
+    "quantity": 1,
+    "file": "01_rigid/P06L_curved_drawer_guide_L_R17_qty1.stl",
+    "folder": "01_rigid",
+    "sources": [
+      "P06L | Curved fascia lock guide R17"
+    ],
+    "revision": "R17 prototype",
+    "reimport_check": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 7480.928740423764,
+      "dimensions_mm": [
+        18.70000457763672,
+        95.08717346191406,
+        28.89324188232422
+      ],
+      "min_z_mm": 0.0
+    },
+    "sha256": "fb30ead3ce525ac1a60f2e4975f06a49efbc85b385d0347e94d962d4f49875da",
+    "export_rotation_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "note": "Matching guide rear lock end for curved P05; original rail/channel and mounting axes retained.",
+    "support": "Inspect sliced supports, especially ToF recesses, wheel arch, guide/nut pockets and rocker counterbores. No support-free claim.",
+    "brim_2mm_fits_nominal_K1C": true,
+    "brim_4mm_fits_K1C": true
+  },
+  {
+    "id": "P06R",
+    "label": "curved_drawer_guide_R",
+    "quantity": 1,
+    "file": "01_rigid/P06R_curved_drawer_guide_R_R17_qty1.stl",
+    "folder": "01_rigid",
+    "sources": [
+      "P06R | Curved fascia lock guide R17"
+    ],
+    "revision": "R17 prototype",
+    "reimport_check": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 7480.639748391361,
+      "dimensions_mm": [
+        18.70000457763672,
+        95.08717346191406,
+        28.89324188232422
+      ],
+      "min_z_mm": 0.0
+    },
+    "sha256": "a0af26b984b5a4252b05816dad3b9b6b396d97d8965c1b3d779b3a5efe41de7d",
+    "export_rotation_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "note": "Matching guide rear lock end for curved P05; original rail/channel and mounting axes retained.",
+    "support": "Inspect sliced supports, especially ToF recesses, wheel arch, guide/nut pockets and rocker counterbores. No support-free claim.",
+    "brim_2mm_fits_nominal_K1C": true,
+    "brim_4mm_fits_K1C": true
+  },
+  {
+    "id": "Q17A",
+    "label": "fit_sample",
+    "quantity": 1,
+    "file": "04_fit_test/Q17A_fit_sample_R17_qty1.stl",
+    "folder": "04_fit_test",
+    "sources": [
+      "Q17A | Lower seam fit sample"
+    ],
+    "revision": "R17 prototype",
+    "reimport_check": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 842.3444597191758,
+      "dimensions_mm": [
+        5.4000091552734375,
+        13.800018310546875,
+        13.399993896484375
+      ],
+      "min_z_mm": 0.0
+    },
+    "sha256": "0a01c3dead63c2570cddcb02fe45c96a428cdba63abf662e70f439c5718ff3ed",
+    "export_rotation_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "note": "Actual joint/rocker fit sample, upright in the SAME orientation as its parent lower part. Print with the same PETG profile and local support settings; Q17C/D use \u00d820.5 x 2.2mm seats.",
+    "support": "Inspect sliced supports, especially ToF recesses, wheel arch, guide/nut pockets and rocker counterbores. No support-free claim.",
+    "brim_2mm_fits_nominal_K1C": true,
+    "brim_4mm_fits_K1C": true
+  },
+  {
+    "id": "Q17B",
+    "label": "fit_sample",
+    "quantity": 1,
+    "file": "04_fit_test/Q17B_fit_sample_R17_qty1.stl",
+    "folder": "04_fit_test",
+    "sources": [
+      "Q17B | Lower seam fit sample"
+    ],
+    "revision": "R17 prototype",
+    "reimport_check": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 2133.5635844065728,
+      "dimensions_mm": [
+        10.599990844726562,
+        24.0,
+        13.399993896484375
+      ],
+      "min_z_mm": 0.0
+    },
+    "sha256": "e1c78c546844c5a14a107c99390132c26f7377d6cd23650c650309a3eb851d14",
+    "export_rotation_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "note": "Actual joint/rocker fit sample, upright in the SAME orientation as its parent lower part. Print with the same PETG profile and local support settings; Q17C/D use \u00d820.5 x 2.2mm seats.",
+    "support": "Inspect sliced supports, especially ToF recesses, wheel arch, guide/nut pockets and rocker counterbores. No support-free claim.",
+    "brim_2mm_fits_nominal_K1C": true,
+    "brim_4mm_fits_K1C": true
+  },
+  {
+    "id": "Q17C",
+    "label": "fit_sample",
+    "quantity": 1,
+    "file": "04_fit_test/Q17C_fit_sample_R17_qty1.stl",
+    "folder": "04_fit_test",
+    "sources": [
+      "Q17C | Actual rocker mount fit sample"
+    ],
+    "revision": "R17 prototype",
+    "reimport_check": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 2390.1692429021946,
+      "dimensions_mm": [
+        32.0,
+        5.941825866699219,
+        31.99999237060547
+      ],
+      "min_z_mm": 0.0
+    },
+    "sha256": "e8cbc07a9bea8f428ba37d74022dba8522f1c91a9fbbb43cac3051ed52495c25",
+    "export_rotation_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "note": "Actual joint/rocker fit sample, upright in the SAME orientation as its parent lower part. Print with the same PETG profile and local support settings; Q17C/D use \u00d820.5 x 2.2mm seats.",
+    "support": "Inspect sliced supports, especially ToF recesses, wheel arch, guide/nut pockets and rocker counterbores. No support-free claim.",
+    "brim_2mm_fits_nominal_K1C": true,
+    "brim_4mm_fits_K1C": true
+  },
+  {
+    "id": "Q17D",
+    "label": "fit_sample",
+    "quantity": 1,
+    "file": "04_fit_test/Q17D_fit_sample_R17_qty1.stl",
+    "folder": "04_fit_test",
+    "sources": [
+      "Q17D | Actual rocker mount fit sample"
+    ],
+    "revision": "R17 prototype",
+    "reimport_check": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 1959.538496166869,
+      "dimensions_mm": [
+        5.521820068359375,
+        31.999996185302734,
+        32.00000762939453
+      ],
+      "min_z_mm": 0.0
+    },
+    "sha256": "8d9712647c2dfd91c687b57c1f6ece34f8cf3bcfe7be7bc97edf8973d21a9ab6",
+    "export_rotation_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "note": "Actual joint/rocker fit sample, upright in the SAME orientation as its parent lower part. Print with the same PETG profile and local support settings; Q17C/D use \u00d820.5 x 2.2mm seats.",
+    "support": "Inspect sliced supports, especially ToF recesses, wheel arch, guide/nut pockets and rocker counterbores. No support-free claim.",
+    "brim_2mm_fits_nominal_K1C": true,
+    "brim_4mm_fits_K1C": true
+  },
+  {
+    "id": "Q17E",
+    "label": "fit_sample",
+    "quantity": 1,
+    "file": "04_fit_test/Q17E_fit_sample_R17_qty1.stl",
+    "folder": "04_fit_test",
+    "sources": [
+      "Q17E | Alternate rocker cutout test"
+    ],
+    "revision": "R17 prototype",
+    "reimport_check": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 842.4463467686699,
+      "dimensions_mm": [
+        30.000001907348633,
+        30.000001907348633,
+        2.200000047683716
+      ],
+      "min_z_mm": 0.0
+    },
+    "sha256": "c4b694e7719c5493dc67430772f72d473f129163787b1a09cfaad3b2c1f19c51",
+    "export_rotation_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "note": "R17 fit sample, not installed. Q17A/B test M3 seam. Q17C/D actual \u00d820.5 switch seat; E/F alternatives \u00d820.3/20.7 at 2.2mm.",
+    "support": "Inspect sliced supports, especially ToF recesses, wheel arch, guide/nut pockets and rocker counterbores. No support-free claim.",
+    "brim_2mm_fits_nominal_K1C": true,
+    "brim_4mm_fits_K1C": true
+  },
+  {
+    "id": "Q17F",
+    "label": "fit_sample",
+    "quantity": 1,
+    "file": "04_fit_test/Q17F_fit_sample_R17_qty1.stl",
+    "folder": "04_fit_test",
+    "sources": [
+      "Q17F | Alternate rocker cutout test"
+    ],
+    "revision": "R17 prototype",
+    "reimport_check": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 814.1293947057361,
+      "dimensions_mm": [
+        30.000001907348633,
+        30.000001907348633,
+        2.200000047683716
+      ],
+      "min_z_mm": 0.0
+    },
+    "sha256": "6e2eba0c500a37035c7a3a34a0b36c2c0727f70161108b692f6fcc3d8c4e7c54",
+    "export_rotation_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "note": "R17 fit sample, not installed. Q17A/B test M3 seam. Q17C/D actual \u00d820.5 switch seat; E/F alternatives \u00d820.3/20.7 at 2.2mm.",
+    "support": "Inspect sliced supports, especially ToF recesses, wheel arch, guide/nut pockets and rocker counterbores. No support-free claim.",
+    "brim_2mm_fits_nominal_K1C": true,
+    "brim_4mm_fits_K1C": true
+  }
+]

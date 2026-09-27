@@ -1,0 +1,191 @@
+{
+  "revision": "R06 Geekworm + multiplexer, unused MCU removed",
+  "source": "~/roam-e/mechanical/geekworm_r05/roam_geekworm_r05.blend",
+  "source_sha256": "30357d82e125284d80ab42c00234f45b59284d3dde5bbfa17dba787d023d8003",
+  "donor": "~/cad/roam_tof_mux.blend",
+  "donor_sha256": "80ff95cb84b2947e31e19642ad8c02c46c9e3e079db68126e83283f628cc70f9",
+  "imported_collection": "14 R06 TCA9548A multiplexer",
+  "imported_objects": 89,
+  "part_name_mapping": {
+    "C08 | TCA9548A removable carrier": "C09 | TCA9548A removable carrier",
+    "P20 | Multiplexer end clip 1": "P20 | Multiplexer end clip 1",
+    "F05 | Multiplexer soft pad 1": "F06 | Multiplexer soft pad 1",
+    "P20 | Multiplexer end clip 2": "P20 | Multiplexer end clip 2",
+    "F05 | Multiplexer soft pad 2": "F06 | Multiplexer soft pad 2",
+    "MUX reference | TCA9548A HW-617 PCB 21.4 x 31.5": "MUX reference | TCA9548A HW-617 PCB 21.4 x 31.5",
+    "MUX reference | IC": "MUX reference | IC",
+    "MUX reference | Soldered male pin": "MUX reference | Soldered male pin",
+    "MUX reference | Header insulator": "MUX reference | Header insulator",
+    "MUX reference | Female jumper housing": "MUX reference | Female jumper housing",
+    "MUX reference | Soldered male pin.001": "MUX reference | Soldered male pin.001",
+    "MUX reference | Header insulator.001": "MUX reference | Header insulator.001",
+    "MUX reference | Female jumper housing.001": "MUX reference | Female jumper housing.001",
+    "MUX reference | Soldered male pin.002": "MUX reference | Soldered male pin.002",
+    "MUX reference | Header insulator.002": "MUX reference | Header insulator.002",
+    "MUX reference | Female jumper housing.002": "MUX reference | Female jumper housing.002",
+    "MUX reference | Soldered male pin.003": "MUX reference | Soldered male pin.003",
+    "MUX reference | Header insulator.003": "MUX reference | Header insulator.003",
+    "MUX reference | Female jumper housing.003": "MUX reference | Female jumper housing.003",
+    "MUX reference | Soldered male pin.004": "MUX reference | Soldered male pin.004",
+    "MUX reference | Header insulator.004": "MUX reference | Header insulator.004",
+    "MUX reference | Female jumper housing.004": "MUX reference | Female jumper housing.004",
+    "MUX reference | Soldered male pin.005": "MUX reference | Soldered male pin.005",
+    "MUX reference | Header insulator.005": "MUX reference | Header insulator.005",
+    "MUX reference | Female jumper housing.005": "MUX reference | Female jumper housing.005",
+    "MUX reference | Soldered male pin.006": "MUX reference | Soldered male pin.006",
+    "MUX reference | Header insulator.006": "MUX reference | Header insulator.006",
+    "MUX reference | Female jumper housing.006": "MUX reference | Female jumper housing.006",
+    "MUX reference | Soldered male pin.007": "MUX reference | Soldered male pin.007",
+    "MUX reference | Header insulator.007": "MUX reference | Header insulator.007",
+    "MUX reference | Female jumper housing.007": "MUX reference | Female jumper housing.007",
+    "MUX reference | Soldered male pin.008": "MUX reference | Soldered male pin.008",
+    "MUX reference | Header insulator.008": "MUX reference | Header insulator.008",
+    "MUX reference | Female jumper housing.008": "MUX reference | Female jumper housing.008",
+    "MUX reference | Soldered male pin.009": "MUX reference | Soldered male pin.009",
+    "MUX reference | Header insulator.009": "MUX reference | Header insulator.009",
+    "MUX reference | Female jumper housing.009": "MUX reference | Female jumper housing.009",
+    "MUX reference | Soldered male pin.010": "MUX reference | Soldered male pin.010",
+    "MUX reference | Header insulator.010": "MUX reference | Header insulator.010",
+    "MUX reference | Female jumper housing.010": "MUX reference | Female jumper housing.010",
+    "MUX reference | Soldered male pin.011": "MUX reference | Soldered male pin.011",
+    "MUX reference | Header insulator.011": "MUX reference | Header insulator.011",
+    "MUX reference | Female jumper housing.011": "MUX reference | Female jumper housing.011",
+    "MUX reference | Soldered male pin.012": "MUX reference | Soldered male pin.012",
+    "MUX reference | Header insulator.012": "MUX reference | Header insulator.012",
+    "MUX reference | Female jumper housing.012": "MUX reference | Female jumper housing.012",
+    "MUX reference | Soldered male pin.013": "MUX reference | Soldered male pin.013",
+    "MUX reference | Header insulator.013": "MUX reference | Header insulator.013",
+    "MUX reference | Female jumper housing.013": "MUX reference | Female jumper housing.013",
+    "MUX reference | Soldered male pin.014": "MUX reference | Soldered male pin.014",
+    "MUX reference | Header insulator.014": "MUX reference | Header insulator.014",
+    "MUX reference | Female jumper housing.014": "MUX reference | Female jumper housing.014",
+    "MUX reference | Soldered male pin.015": "MUX reference | Soldered male pin.015",
+    "MUX reference | Header insulator.015": "MUX reference | Header insulator.015",
+    "MUX reference | Female jumper housing.015": "MUX reference | Female jumper housing.015",
+    "MUX reference | Soldered male pin.016": "MUX reference | Soldered male pin.016",
+    "MUX reference | Header insulator.016": "MUX reference | Header insulator.016",
+    "MUX reference | Female jumper housing.016": "MUX reference | Female jumper housing.016",
+    "MUX reference | Soldered male pin.017": "MUX reference | Soldered male pin.017",
+    "MUX reference | Header insulator.017": "MUX reference | Header insulator.017",
+    "MUX reference | Female jumper housing.017": "MUX reference | Female jumper housing.017",
+    "MUX reference | Soldered male pin.018": "MUX reference | Soldered male pin.018",
+    "MUX reference | Header insulator.018": "MUX reference | Header insulator.018",
+    "MUX reference | Female jumper housing.018": "MUX reference | Female jumper housing.018",
+    "MUX reference | Soldered male pin.019": "MUX reference | Soldered male pin.019",
+    "MUX reference | Header insulator.019": "MUX reference | Header insulator.019",
+    "MUX reference | Female jumper housing.019": "MUX reference | Female jumper housing.019",
+    "MUX reference | Soldered male pin.020": "MUX reference | Soldered male pin.020",
+    "MUX reference | Header insulator.020": "MUX reference | Header insulator.020",
+    "MUX reference | Female jumper housing.020": "MUX reference | Female jumper housing.020",
+    "MUX reference | Soldered male pin.021": "MUX reference | Soldered male pin.021",
+    "MUX reference | Header insulator.021": "MUX reference | Header insulator.021",
+    "MUX reference | Female jumper housing.021": "MUX reference | Female jumper housing.021",
+    "MUX reference | Soldered male pin.022": "MUX reference | Soldered male pin.022",
+    "MUX reference | Header insulator.022": "MUX reference | Header insulator.022",
+    "MUX reference | Female jumper housing.022": "MUX reference | Female jumper housing.022",
+    "MUX reference | Soldered male pin.023": "MUX reference | Soldered male pin.023",
+    "MUX reference | Header insulator.023": "MUX reference | Header insulator.023",
+    "MUX reference | Female jumper housing.023": "MUX reference | Female jumper housing.023",
+    "MUX hardware | M2.5x10 deck screw": "MUX hardware | M2.5x10 deck screw",
+    "MUX hardware | M2.5 top washer": "MUX hardware | M2.5 top washer",
+    "MUX hardware | M2.5 underside washer": "MUX hardware | M2.5 underside washer",
+    "MUX hardware | M2.5 underside nut": "MUX hardware | M2.5 underside nut",
+    "MUX hardware | M2.5x10 deck screw.001": "MUX hardware | M2.5x10 deck screw.001",
+    "MUX hardware | M2.5 top washer.001": "MUX hardware | M2.5 top washer.001",
+    "MUX hardware | M2.5 underside washer.001": "MUX hardware | M2.5 underside washer.001",
+    "MUX hardware | M2.5 underside nut.001": "MUX hardware | M2.5 underside nut.001",
+    "MUX hardware | M2x6 clip screw": "MUX hardware | M2x6 clip screw",
+    "MUX hardware | M2x6 clip screw.001": "MUX hardware | M2x6 clip screw.001"
+  },
+  "removed_objects": [
+    "Component | MCU",
+    "MCU | Removable carrier",
+    "Label | MCU",
+    "MCU | Lower spacer 1",
+    "MCU | PCB spacer 1",
+    "N_MCU_1 | M2.5x20 screw",
+    "N_MCU_1 | washer",
+    "N_MCU_1 | underside nut",
+    "N_MCU_1 | underside washer",
+    "MCU | Lower spacer 2",
+    "MCU | PCB spacer 2",
+    "N_MCU_2 | M2.5x20 screw",
+    "N_MCU_2 | washer",
+    "N_MCU_2 | underside nut",
+    "N_MCU_2 | underside washer"
+  ],
+  "unchanged_original_objects": 727,
+  "unexpected_changes": [],
+  "donor_geometry_changes": [],
+  "assembly_clashes": [],
+  "jumper_keepout_clashes": [],
+  "board_mount_clashes": [],
+  "sampled_drawer_sweep_clashes": [],
+  "duplicate_parts": {
+    "P20_surface_difference_mm": 1.727346088387094e-06,
+    "F06_surface_difference_mm": 1.5359765015432458e-06
+  },
+  "deck_ray_checks": [
+    {
+      "xy_mm": [
+        -6,
+        -2
+      ],
+      "surface_hit": false,
+      "expected_surface_hit": false
+    },
+    {
+      "xy_mm": [
+        24,
+        -2
+      ],
+      "surface_hit": false,
+      "expected_surface_hit": false
+    },
+    {
+      "xy_mm": [
+        2,
+        24.25
+      ],
+      "surface_hit": true,
+      "expected_surface_hit": true
+    },
+    {
+      "xy_mm": [
+        18,
+        24.25
+      ],
+      "surface_hit": true,
+      "expected_surface_hit": true
+    }
+  ],
+  "board_outline_mm": [
+    21.4,
+    31.5
+  ],
+  "new_holes_xy_mm": [
+    [
+      -6,
+      -2
+    ],
+    [
+      24,
+      -2
+    ]
+  ],
+  "filled_holes_xy_mm": [
+    [
+      2,
+      24.25
+    ],
+    [
+      18,
+      24.25
+    ]
+  ],
+  "limitations": [
+    "Donor board thickness, headers, pads and screw fit remain provisional.",
+    "Static and sampled geometry checks are not physical tests, thermal tests or continuous swept-volume validation.",
+    "Geekworm R05 estimate limitations and fit checks still apply. No electronics wiring was changed."
+  ]
+}

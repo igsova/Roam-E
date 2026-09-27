@@ -1,0 +1,45 @@
+{
+  "revision": "R05 Geekworm Pi5-5V5APD terminal-input prototype",
+  "source": "User-supplied dimensioned product image and terminal-input photo, 2026-09-15",
+  "manufacturer_reference": "https://wiki.geekworm.com/Pi5-5V5APD",
+  "specified_mm": {
+    "supplied_base_xy": [59, 44],
+    "pcb_xy": [55, 40],
+    "overall_height": 22,
+    "fan_xyz": [30, 30, 7],
+    "terminal_pitch": 3.81
+  },
+  "estimated_mm_pending_delivery": {
+    "supplied_base_height": 5,
+    "pcb_thickness": 1.6,
+    "base_corner_radius": 4,
+    "terminal_protrusion_beyond_base": 9,
+    "terminal_body_xyz": [18, 11, 11],
+    "mount_hole_centres_xy": [48, 33],
+    "mount_hole_diameter": 3,
+    "usb_c_plug_clearance_xyz": [24, 12, 9]
+  },
+  "adapter_mm": {
+    "centre_xy": [-44, -50],
+    "bottom_z": 119,
+    "support_bottom_z": 115,
+    "module_rotation_degrees": 180,
+    "floor_thickness": 3,
+    "floor_xy": [62, 49],
+    "clamp_screw_x": [-18, 18],
+    "clamp_screw_y": [-26.5, 26.5],
+    "existing_deck_holes_xy": [[-28.9, -68.125], [-59.1, -51.875]],
+    "mount_clearance_diameter": 2.9,
+    "countersink_diameter": 5.7,
+    "countersink_depth": 1.4,
+    "retainer_to_base_side_clearance": 0.4,
+    "retainer_pad_thickness": 0.6
+  },
+  "constraints": [
+    "No Geekworm PCB mounting hole is used to locate or fasten the adapter.",
+    "Adapter retains the supplied plastic base; verify its actual dimensions before printing the final mount.",
+    "Electronics reference is approximate, not an OEM manufacturing CAD model.",
+    "Do not print or install the reference electronics or clearance-volume STL as functional parts.",
+    "Keep the fan inlet and side exhaust unobstructed; thermal performance is not established by geometric clearance."
+  ]
+}

@@ -1,0 +1,786 @@
+{
+  "revision": "R16",
+  "source_R14_sha256": "89de4d5e40769ea92a1ed2eb0d9fd4342e153a70cc8bb1af4264c608a6cf5672",
+  "renamed_hood_objects": {
+    "P15B | Removable hood side panel R14": "P15B | Raised removable hood side panel R15",
+    "P15C | Front slide-on smiling hood R14": "P15C | Closed camera surround front hood R16",
+    "P15D | Rear slide-on hood R14": "P15D | Raised rear hood R15"
+  },
+  "changed_original_objects": [
+    "Component | LIDAR",
+    "Depth_Aperture",
+    "Depth_Coated_Lens",
+    "Depth_Concentric_Ring_1",
+    "Depth_Concentric_Ring_2",
+    "Depth_Concentric_Ring_3",
+    "Depth_Outer_Optic",
+    "Front_Left_Glass_Panel",
+    "Front_Right_Glass_Panel",
+    "H1 | M3 captive nut",
+    "H1 | M3 washer",
+    "H1 | M3x12 screw",
+    "H2 | M3 captive nut",
+    "H2 | M3 washer",
+    "H2 | M3x12 screw",
+    "H3 | M3 captive nut",
+    "H3 | M3 washer",
+    "H3 | M3x12 screw",
+    "Housing_Silver_Capsule",
+    "IR_Projector_Aperture",
+    "IR_Projector_Coated_Lens",
+    "IR_Projector_Concentric_Ring_1",
+    "IR_Projector_Concentric_Ring_2",
+    "IR_Projector_Concentric_Ring_3",
+    "IR_Projector_Outer_Optic",
+    "Left_Small_Front_Aperture",
+    "P08 | Camera upper compliant pad",
+    "P08 | Camera upper compliant pad.001",
+    "P11.1 | LIDAR spacer 4 mm",
+    "P11.2 | LIDAR spacer 4 mm",
+    "P11.3 | LIDAR spacer 4 mm",
+    "P11.4 | LIDAR spacer 4 mm",
+    "P14 | Removable service-port plug",
+    "P14 | Removable service-port plug.001",
+    "P14 | Removable service-port plug.002",
+    "P14 | Removable service-port plug.003",
+    "P15B | Removable hood side panel R14",
+    "P15C | Front slide-on smiling hood R14",
+    "P15D | Rear slide-on hood R14",
+    "R10 H4 | M3 captive nut",
+    "R10 H4 | M3 washer",
+    "R10 H4 | M3x12 screw",
+    "RGB_Aperture",
+    "RGB_Coated_Lens",
+    "RGB_Concentric_Ring_1",
+    "RGB_Concentric_Ring_2",
+    "RGB_Concentric_Ring_3",
+    "RGB_Outer_Optic",
+    "Rear_Black_Inset",
+    "Right_Small_Front_Aperture"
+  ],
+  "added_reference_objects": [
+    "R15 LiDAR | Rotating body 70.26 mm",
+    "R15 LiDAR | Brass post 1 44.78 mm",
+    "R15 LiDAR | Brass post 2 44.78 mm",
+    "R15 LiDAR | Brass post 3 44.78 mm",
+    "R15 LiDAR | Brass post 4 44.78 mm",
+    "R15 LiDAR | Fixed base",
+    "R15 LiDAR | Underside PCB",
+    "R15 LiDAR | Fixed rear motor",
+    "R15 LiDAR | Lower rotating rim",
+    "R15 LiDAR | Base screw head 1",
+    "R15 LiDAR | Base screw head 2",
+    "R15 LiDAR | Base screw head 3",
+    "R15 LiDAR | Base screw head 4"
+  ],
+  "measurements": {
+    "lidar_post_mm": 44.78,
+    "lidar_post_to_rotor_mm": 5.57,
+    "lidar_rotor_diameter_mm": 70.26,
+    "camera_width_mm": 161.0,
+    "camera_height_mm": 22.8,
+    "camera_depth_mm": 24.92
+  },
+  "datums": {
+    "lidar_support_plate_top_z_mm": 163.75,
+    "rotor_bottom_z_mm": 214.1,
+    "roof_z_mm": 217.9,
+    "roof_rise_mm": 27.099999999999994,
+    "roof_insert_thickness_mm": 2.8,
+    "aperture_radius_mm": 37.13,
+    "aperture_centre_mm": [
+      0.0,
+      -8.10129
+    ],
+    "local_roof_seam_y_mm": -8.10129,
+    "camera_front_y_mm": -104.145,
+    "camera_rear_y_mm": -79.225,
+    "camera_bottom_z_mm": 150.25
+  },
+  "assumptions": [
+    "Measured camera dimensions treated as maximum body/optical envelope, anchored to existing rear and lower supports.",
+    "LiDAR post footprint inherited from old reference; P11 printed spacers omitted because measured brass posts stand directly on P10.",
+    "Rotor height/optical details inherited visual reference; fixed-base thickness subdivisions, underside PCB, motor and screw details approximate.",
+    "No calibration/URDF changes; actual sensor scan height should be measured before updating software transforms."
+  ],
+  "unexpected_original_changes": [],
+  "nut_retention": [
+    {
+      "id": "H1",
+      "part": "P15B | Raised removable hood side panel R15",
+      "nut_object": "H1 | M3 captive nut",
+      "local_to_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.8899999856948853
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          -0.3499999940395355
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          2.104266735076904
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "original_flat_radii_mm": [
+        2.950000773730065,
+        2.949999614509776,
+        2.949999614509776,
+        2.950000773730065,
+        2.949999614509776,
+        2.949999614509776
+      ],
+      "pocket_AF_mm": 5.9,
+      "pocket_depth_mm": 2.8,
+      "nominal_nut_AF_mm": 5.5,
+      "nominal_nut_thickness_mm": 2.4,
+      "rib_tip_AF_mm": 5.3,
+      "nominal_radial_interference_mm": 0.10000000000000009,
+      "rib_count": 6,
+      "rib_base_width_mm": 1.2,
+      "rib_tip_width_mm": 0.2,
+      "rib_leadin_depth_mm": 0.8,
+      "floor_clearance_mm": 0.05,
+      "profile": "standard"
+    },
+    {
+      "id": "H2",
+      "part": "P15B | Raised removable hood side panel R15",
+      "nut_object": "H2 | M3 captive nut",
+      "local_to_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.8899999856948853
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          2.1044436416625976
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "original_flat_radii_mm": [
+        2.950000773730065,
+        2.9500003051091523,
+        2.950000403766193,
+        2.950000773730065,
+        2.9500003051091523,
+        2.950000403766193
+      ],
+      "pocket_AF_mm": 5.9,
+      "pocket_depth_mm": 2.8,
+      "nominal_nut_AF_mm": 5.5,
+      "nominal_nut_thickness_mm": 2.4,
+      "rib_tip_AF_mm": 5.3,
+      "nominal_radial_interference_mm": 0.10000000000000009,
+      "rib_count": 6,
+      "rib_base_width_mm": 1.2,
+      "rib_tip_width_mm": 0.2,
+      "rib_leadin_depth_mm": 0.8,
+      "floor_clearance_mm": 0.05,
+      "profile": "standard"
+    },
+    {
+      "id": "H3",
+      "part": "P15B | Raised removable hood side panel R15",
+      "nut_object": "H3 | M3 captive nut",
+      "local_to_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.8899999856948853
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          0.3499999940395355
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          2.1042726955413817
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "original_flat_radii_mm": [
+        2.950000773730065,
+        2.949999614509776,
+        2.949999614509776,
+        2.950000773730065,
+        2.949999614509776,
+        2.949999614509776
+      ],
+      "pocket_AF_mm": 5.9,
+      "pocket_depth_mm": 2.8,
+      "nominal_nut_AF_mm": 5.5,
+      "nominal_nut_thickness_mm": 2.4,
+      "rib_tip_AF_mm": 5.3,
+      "nominal_radial_interference_mm": 0.10000000000000009,
+      "rib_count": 6,
+      "rib_base_width_mm": 1.2,
+      "rib_tip_width_mm": 0.2,
+      "rib_leadin_depth_mm": 0.8,
+      "floor_clearance_mm": 0.05,
+      "profile": "standard"
+    },
+    {
+      "id": "H4",
+      "part": "P15D | Raised rear hood R15",
+      "nut_object": "R10 H4 | M3 captive nut",
+      "local_to_world_matrix": [
+        [
+          0.0,
+          -1.0,
+          0.0,
+          -0.8500000238418579
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.03999999538064003
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          2.106660696029663
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "original_flat_radii_mm": [
+        2.950000379101933,
+        2.949999614509776,
+        2.949999984473748,
+        2.949999984473748,
+        2.9499998858166934,
+        2.9499997871596353
+      ],
+      "pocket_AF_mm": 5.9,
+      "pocket_depth_mm": 2.8,
+      "nominal_nut_AF_mm": 5.5,
+      "nominal_nut_thickness_mm": 2.4,
+      "rib_tip_AF_mm": 5.3,
+      "nominal_radial_interference_mm": 0.10000000000000009,
+      "rib_count": 6,
+      "rib_base_width_mm": 1.2,
+      "rib_tip_width_mm": 0.2,
+      "rib_leadin_depth_mm": 0.8,
+      "floor_clearance_mm": 0.05,
+      "profile": "standard"
+    },
+    {
+      "id": "H5",
+      "part": "P15D | Raised rear hood R15",
+      "nut_object": "R12 H5 | M3 captive nut",
+      "local_to_world_matrix": [
+        [
+          0.0,
+          0.0,
+          1.0,
+          -1.0667388439178467
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.019999999552965164
+        ],
+        [
+          -1.0,
+          0.0,
+          0.0,
+          1.1799999475479126
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "original_flat_radii_mm": [
+        2.950000773730065,
+        2.950000601080264,
+        2.950000601080264,
+        2.950000773730065,
+        2.950000403766193,
+        2.950000403766193
+      ],
+      "pocket_AF_mm": 5.9,
+      "pocket_depth_mm": 2.8,
+      "nominal_nut_AF_mm": 5.5,
+      "nominal_nut_thickness_mm": 2.4,
+      "rib_tip_AF_mm": 5.3,
+      "nominal_radial_interference_mm": 0.10000000000000009,
+      "rib_count": 6,
+      "rib_base_width_mm": 1.2,
+      "rib_tip_width_mm": 0.2,
+      "rib_leadin_depth_mm": 0.8,
+      "floor_clearance_mm": 0.05,
+      "profile": "standard"
+    },
+    {
+      "id": "H6",
+      "part": "P15D | Raised rear hood R15",
+      "nut_object": "R12 H6 | M3 captive nut",
+      "local_to_world_matrix": [
+        [
+          0.0,
+          0.0,
+          1.0,
+          -1.0535409450531006
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.019999999552965164
+        ],
+        [
+          -1.0,
+          0.0,
+          0.0,
+          1.5099999904632568
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "original_flat_radii_mm": [
+        2.950000773730065,
+        2.950000601080264,
+        2.950000601080264,
+        2.950000773730065,
+        2.950000403766193,
+        2.950000403766193
+      ],
+      "pocket_AF_mm": 5.9,
+      "pocket_depth_mm": 2.8,
+      "nominal_nut_AF_mm": 5.5,
+      "nominal_nut_thickness_mm": 2.4,
+      "rib_tip_AF_mm": 5.3,
+      "nominal_radial_interference_mm": 0.10000000000000009,
+      "rib_count": 6,
+      "rib_base_width_mm": 1.2,
+      "rib_tip_width_mm": 0.2,
+      "rib_leadin_depth_mm": 0.8,
+      "floor_clearance_mm": 0.05,
+      "profile": "standard"
+    },
+    {
+      "id": "H7",
+      "part": "P15B | Raised removable hood side panel R15",
+      "nut_object": "R14 H7 | M3 captive nut",
+      "local_to_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.8899999856948853
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -0.8524948954582214
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          1.350000023841858
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rib_tip_AF_mm": 5.3,
+      "nominal_nut_AF_mm": 5.5,
+      "pocket_AF_mm": 5.9,
+      "pocket_depth_mm": 2.8,
+      "rib_count": 6,
+      "profile": "standard"
+    },
+    {
+      "id": "H8",
+      "part": "P15B | Raised removable hood side panel R15",
+      "nut_object": "R14 H8 | M3 captive nut",
+      "local_to_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.8899999856948853
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          0.8525100946426392
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          1.350000023841858
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rib_tip_AF_mm": 5.3,
+      "nominal_nut_AF_mm": 5.5,
+      "pocket_AF_mm": 5.9,
+      "pocket_depth_mm": 2.8,
+      "rib_count": 6,
+      "profile": "standard"
+    }
+  ],
+  "roof_joint": {
+    "id": "R10 H4",
+    "screw": "M3x12",
+    "quantity": 1,
+    "captive_nut": "M3 standard 5.5 AF x 2.4 mm",
+    "washer": "M3, 6 mm OD x 0.5 mm",
+    "seat_mm": [
+      -85.0,
+      3.9999990463256836,
+      217.0497833251953
+    ],
+    "axis_inward": [
+      0.0,
+      0.0,
+      -1.0
+    ],
+    "bore_mm": 3.4,
+    "nut_recess_AF_mm": 5.9,
+    "nut_recess_depth_mm": 2.8,
+    "nut_shoulder_mm": 2.2,
+    "main_screw_shoulder_mm": 3.8837158203125,
+    "tongue_clearance_per_face_mm": 0.3
+  },
+  "side_joints": [
+    {
+      "id": "H5",
+      "seat_mm": [
+        -112.77388763427734,
+        2,
+        118.0
+      ],
+      "axis_inward": [
+        1,
+        0,
+        0
+      ],
+      "front_clamping_pad_thickness_mm": 3.6,
+      "rear_lap_thickness_mm": 5.0,
+      "lap_gap_mm": 0.3,
+      "bore_mm": 3.4,
+      "nut_pocket_AF_mm": 5.9,
+      "nut_pocket_depth_mm": 2.8,
+      "nut_shoulder_mm": 2.2,
+      "screw": "M3x12",
+      "nut": "M3 standard 5.5 AF x 2.4 mm",
+      "washer": "M3 6 mm OD x 0.5 mm",
+      "nut_insertion": "From inside rear cover before installing it",
+      "edit_bounds_mm": [
+        [
+          -112.87388763427734,
+          -103.27388763427734
+        ],
+        [
+          -8.1,
+          24.1
+        ],
+        [
+          107.9,
+          128.1
+        ]
+      ]
+    },
+    {
+      "id": "H6",
+      "seat_mm": [
+        -111.4541015625,
+        2,
+        151.0
+      ],
+      "axis_inward": [
+        1,
+        0,
+        0
+      ],
+      "front_clamping_pad_thickness_mm": 3.6,
+      "rear_lap_thickness_mm": 5.0,
+      "lap_gap_mm": 0.3,
+      "bore_mm": 3.4,
+      "nut_pocket_AF_mm": 5.9,
+      "nut_pocket_depth_mm": 2.8,
+      "nut_shoulder_mm": 2.2,
+      "screw": "M3x12",
+      "nut": "M3 standard 5.5 AF x 2.4 mm",
+      "washer": "M3 6 mm OD x 0.5 mm",
+      "nut_insertion": "From inside rear cover before installing it",
+      "edit_bounds_mm": [
+        [
+          -111.5541015625,
+          -101.9541015625
+        ],
+        [
+          -8.1,
+          24.1
+        ],
+        [
+          140.9,
+          161.1
+        ]
+      ]
+    }
+  ],
+  "panel_joints": [
+    {
+      "id": "H7",
+      "main": "P15C | Front slide-on smiling hood R14",
+      "cap": "P15B | Removable hood side panel R14",
+      "sign": -1,
+      "local_to_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.949999988079071
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -0.913494884967804
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          1.350000023841858
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "seat_mm": [
+        89.0,
+        -91.3494873046875,
+        135.0
+      ],
+      "axis_inward": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "screw": "M3x10",
+      "washer": "M3 6 mm OD x 0.5 mm",
+      "nut": "standard M3 5.5 AF x 2.4 mm",
+      "lap_thickness_mm": 5.0,
+      "pad_thickness_mm": 3.6,
+      "receiver_gap_mm": 0.3,
+      "nut_shoulder_mm": 2.2,
+      "bore_mm": 3.4,
+      "pocket_AF_mm": 5.9,
+      "pocket_depth_mm": 2.8,
+      "edit_bounds_mm": [
+        [
+          79.9000015258789,
+          105.0999984741211
+        ],
+        [
+          -107.3494873046875,
+          -56.249488830566406
+        ],
+        [
+          124.90000915527344,
+          145.09999084472656
+        ]
+      ]
+    },
+    {
+      "id": "H8",
+      "main": "P15D | Rear slide-on hood R14",
+      "cap": "P15B | Removable hood side panel R14",
+      "sign": 1,
+      "local_to_world_matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.949999988079071
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          0.9135100841522217
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          1.350000023841858
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "seat_mm": [
+        89.0,
+        91.35100555419922,
+        135.0
+      ],
+      "axis_inward": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "screw": "M3x10",
+      "washer": "M3 6 mm OD x 0.5 mm",
+      "nut": "standard M3 5.5 AF x 2.4 mm",
+      "lap_thickness_mm": 5.0,
+      "pad_thickness_mm": 3.6,
+      "receiver_gap_mm": 0.3,
+      "nut_shoulder_mm": 2.2,
+      "bore_mm": 3.4,
+      "pocket_AF_mm": 5.9,
+      "pocket_depth_mm": 2.8,
+      "edit_bounds_mm": [
+        [
+          79.9000015258789,
+          105.0999984741211
+        ],
+        [
+          56.251014709472656,
+          107.35100555419922
+        ],
+        [
+          124.90000915527344,
+          145.09999084472656
+        ]
+      ]
+    }
+  ],
+  "source_R15_sha256": "1a378301e528b09c1ddb794c7b77aac5a6b3f740ff8d75d3dadcf83d06bbdb93",
+  "source_R15_validation_sha256": "15c5ab94323df0c364ef2c890dbb52e86aadb66c5072fad7aa07f93ed83a2c3c",
+  "renamed_from_R15": {
+    "P15C | Enclosed camera front hood R15": "P15C | Closed camera surround front hood R16"
+  },
+  "only_changed_R15_geometry": "P15C | Enclosed camera front hood R15",
+  "R16_net_added_volume_mm3": 3043.4088702530134,
+  "R16_addition_bounds_mm": [
+    [
+      -98.99999237060547,
+      94.85000610351562
+    ],
+    [
+      -91.29999542236328,
+      -72.48130798339844
+    ],
+    [
+      135.64999389648438,
+      187.64999389648438
+    ]
+  ],
+  "R16_surface_preservation": {
+    "old_surface_sample_count": 15279,
+    "old_outside_edit_region_samples_lost": 0,
+    "local_surface_retriangulation_samples": [
+      [
+        [
+          -86.04371643066406,
+          -90.91233825683594,
+          139.7791748046875
+        ],
+        0.45665106177330017
+      ]
+    ],
+    "new_samples_outside_edit_region": 13866,
+    "max_outside_region_surface_error_mm": 0.050467584282159805,
+    "samples_exceeding_0p04mm": [
+      [
+        [
+          -26.64133071899414,
+          -101.39500427246094,
+          147.04727172851562
+        ],
+        0.050467584282159805
+      ]
+    ],
+    "method": "Nearest oriented surface; vertices and triangle centroids outside the local edit box. 0.025 mm old-surface / 0.06 mm new-surface tolerance. Local edits independently tested for end coverage and collisions. Sampled, not exact volume containment."
+  },
+  "R16_front_solid": {
+    "components": 1,
+    "nonmanifold_edges": 0,
+    "loose_vertices": 0,
+    "volume_mm3": 140173.59166281324,
+    "dimensions_mm": [
+      207.85000610351562,
+      113.79500770568848,
+      115.89999389648438
+    ],
+    "min_z_mm": 102.0
+  },
+  "R16_unchanged_object_count": 864,
+  "R16_unexpected_original_changes": []
+}

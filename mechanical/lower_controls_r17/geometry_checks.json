@@ -1,0 +1,381 @@
+{
+  "revision": "R17 prototype",
+  "source_R16_sha256": "95a85e7efb10930a65ed4e419cf360c57ff2d36b81b1c8e733d4cb1d8109dd4c",
+  "renames": {
+    "P16A | Main ToF skirt R07": "P16C | Front ToF skirt R17",
+    "P16B | Removable ToF side panel R07": "P16B | Wheel-switch side panel R17",
+    "P05 | Battery drawer with integral fascia": "P05 | Curved switched battery drawer R17",
+    "P06L | Battery guide and lock receiver": "P06L | Curved fascia lock guide R17",
+    "P06R | Battery guide and lock receiver": "P06R | Curved fascia lock guide R17"
+  },
+  "allowed_original_changes": [
+    "E-1 | M3x12 screw",
+    "E-1 | drawer lock nut",
+    "E-1 | washer",
+    "E1 | M3x12 screw",
+    "E1 | drawer lock nut",
+    "E1 | washer",
+    "P05 | Battery drawer with integral fascia",
+    "P06L | Battery guide and lock receiver",
+    "P06R | Battery guide and lock receiver",
+    "P16A | Main ToF skirt R07",
+    "P16B | Removable ToF side panel R07"
+  ],
+  "unchanged_original_objects": 854,
+  "unexpected_original_changes": [],
+  "solid_checks": {
+    "P16C | Front ToF skirt R17": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 71888.85598194847,
+      "dimensions_mm": [
+        211.35000610351562,
+        102.45001220703125,
+        87.0
+      ],
+      "min_z_mm": 13.0
+    },
+    "P16D | Rear ToF skirt R17": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 57627.10087528848,
+      "dimensions_mm": [
+        213.5325698852539,
+        122.64999389648438,
+        87.0
+      ],
+      "min_z_mm": 13.0
+    },
+    "P16B | Wheel-switch side panel R17": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 43991.10663464532,
+      "dimensions_mm": [
+        35.68256378173828,
+        178.89422607421875,
+        87.0
+      ],
+      "min_z_mm": 13.0
+    },
+    "P05 | Curved switched battery drawer R17": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 91269.81064970387,
+      "dimensions_mm": [
+        174.0,
+        104.0,
+        45.0
+      ],
+      "min_z_mm": 54.5
+    },
+    "P06L | Curved fascia lock guide R17": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 7480.665796712243,
+      "dimensions_mm": [
+        18.70000457763672,
+        95.08717346191406,
+        28.89324188232422
+      ],
+      "min_z_mm": 55.90675354003906
+    },
+    "P06R | Curved fascia lock guide R17": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "loose_vertices": 0,
+      "volume_mm3": 7480.904524672118,
+      "dimensions_mm": [
+        18.70000457763672,
+        95.08717346191406,
+        28.89324188232422
+      ],
+      "min_z_mm": 55.90675354003906
+    }
+  },
+  "new_joints": [
+    {
+      "id": "S3",
+      "screw": "M3x12",
+      "ear_mm": 5,
+      "bore_mm": 3.4,
+      "receiver_clearance_mm": 0.3,
+      "matrix": [
+        [
+          0.0,
+          0.0,
+          1.0,
+          -1.1649999618530273
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          -0.03999999910593033
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.7799999713897705
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "id": "S4",
+      "screw": "M3x12",
+      "ear_mm": 5,
+      "bore_mm": 3.4,
+      "receiver_clearance_mm": 0.3,
+      "matrix": [
+        [
+          0.0,
+          0.0,
+          1.0,
+          -1.1649999618530273
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          -0.03999999910593033
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.9300000071525574
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  ],
+  "nut_retention": [
+    {
+      "id": "S1",
+      "part": "P16B | Wheel-switch side panel R17",
+      "nut_object": "S1 | M3 captive nut",
+      "matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.8899999856948853
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -0.849651038646698
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          0.1899999976158142
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "tip_AF_mm": 5.3
+    },
+    {
+      "id": "S2",
+      "part": "P16B | Wheel-switch side panel R17",
+      "nut_object": "S2 | M3 captive nut",
+      "matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.8899999856948853
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          0.849651038646698
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          0.1899999976158142
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "tip_AF_mm": 5.3
+    },
+    {
+      "id": "S3",
+      "part": "P16D | Rear ToF skirt R17",
+      "nut_object": "R17 S3 | M3 captive nut",
+      "matrix": [
+        [
+          0.0,
+          0.0,
+          1.0,
+          -1.0859999656677246
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          -0.09999999403953552
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.7799999713897705
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "tip_AF_mm": 5.3
+    },
+    {
+      "id": "S4",
+      "part": "P16D | Rear ToF skirt R17",
+      "nut_object": "R17 S4 | M3 captive nut",
+      "matrix": [
+        [
+          0.0,
+          0.0,
+          1.0,
+          -1.0859999656677246
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          -0.09999999403953552
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.9300000071525574
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "tip_AF_mm": 5.3
+    }
+  ],
+  "switch_mounts": [
+    {
+      "id": "WHEELS",
+      "part": "P16B | Wheel-switch side panel R17",
+      "matrix": [
+        [
+          0.0,
+          0.0,
+          -1.0,
+          1.156000018119812
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          -0.23999999463558197
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.8399999737739563
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "cutout_diameter_mm": 20.5,
+      "snap_seat_thickness_mm": 2.2,
+      "bezel_diameter_mm": 23,
+      "terminal_depth_mm": 26,
+      "reserved_depth_mm": 40,
+      "status": "PROVISIONAL: print fit coupon and verify actual clip/body dimensions before main part"
+    },
+    {
+      "id": "BATTERY",
+      "part": "P05 | Curved switched battery drawer R17",
+      "matrix": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.4000000059604645
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          1.0336064100265503
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.7799999713897705
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "cutout_diameter_mm": 20.5,
+      "snap_seat_thickness_mm": 2.2,
+      "bezel_diameter_mm": 23,
+      "terminal_depth_mm": 26,
+      "reserved_depth_mm": 40,
+      "status": "PROVISIONAL: print fit coupon and verify actual clip/body dimensions before main part"
+    }
+  ],
+  "lock_seat_y_mm": 96.87999353131863,
+  "split_plane_y_mm": -4.0,
+  "split_gap_mm": 0.4,
+  "switch_rating": "AC-only 10A/125VAC, 6A/250VAC provided; NO verified DC rating; mechanical mounting only",
+  "limits": [
+    "No wiring/power changes made. Do not switch battery/motor current until exact DC load/inrush rating is verified.",
+    "Switch cutout and snap thickness are provisional, not certified by the ambiguous supplier drawing.",
+    "Digital checks do not establish physical fit, strength, PETG creep, cable routing or sliced support requirements."
+  ]
+}

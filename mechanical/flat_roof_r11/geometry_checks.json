@@ -1,0 +1,125 @@
+{
+  "revision": "R11 flat roof",
+  "source_R10_sha256": "3c0c5b9d9a7bc49eb677fe3496d1b7d3e19a0f5e85a3e6991b6f624e36a632d5",
+  "renamed_hood_objects": {
+    "P15C | Front slide-on smiling hood R10": "P15C | Front slide-on smiling hood R11",
+    "P15D | Rear slide-on hood R10": "P15D | Rear slide-on hood R11"
+  },
+  "roof_plane_mm": 190.8,
+  "protected_geometry_below_z_mm": 190.0,
+  "roof_checks": {
+    "P15C | Front slide-on smiling hood R11": {
+      "mesh": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "loose_vertices": 0,
+        "volume_mm3": 86462.86714376353,
+        "dimensions_mm": [
+          207.85000610351562,
+          111.80000495910645,
+          88.80000305175781
+        ],
+        "min_z_mm": 102.0
+      },
+      "flattened_vertex_count": 543,
+      "plane_z_mm": 190.8,
+      "flat_bed_contact_area_mm2": 11790.254184147378,
+      "thickness_sample_grid_mm": 2,
+      "thickness_sample_count": 2942,
+      "min_sampled_flat_roof_thickness_mm": 2.334451675415039
+    },
+    "P15D | Rear slide-on hood R11": {
+      "mesh": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "loose_vertices": 0,
+        "volume_mm3": 89430.87419994881,
+        "dimensions_mm": [
+          207.81927490234375,
+          104.00000023841858,
+          88.80000305175781
+        ],
+        "min_z_mm": 102.0
+      },
+      "flattened_vertex_count": 392,
+      "plane_z_mm": 190.8,
+      "flat_bed_contact_area_mm2": 9094.51815009035,
+      "thickness_sample_grid_mm": 2,
+      "thickness_sample_count": 2263,
+      "min_sampled_flat_roof_thickness_mm": 2.3373961448669434
+    }
+  },
+  "roof_joint": {
+    "id": "R10 H4",
+    "screw": "M3x12",
+    "quantity": 1,
+    "captive_nut": "M3 standard 5.5 AF x 2.4 mm",
+    "washer": "M3, 6 mm OD x 0.5 mm",
+    "seat_mm": [
+      -85.0,
+      3.9999990463256836,
+      189.9497833251953
+    ],
+    "axis_inward": [
+      0.0,
+      0.0,
+      -1.0
+    ],
+    "bore_mm": 3.4,
+    "nut_recess_AF_mm": 5.9,
+    "nut_recess_depth_mm": 2.8,
+    "nut_shoulder_mm": 2.2,
+    "main_screw_shoulder_mm": 3.8837158203125,
+    "tongue_clearance_per_face_mm": 0.3
+  },
+  "unexpected_original_changes": [],
+  "unchanged_original_object_count": 838,
+  "unchanged_STL_ids": [
+    "P01",
+    "P02",
+    "P03",
+    "P05",
+    "P06L",
+    "P07L",
+    "P06R",
+    "P07R",
+    "P09",
+    "P10",
+    "P11",
+    "P12",
+    "P14",
+    "C01",
+    "C03",
+    "C05",
+    "C06",
+    "C07",
+    "S01",
+    "S02",
+    "S03",
+    "S04",
+    "S07",
+    "S08",
+    "S09",
+    "F01",
+    "F02",
+    "F03",
+    "F04",
+    "P17",
+    "P18",
+    "P19",
+    "C02",
+    "C08",
+    "F05",
+    "P04",
+    "C09",
+    "P20",
+    "F06",
+    "P15B",
+    "P16A",
+    "P16B",
+    "Q07A",
+    "Q07B"
+  ],
+  "design_choice": "User requested attached face and accepted local support; no new separate face part.",
+  "motion_validation": "validate_flat_roof_r11.py must pass before release."
+}

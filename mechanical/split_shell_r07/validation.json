@@ -1,0 +1,210 @@
+{
+  "revision": "R07",
+  "status": "digital geometry checks passed; physical and slicer tests outstanding",
+  "source_sha256": "a8272e3efe3b14436a7eb93514062eee087218fdcf7bfc8b61f5a48c138c7e88",
+  "unchanged_R06_objects_excluding_camera_and_replaced_shells": 816,
+  "unexpected_changes": [],
+  "protected_surface_checks": {
+    "Shell | Removable sensor hood": {
+      "sampled_original_vertices_outside_intentional_changes": 3421,
+      "max_surface_error_mm": 1.4600097131278744e-05,
+      "limit_mm": 0.01
+    },
+    "Shell | Independent lower skirt": {
+      "sampled_original_vertices_outside_intentional_changes": 8524,
+      "max_surface_error_mm": 1.3328003944934608e-05,
+      "limit_mm": 0.01
+    }
+  },
+  "unchanged_STL_ids": [
+    "P01",
+    "P02",
+    "P03",
+    "P05",
+    "P06L",
+    "P07L",
+    "P06R",
+    "P07R",
+    "P09",
+    "P10",
+    "P11",
+    "P12",
+    "P14",
+    "C01",
+    "C03",
+    "C05",
+    "C06",
+    "C07",
+    "S01",
+    "S02",
+    "S03",
+    "S04",
+    "S07",
+    "S08",
+    "S09",
+    "F01",
+    "F02",
+    "F03",
+    "F04",
+    "P17",
+    "P18",
+    "P19",
+    "C02",
+    "C08",
+    "F05",
+    "P04",
+    "C09",
+    "P20",
+    "F06"
+  ],
+  "new_STL_reimport_checks": {
+    "P15A": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "volume": 167729.87372590546,
+      "dimensions": [
+        207.85000610351562,
+        208.3994903564453,
+        90.00000762939453
+      ],
+      "z_min": 0.0
+    },
+    "P15B": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "volume": 42542.331948434934,
+      "dimensions": [
+        88.04109954833984,
+        171.2927703857422,
+        30.00000762939453
+      ],
+      "z_min": 0.0
+    },
+    "P16A": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "volume": 120941.29191161964,
+      "dimensions": [
+        211.32960510253906,
+        209.46910095214844,
+        87.0
+      ],
+      "z_min": 0.0
+    },
+    "P16B": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "volume": 43902.7461037814,
+      "dimensions": [
+        87.0,
+        178.89422607421875,
+        33.47959899902344
+      ],
+      "z_min": 0.0
+    },
+    "Q07A": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "volume": 1008.4192306233928,
+      "dimensions": [
+        13.850006103515625,
+        21.999998092651367,
+        4.5135955810546875
+      ],
+      "z_min": 0.0
+    },
+    "Q07B": {
+      "components": 1,
+      "nonmanifold_edges": 0,
+      "volume": 2044.0983829827437,
+      "dimensions": [
+        10.036727905273438,
+        21.999996185302734,
+        23.99999237060547
+      ],
+      "z_min": 0.0
+    }
+  },
+  "sampled_panel_separation": [
+    {
+      "cap": "P15B | Removable hood side panel R07",
+      "offset_x_mm": 0,
+      "intersection_mm3": 0.0
+    },
+    {
+      "cap": "P15B | Removable hood side panel R07",
+      "offset_x_mm": 1,
+      "intersection_mm3": 0.0
+    },
+    {
+      "cap": "P15B | Removable hood side panel R07",
+      "offset_x_mm": 3,
+      "intersection_mm3": 0.0
+    },
+    {
+      "cap": "P15B | Removable hood side panel R07",
+      "offset_x_mm": 7,
+      "intersection_mm3": 0.0
+    },
+    {
+      "cap": "P15B | Removable hood side panel R07",
+      "offset_x_mm": 12,
+      "intersection_mm3": 0.0
+    },
+    {
+      "cap": "P15B | Removable hood side panel R07",
+      "offset_x_mm": 20,
+      "intersection_mm3": 0.0
+    },
+    {
+      "cap": "P15B | Removable hood side panel R07",
+      "offset_x_mm": 40,
+      "intersection_mm3": 0.0
+    },
+    {
+      "cap": "P16B | Removable ToF side panel R07",
+      "offset_x_mm": 0,
+      "intersection_mm3": 0.0
+    },
+    {
+      "cap": "P16B | Removable ToF side panel R07",
+      "offset_x_mm": 1,
+      "intersection_mm3": 0.0
+    },
+    {
+      "cap": "P16B | Removable ToF side panel R07",
+      "offset_x_mm": 3,
+      "intersection_mm3": 0.0
+    },
+    {
+      "cap": "P16B | Removable ToF side panel R07",
+      "offset_x_mm": 7,
+      "intersection_mm3": 0.0
+    },
+    {
+      "cap": "P16B | Removable ToF side panel R07",
+      "offset_x_mm": 12,
+      "intersection_mm3": 0.0
+    },
+    {
+      "cap": "P16B | Removable ToF side panel R07",
+      "offset_x_mm": 20,
+      "intersection_mm3": 0.0
+    },
+    {
+      "cap": "P16B | Removable ToF side panel R07",
+      "offset_x_mm": 40,
+      "intersection_mm3": 0.0
+    }
+  ],
+  "slicer_check": {
+    "status": "not completed",
+    "cause": "Installed Creality Print CLI crashes in PartPlate::set_shape before slicing the unmodified R06 baseline.",
+    "support_or_time_savings_measured": false
+  },
+  "limits": [
+    "Surface-vertex comparison is not a physical measurement or volumetric proof.",
+    "Sampled separation checks cover pair geometry only; remove fasteners and unplug harnesses first.",
+    "Nominal 4 mm brim bounding-box fit is not a toolpath/bed-exclusion validation."
+  ]
+}
