@@ -1,0 +1,139 @@
+{
+  "component_bounds_cad_mm": [
+    [
+      -17.5,
+      17.5
+    ],
+    [
+      37.75796127319336,
+      86.24203491210938
+    ],
+    [
+      0.41445493698120117,
+      38.40554428100586
+    ]
+  ],
+  "limits": [
+    "Swivel axis inferred from mounting-plate symmetry, not a CAD joint.",
+    "Physical caster/assembly and external harness protrusions unverified."
+  ],
+  "mesh_components": [
+    {
+      "bounds_cad_mm": [
+        [
+          -12.499837875366211,
+          12.499839782714844
+        ],
+        [
+          45.25796127319336,
+          77.55706024169922
+        ],
+        [
+          9.106075286865234,
+          34.10554504394531
+        ]
+      ],
+      "vertices": 36188
+    },
+    {
+      "bounds_cad_mm": [
+        [
+          -17.5,
+          17.5
+        ],
+        [
+          37.75796127319336,
+          77.7579574584961
+        ],
+        [
+          34.205543518066406,
+          38.40554428100586
+        ]
+      ],
+      "vertices": 31135
+    },
+    {
+      "bounds_cad_mm": [
+        [
+          -8,
+          8
+        ],
+        [
+          56.264530181884766,
+          86.24203491210938
+        ],
+        [
+          0.41445493698120117,
+          30.396631240844727
+        ]
+      ],
+      "vertices": 9251
+    },
+    {
+      "bounds_cad_mm": [
+        [
+          -9.298233985900879,
+          9.298233985900879
+        ],
+        [
+          48.25796127319336,
+          67.2579574584961
+        ],
+        [
+          32.61091613769531,
+          36.11079406738281
+        ]
+      ],
+      "vertices": 2912
+    },
+    {
+      "bounds_cad_mm": [
+        [
+          -4.996157169342041,
+          4.9943366050720215
+        ],
+        [
+          52.76180648803711,
+          62.757957458496094
+        ],
+        [
+          31.305545806884766,
+          37.40554428100586
+        ]
+      ],
+      "vertices": 2278
+    }
+  ],
+  "method": "Full XY bounding-box rotation, including fixed plate; analytic disc",
+  "nominal_pivot_cad_xy_mm": [
+    0,
+    57.75795936584473
+  ],
+  "object": "Component | Caster",
+  "physical_swivel_axis_verified": false,
+  "plate_spacer_axis_disagreement_mm": 0.00000286102294921875,
+  "scene_scale_length": 0.1,
+  "source_sha256": "b5b6360d568ab5c79f65d23d1399e47ed0c22d680765c039d0ac5ad28a81081e",
+  "source_unchanged": true,
+  "spacer_centres_cad_xy_mm": [
+    [
+      -11.999999523162842,
+      43.25795936584473
+    ],
+    [
+      -11.999999523162842,
+      72.25795364379883
+    ],
+    [
+      11.999999523162842,
+      43.25795936584473
+    ],
+    [
+      11.999999523162842,
+      72.25795364379883
+    ]
+  ],
+  "status": "CAD_ONLY",
+  "sweep_radius_from_bbox_m": 0.0334304136936011,
+  "sweep_radius_outward_rounded_m": 0.034
+}
