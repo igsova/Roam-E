@@ -63,7 +63,11 @@ controller_server:
       use_rotate_to_heading: true
       allow_reversing: false
       rotate_to_heading_min_angle: 0.35
-      max_angular_accel: 0.60
+      # RPP limits rotate-to-heading from the MEASURED angular speed. At 0.60
+      # a stationary pivot was asked for only ~14 ticks/s/wheel and buzzed in
+      # place at the goal (14 Oct 2026, 10.9 V). 3.0 reaches 0.30 rad/s in
+      # ~0.1 s; the velocity smoother still limits the final command.
+      max_angular_accel: 3.0
       max_robot_pose_search_dist: 2.0
       stateful: true
 
@@ -188,7 +192,9 @@ velocity_smoother:
     feedback: "OPEN_LOOP"
     max_velocity: [0.08, 0.0, 0.35]
     min_velocity: [-0.06, 0.0, -0.35]
-    max_accel: [0.10, 0.0, 0.60]
+    # Angular 2.0 rad/s^2 (14 Oct): short final-heading corrections must reach
+    # a breakaway pivot speed before RPP stops commanding them.
+    max_accel: [0.10, 0.0, 2.0]
     max_decel: [-0.25, 0.0, -1.00]
     odom_topic: /odometry/filtered
     odom_duration: 0.20
