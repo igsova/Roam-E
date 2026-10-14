@@ -14,7 +14,11 @@ class ProductionFirmwareTest(unittest.TestCase):
 
     def test_production(self):
         for case in (*V3_CASES, 'p230_ceiling', 'production_defaults',
-                     'production_normal_pivot', 'production_direct_pwm_range'):
+                     'production_normal_pivot', 'production_direct_pwm_range',
+                     'bk_pivot_stall_ramp_cap_timeout', 'bk_release_on_motion',
+                     'bk_wrong_direction_not_progress', 'bk_moving_wheel_no_boost',
+                     'bk_slow_target_window', 'bk_stop_and_watchdog_clear',
+                     'bk_opposite_target_resets'):
             with self.subTest(case=case):
                 r = subprocess.run([self.binary, case], capture_output=True, text=True, timeout=2)
                 self.assertEqual(r.returncode, 0, r.stdout + r.stderr)

@@ -21,7 +21,7 @@ from check_r19_lifted_wheel import PORT, command, counter_delta, resting
 from r19_power_monitor import PowerMonitor, QUERY_TIMEOUT, POLL_INTERVAL, MAX_SAMPLE_AGE
 
 INFO = 'INFO,2,748,230,2000'
-CAPS = 'CAPS,BOUNDED_DUAL_V3_P230B3,128,153,230,300,250,1000,6000,1400,160,3'
+CAPS = 'CAPS,BOUNDED_DUAL_V3_P230B3,128,153,230,300,250,1000,6000,1400,160,3,BK1'
 TURNS = {'left': (-1, 1), 'right': (1, -1)}
 SIGNS = TURNS['left']
 TARGET = 300

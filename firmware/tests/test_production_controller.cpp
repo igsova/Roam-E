@@ -22,7 +22,7 @@ void test(const std::string &name) {
   if (name=="default_disabled_caps") {
     setup(); stopped(); require(!boundedStartupEnabled,"Not default disabled");
     Serial.clearOutput(); handleCommand("CAPS");
-    require(Serial.output.str()=="CAPS,BOUNDED_DUAL_V3_P230B3,128,153,230,300,250,1000,6000,1400,160,3\n","Wrong P230 caps");
+    require(Serial.output.str()=="CAPS,BOUNDED_DUAL_V3_P230B3,128,153,230,300,250,1000,6000,1400,160,3,BK1\n","Wrong P230 caps");
   } else if (name=="paired_forward" || name=="paired_reverse") {
     const int sign=name=="paired_forward" ? 1 : -1;
     armed(); handleCommand(sign>0 ? "VEL,200,200" : "VEL,-200,-200"); tick(20,0,0);
@@ -205,6 +205,61 @@ void test(const std::string &name) {
     setup(); handleCommand("PWM,230,-230"); require(currentLeftPwm==230 && currentRightPwm==-230,"230 refused");
     require(mockOutputs[LEFT_IN2]==230 && mockOutputs[RIGHT_IN2]==230,"R19 polarity at 230");
     handleCommand("PWM,231,0"); stopped(); handleCommand("STOP");
+  } else if (name=="bk_pivot_stall_ramp_cap_timeout") {
+    setup(); handleCommand("VEL,-69,69");
+    int lastMag=0; bool sawStart=false, sawCap=false;
+    for (unsigned long t=20;t<=560;t+=20) {
+      handleCommand("VEL,-69,69"); tick(t,0,0);
+      require(currentLeftPwm<0 && currentRightPwm>0,"Floor sign");
+      const int mag=-currentLeftPwm;
+      require(mag<=153 && currentRightPwm<=153,"Floor above cap");
+      if (t<80) require(mag<100,"Boost before detection window");
+      if (mag>=100 && !sawStart) { sawStart=true; require(t>=80 && t<=100,"Late boost"); }
+      if (sawStart && t<=400) require(mag>=lastMag,"Boost not ramping");
+      if (mag==153) sawCap=true;
+      lastMag=mag;
+    }
+    require(sawStart && sawCap,"Boost never reached start/cap");
+    // Timeout at ~500 ms after start: floor removed, then cooldown 500 ms.
+    handleCommand("VEL,-69,69"); tick(600,0,0);
+    require(!breakawayLeft.boosting && breakawayLeft.coolingDown,"Boost not released at timeout");
+    require(-currentLeftPwm<153,"Cap held after timeout");
+    for (unsigned long t=620;t<=1080;t+=20) { handleCommand("VEL,-69,69"); tick(t,0,0);
+      require(!breakawayLeft.boosting,"Boost during cooldown"); }
+    bool again=false;
+    for (unsigned long t=1100;t<=1300;t+=20) { handleCommand("VEL,-69,69"); tick(t,0,0); if (breakawayLeft.boosting) again=true; }
+    require(again,"No retry after cooldown");
+  } else if (name=="bk_release_on_motion") {
+    setup(); handleCommand("VEL,-69,69");
+    for (unsigned long t=20;t<=140;t+=20) { handleCommand("VEL,-69,69"); tick(t,0,0); }
+    require(-currentLeftPwm>=100 && currentRightPwm>=100,"No boost before motion");
+    handleCommand("VEL,-69,69"); tick(160,-2,2);
+    require(!breakawayLeft.boosting && !breakawayRight.boosting,"Boost kept after motion");
+    require(-currentLeftPwm<100,"Floor still applied after motion");
+  } else if (name=="bk_wrong_direction_not_progress") {
+    setup(); handleCommand("VEL,-69,69");
+    for (unsigned long t=20;t<=140;t+=20) { handleCommand("VEL,-69,69"); tick(t,(long)(t/20),0); }
+    require(breakawayLeft.boosting,"Backward drift counted as progress");
+  } else if (name=="bk_moving_wheel_no_boost") {
+    setup(); handleCommand("VEL,200,200");
+    for (unsigned long t=20;t<=400;t+=20) { handleCommand("VEL,200,200"); tick(t,(long)(t/5),(long)(t/5));
+      require(!breakawayLeft.boosting && !breakawayRight.boosting,"Boost on a moving wheel"); }
+  } else if (name=="bk_slow_target_window") {
+    setup(); handleCommand("VEL,10,10");
+    for (unsigned long t=20;t<=260;t+=20) { handleCommand("VEL,10,10"); tick(t,0,0);
+      require(!breakawayLeft.boosting,"Boost before 250 ms window at 10 ticks/s"); }
+    handleCommand("VEL,10,10"); tick(300,0,0); require(breakawayLeft.boosting,"No boost after window");
+  } else if (name=="bk_stop_and_watchdog_clear") {
+    setup(); handleCommand("VEL,-69,69");
+    for (unsigned long t=20;t<=140;t+=20) { handleCommand("VEL,-69,69"); tick(t,0,0); }
+    handleCommand("STOP"); stopped(); require(!breakawayLeft.boosting && breakawayLeft.direction==0,"STOP kept boost");
+    handleCommand("VEL,-69,69"); tick(160,0,0); mockMillis=520; loop(); stopped();
+    require(Serial.output.str().find("EVENT,WATCHDOG_STOP")!=std::string::npos,"Watchdog with assist");
+  } else if (name=="bk_opposite_target_resets") {
+    setup(); handleCommand("VEL,-69,69");
+    for (unsigned long t=20;t<=140;t+=20) { handleCommand("VEL,-69,69"); tick(t,0,0); }
+    handleCommand("VEL,69,-69"); tick(160,0,0);
+    require(currentLeftPwm>0 && currentLeftPwm<100,"Reversal kept old boost");
   } else if (name=="phase_diagnostic") {
     armed(); handleCommand("VEL,200,200"); tick(20,0,0); mockMillis=50;
     Serial.clearOutput(); publishTelemetry();

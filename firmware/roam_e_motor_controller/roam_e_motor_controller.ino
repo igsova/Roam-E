@@ -1,4 +1,5 @@
-// Production image from 2026-10-14 (promoted from candidate r19_dual_p230):
+// Production image from 2026-10-14 (promoted from candidate r19_dual_p230),
+// plus normal-mode breakaway assist (breakaway_assist.h, CAPS suffix BK1):
 // 90% running ceiling (230/255), opt-in bounded startup (START,1; default off)
 // with its boost capped at 153, and velocity defaults measured on the R19 body.
 #include <Arduino.h>
@@ -88,6 +89,7 @@ uint8_t receiveLength = 0;
 bool discardingLongLine = false;
 
 #include "bounded_startup.h"
+#include "breakaway_assist.h"
 
 void encoderAInterrupt() {
   if (digitalRead(ENCODER_A_A) == digitalRead(ENCODER_A_B)) {
@@ -143,6 +145,8 @@ void resetVelocityState() {
   leftIntegralPwm = 0.0f;
   rightIntegralPwm = 0.0f;
   resetBoundedWheels();
+  resetBreakaway(breakawayLeft);
+  resetBreakaway(breakawayRight);
 }
 
 void stopControl() {
@@ -467,9 +471,16 @@ void updateVelocityControl() {
     velocityKp * rightError +
     rightIntegralPwm;
 
+  const int leftFloor = breakawayStep(
+    breakawayLeft, targetLeftTicksPerSecond, deltaLeft, (uint32_t)now);
+  const int rightFloor = breakawayStep(
+    breakawayRight, targetRightTicksPerSecond, deltaRight, (uint32_t)now);
+
   applyMotorOutput(
-    targetLeftTicksPerSecond == 0 ? 0 : roundedPwm(leftOutput),
-    targetRightTicksPerSecond == 0 ? 0 : roundedPwm(rightOutput)
+    targetLeftTicksPerSecond == 0 ? 0 :
+      applyBreakawayFloor(roundedPwm(leftOutput), targetLeftTicksPerSecond, leftFloor),
+    targetRightTicksPerSecond == 0 ? 0 :
+      applyBreakawayFloor(roundedPwm(rightOutput), targetRightTicksPerSecond, rightFloor)
   );
 }
 
@@ -533,7 +544,7 @@ void handleCommand(const char *command) {
   }
 
   if (strcmp(command, "CAPS") == 0) {
-    Serial.println(F("CAPS,BOUNDED_DUAL_V3_P230B3,128,153,230,300,250,1000,6000,1400,160,3"));
+    Serial.println(F("CAPS,BOUNDED_DUAL_V3_P230B3,128,153,230,300,250,1000,6000,1400,160,3,BK1"));
     return;
   }
   if (strcmp(command, "START,1") == 0 || strcmp(command, "START,0") == 0) {
