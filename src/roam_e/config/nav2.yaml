@@ -183,7 +183,9 @@ velocity_smoother:
   ros__parameters:
     smoothing_frequency: 20.0
     scale_velocities: false
-    feedback: "CLOSED_LOOP"
+    # OPEN_LOOP (14 Oct 2026): CLOSED_LOOP ramps from measured odometry, so a
+    # stationary R19 pivot (stiction) only received ~10 ticks/s and stalled.
+    feedback: "OPEN_LOOP"
     max_velocity: [0.08, 0.0, 0.35]
     min_velocity: [-0.06, 0.0, -0.35]
     max_accel: [0.10, 0.0, 0.60]
