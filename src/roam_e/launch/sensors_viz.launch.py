@@ -184,6 +184,8 @@ def generate_launch_description():
             launch_arguments={
                 'rviz': use_rviz,
                 'publish_joints': publish_joints,
+                # OpenNI2 owns live optical TF; do not duplicate CAD preview TF.
+                'include_camera_optical_frames': 'false',
             }.items(),
         ),
 

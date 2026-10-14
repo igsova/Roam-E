@@ -1,0 +1,257 @@
+# Distances metres; rotations radians. CAD starting values, NOT measured calibration.
+# Copy this file, edit measured xyz/rpy, then launch with calibration_file:=/absolute/path.yaml.
+# Disable camera optical preview TF when OpenNI2 owns those frames.
+revision: R19 nominal CAD; not measured sensor calibration
+forward: camera
+physical_wheels:
+  radius: 0.033875
+  separation: 0.17363
+  width: 0.029
+effective_odometry:
+  radius: 0.033975
+  separation: 0.17515
+  note: Existing floor/turn-calibrated runtime values; not changed by this export.
+frames:
+  hood_side_link:
+    parent: base_link
+    xyz:
+    - 0
+    - 0
+    - 0
+    rpy:
+    - 0
+    - 0
+    - 0
+    status: Rigid assembled panel; origin shared with base_link
+  hood_front_link:
+    parent: base_link
+    xyz:
+    - 0
+    - 0
+    - 0
+    rpy:
+    - 0
+    - 0
+    - 0
+    status: Rigid assembled panel; origin shared with base_link
+  hood_rear_link:
+    parent: base_link
+    xyz:
+    - 0
+    - 0
+    - 0
+    rpy:
+    - 0
+    - 0
+    - 0
+    status: Rigid assembled panel; origin shared with base_link
+  skirt_side_link:
+    parent: base_link
+    xyz:
+    - 0
+    - 0
+    - 0
+    rpy:
+    - 0
+    - 0
+    - 0
+    status: Rigid assembled panel; origin shared with base_link
+  skirt_front_link:
+    parent: base_link
+    xyz:
+    - 0
+    - 0
+    - 0
+    rpy:
+    - 0
+    - 0
+    - 0
+    status: Rigid assembled panel; origin shared with base_link
+  skirt_rear_link:
+    parent: base_link
+    xyz:
+    - 0
+    - 0
+    - 0
+    rpy:
+    - 0
+    - 0
+    - 0
+    status: Rigid assembled panel; origin shared with base_link
+  battery_drawer_link:
+    parent: base_link
+    xyz:
+    - 0
+    - 0
+    - 0
+    rpy:
+    - 0
+    - 0
+    - 0
+    status: Rigid assembled panel; origin shared with base_link
+  laser_frame:
+    parent: base_link
+    xyz:
+    - -0.02889871
+    - 0.0
+    - 0.190899983
+    rpy:
+    - 0.0
+    - -0.0
+    - 3.141592503
+    status: CAD rotor-envelope midpoint; actual scan plane and yaw must be measured
+  imu_mount_link:
+    parent: base_link
+    xyz:
+    - -4.0e-09
+    - 0.0
+    - 0.089500003
+    rpy:
+    - 0.0
+    - -0.0
+    - 3.141592503
+    status: CAD nominal; bench verification required
+  imu_link:
+    parent: imu_mount_link
+    xyz:
+    - 4.0e-09
+    - 0.0
+    - 0.002000004
+    rpy:
+    - 3.141592654
+    - 0
+    - 0
+    status: Retained software roll=pi axis convention; drawing is not proof of physical
+      chip axes
+  camera_link:
+    parent: base_link
+    xyz:
+    - 0.067083791
+    - 0.021466669
+    - 0.129150003
+    rpy:
+    - 0.0
+    - -0.0
+    - 0.0
+    status: Provisional depth lens visual centre; optical detail in Blender is unmeasured
+  camera_rgb_optical_frame:
+    parent: camera_link
+    xyz:
+    - 0.0
+    - 0.035330553
+    - 0.0
+    rpy:
+    - -1.570796371
+    - -0.0
+    - -1.570796371
+    status: 'Preview only: nominal CAD centre and REP-103 axes; not stereo calibration'
+  camera_depth_optical_frame:
+    parent: camera_link
+    xyz:
+    - 0.0
+    - 0.0
+    - 0.0
+    rpy:
+    - -1.570796371
+    - -0.0
+    - -1.570796371
+    status: 'Preview only: nominal CAD centre and REP-103 axes; not stereo calibration'
+  camera_ir_optical_frame:
+    parent: camera_link
+    xyz:
+    - 0.0
+    - 0.0
+    - 0.0
+    rpy:
+    - -1.570796371
+    - -0.0
+    - -1.570796371
+    status: 'Preview only: nominal CAD centre and REP-103 axes; not stereo calibration'
+  tof_front_l_link:
+    parent: base_link
+    xyz:
+    - 0.063721955
+    - -0.067987762
+    - 0.0075
+    rpy:
+    - -0.0
+    - -0.0
+    - -0.195908174
+    status: CAD nominal; bench verification required
+  tof_front_c_link:
+    parent: base_link
+    xyz:
+    - 0.066950001
+    - 0.0
+    - 0.0075
+    rpy:
+    - 0.0
+    - -0.0
+    - 0.0
+    status: CAD nominal; bench verification required
+  tof_front_r_link:
+    parent: base_link
+    xyz:
+    - 0.063721955
+    - 0.067987762
+    - 0.0075
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.195908174
+    status: CAD nominal; bench verification required
+  tof_rear_l_link:
+    parent: base_link
+    xyz:
+    - -0.137721956
+    - -0.067987762
+    - 0.0075
+    rpy:
+    - 0.0
+    - -0.0
+    - -2.945684433
+    status: CAD nominal; bench verification required
+  tof_rear_c_link:
+    parent: base_link
+    xyz:
+    - -0.140950009
+    - -0.0
+    - 0.0075
+    rpy:
+    - 0.0
+    - -0.0
+    - 3.141592503
+    status: CAD nominal; bench verification required
+  tof_rear_r_link:
+    parent: base_link
+    xyz:
+    - -0.137721956
+    - 0.067987762
+    - 0.0075
+    rpy:
+    - 0.0
+    - -0.0
+    - 2.945684433
+    status: CAD nominal; bench verification required
+  tof_left_link:
+    parent: base_link
+    xyz:
+    - -0.061998978
+    - -0.115836903
+    - 0.0075
+    rpy:
+    - 0.0
+    - -0.0
+    - -1.586327314
+    status: CAD nominal; bench verification required
+  tof_right_link:
+    parent: base_link
+    xyz:
+    - -0.061998978
+    - 0.115836903
+    - 0.0075
+    rpy:
+    - 0.0
+    - -0.0
+    - 1.586327314
+    status: CAD nominal; bench verification required
