@@ -135,31 +135,31 @@ def generate_launch_description():
         DeclareLaunchArgument('command_timeout', default_value='0.25'),
         DeclareLaunchArgument('command_rate', default_value='20.0'),
         DeclareLaunchArgument(
-            'max_linear_velocity', default_value='0.15'
+            'max_linear_velocity', default_value='0.43'
         ),
         DeclareLaunchArgument(
             'max_angular_velocity', default_value='1.5'
         ),
         DeclareLaunchArgument(
-            'max_wheel_ticks_per_second', default_value='1200.0'
+            'max_wheel_ticks_per_second', default_value='1500.0'
         ),
-        DeclareLaunchArgument('velocity_pid_kp', default_value='0.080'),
-        DeclareLaunchArgument('velocity_pid_ki', default_value='0.200'),
+        DeclareLaunchArgument('velocity_pid_kp', default_value='0.200'),
+        DeclareLaunchArgument('velocity_pid_ki', default_value='0.800'),
         DeclareLaunchArgument(
-            'velocity_feedforward_kv', default_value='0.000'
+            'velocity_feedforward_kv', default_value='0.090'
         ),
-        DeclareLaunchArgument('velocity_static_pwm', default_value='75'),
+        DeclareLaunchArgument('velocity_static_pwm', default_value='70'),
         DeclareLaunchArgument(
-            'left_forward_static_pwm', default_value='75'
-        ),
-        DeclareLaunchArgument(
-            'left_reverse_static_pwm', default_value='60'
+            'left_forward_static_pwm', default_value='70'
         ),
         DeclareLaunchArgument(
-            'right_forward_static_pwm', default_value='75'
+            'left_reverse_static_pwm', default_value='55'
         ),
         DeclareLaunchArgument(
-            'right_reverse_static_pwm', default_value='60'
+            'right_forward_static_pwm', default_value='42'
+        ),
+        DeclareLaunchArgument(
+            'right_reverse_static_pwm', default_value='63'
         ),
         DeclareLaunchArgument(
             'publish_joints',
