@@ -88,10 +88,10 @@ def generate_launch_description():
         DeclareLaunchArgument('cmd_vel_topic', default_value='cmd_vel'),
         DeclareLaunchArgument(
             'max_linear_velocity',
-            default_value='0.20',
+            default_value='0.43',
             description=(
-                'Robot-side linear speed clamp in m/s. The Foxglove '
-                'Normal and Fast presets request 0.06 and 0.18 m/s.'
+                'Robot-side linear speed clamp in m/s (0.43 m/s floor-tested '
+                '14 Oct 2026). Foxglove Normal/Fast presets request 0.06/0.18.'
             ),
         ),
         DeclareLaunchArgument(
@@ -101,7 +101,7 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument(
             'max_wheel_ticks_per_second',
-            default_value='700.0',
+            default_value='1500.0',
             description='Independent firmware target clamp per wheel.',
         ),
         sensors_launch,

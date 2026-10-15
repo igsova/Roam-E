@@ -1,132 +1,59 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="roam_e">
-  <!-- Physical measurements, in metres. -->
-  <xacro:property name="wheel_radius" value="0.033875"/>
-  <xacro:property name="wheel_separation" value="0.173630"/>
-  <xacro:property name="wheel_width" value="0.029"/>
-  <xacro:property name="mesh_scale" value="0.001 0.001 0.001"/>
+  <!-- R19 visualization/TF description. SI units throughout.
+       Edit a COPY of calibration.yaml for measured extrinsics.
+       Camera preview frames MUST be disabled when OpenNI owns optical TF. -->
+  <xacro:arg name="calibration_file" default="../config/calibration.yaml"/>
+  <xacro:arg name="include_camera_optical_frames" default="false"/>
+  <xacro:property name="calibration" value="${xacro.load_yaml('$(arg calibration_file)')}"/>
+  <xacro:property name="wheel_radius" value="${calibration['physical_wheels']['radius']}"/>
+  <xacro:property name="wheel_separation" value="${calibration['physical_wheels']['separation']}"/>
+  <xacro:property name="wheel_width" value="${calibration['physical_wheels']['width']}"/>
+  <xacro:include filename="r19_visuals.xacro"/>
 
-  <material name="chassis_dark">
-    <color rgba="0.12 0.14 0.16 1.0"/>
-  </material>
-  <material name="wheel_black">
-    <color rgba="0.035 0.035 0.035 1.0"/>
-  </material>
-  <material name="lidar_black">
-    <color rgba="0.08 0.08 0.09 1.0"/>
-  </material>
-  <material name="sensor_green">
-    <color rgba="0.05 0.40 0.18 1.0"/>
-  </material>
+  <xacro:macro name="fixed_frame" params="child">
+    <joint name="${child}_joint" type="fixed">
+      <parent link="${calibration['frames'][child]['parent']}"/>
+      <child link="${child}"/>
+      <origin xyz="${' '.join(str(v) for v in calibration['frames'][child]['xyz'])}"
+              rpy="${' '.join(str(v) for v in calibration['frames'][child]['rpy'])}"/>
+    </joint>
+  </xacro:macro>
 
-  <!-- 2-D navigation frame on the floor. -->
   <link name="base_footprint"/>
-
-  <!-- Kinematic center: midpoint of the two drive-wheel axes. -->
-  <link name="base_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://roam_e_description/meshes/base_link.stl"
-              scale="${mesh_scale}"/>
-      </geometry>
-      <material name="chassis_dark"/>
-    </visual>
-  </link>
-
   <joint name="base_footprint_joint" type="fixed">
-    <parent link="base_footprint"/>
-    <child link="base_link"/>
+    <parent link="base_footprint"/><child link="base_link"/>
     <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0"/>
   </joint>
+  <xacro:r19_rigid_links/>
 
-  <link name="left_wheel_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://roam_e_description/meshes/left_wheel_link.stl"
-              scale="${mesh_scale}"/>
-      </geometry>
-      <material name="wheel_black"/>
-    </visual>
-    <collision>
-      <origin xyz="0 0 0" rpy="1.570796327 0 0"/>
-      <geometry>
-        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
-      </geometry>
-    </collision>
-  </link>
-
-  <joint name="left_wheel_joint" type="continuous">
-    <parent link="base_link"/>
-    <child link="left_wheel_link"/>
-    <origin xyz="0 ${wheel_separation / 2.0} 0" rpy="0 0 0"/>
-    <axis xyz="0 1 0"/>
-    <limit effort="5.0" velocity="20.0"/>
-  </joint>
-
-  <link name="right_wheel_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://roam_e_description/meshes/right_wheel_link.stl"
-              scale="${mesh_scale}"/>
-      </geometry>
-      <material name="wheel_black"/>
-    </visual>
-    <collision>
-      <origin xyz="0 0 0" rpy="1.570796327 0 0"/>
-      <geometry>
-        <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
-      </geometry>
-    </collision>
-  </link>
-
-  <joint name="right_wheel_joint" type="continuous">
-    <parent link="base_link"/>
-    <child link="right_wheel_link"/>
-    <origin xyz="0 ${-wheel_separation / 2.0} 0" rpy="0 0 0"/>
-    <axis xyz="0 1 0"/>
-    <limit effort="5.0" velocity="20.0"/>
-  </joint>
-
-  <!-- The LiDAR frame is centered on its rotation axis at scan height. -->
-  <link name="laser_frame">
-    <visual>
-      <geometry>
-        <mesh filename="package://roam_e_description/meshes/laser_frame.stl"
-              scale="${mesh_scale}"/>
-      </geometry>
-      <material name="lidar_black"/>
-    </visual>
-  </link>
-
-  <joint name="laser_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="laser_frame"/>
-    <origin xyz="0.017447 -0.000870 0.176897" rpy="0 0 0"/>
-  </joint>
-
-  <!-- Physical PCB pose from CAD. The child imu_link carries sensor axes. -->
-  <link name="imu_mount_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://roam_e_description/meshes/imu_mount_link.stl"
-              scale="${mesh_scale}"/>
-      </geometry>
-      <material name="sensor_green"/>
-    </visual>
-  </link>
-
-  <joint name="imu_mount_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="imu_mount_link"/>
-    <origin xyz="0.024045 0 0.102297" rpy="0 0 0"/>
-  </joint>
+  <xacro:macro name="wheel" params="side sign">
+    <link name="${side}_wheel_link">
+      <xacro:r19_visuals link="${side}_wheel_link"/>
+      <collision>
+        <origin xyz="0 0 0" rpy="1.5707963267948966 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+      </collision>
+    </link>
+    <joint name="${side}_wheel_joint" type="continuous">
+      <parent link="base_link"/><child link="${side}_wheel_link"/>
+      <origin xyz="0 ${sign * wheel_separation / 2} 0" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="5.0" velocity="20.0"/>
+    </joint>
+  </xacro:macro>
+  <xacro:wheel side="left" sign="1"/>
+  <xacro:wheel side="right" sign="-1"/>
 
   <link name="imu_link"/>
-
-  <joint name="imu_sensor_joint" type="fixed">
-    <parent link="imu_mount_link"/>
-    <child link="imu_link"/>
-    <origin xyz="0 0 0" rpy="3.141592654 0 0"/>
-  </joint>
+  <xacro:fixed_frame child="imu_link"/>
+  <!-- Explicitly nominal preview optics, not measured camera calibration. -->
+  <xacro:if value="$(arg include_camera_optical_frames)">
+    <link name="camera_rgb_optical_frame"/>
+    <xacro:fixed_frame child="camera_rgb_optical_frame"/>
+    <link name="camera_depth_optical_frame"/>
+    <xacro:fixed_frame child="camera_depth_optical_frame"/>
+    <link name="camera_ir_optical_frame"/>
+    <xacro:fixed_frame child="camera_ir_optical_frame"/>
+  </xacro:if>
 </robot>
-

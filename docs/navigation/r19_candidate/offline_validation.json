@@ -1,0 +1,30 @@
+{
+  "recorded_at_utc": "2026-10-10T09:58:37Z",
+  "scope": "Offline CAD/navigation geometry only; not robot acceptance",
+  "status": "PASS",
+  "test_command": "python3 -m unittest discover -s tools -p test_prepare_r19_navigation_candidate.py -v",
+  "tests_passed": 23,
+  "tests_skipped": 0,
+  "preserved_description_urdf_static_check": "PASS",
+  "caster_disc_analytic_containment": "PASS",
+  "padded_hull_convexity_and_containment": "PASS",
+  "costmaps_share_footprint_and_padding": "PASS",
+  "zones_nested_and_do_not_shrink_baseline_rectangles": "PASS",
+  "non_geometry_parameters_unchanged": true,
+  "source_blend_unchanged": true,
+  "default_nav2_unchanged": true,
+  "navigation_launch_unchanged": true,
+  "unchanged_sha256": {
+    "mechanical/service_skirt_r19/roam_service_skirt_r19.blend": "b5b6360d568ab5c79f65d23d1399e47ed0c22d680765c039d0ac5ad28a81081e",
+    "src/roam_e/config/nav2.yaml": "981774ab9f2c25e11fa52a56467f135fb0f4cf5f7dc23a627de8d58eb61d378b",
+    "src/roam_e/launch/navigation.launch.py": "ebcf13afb3d65f319cc96bf63fc55d0db19751acc0a002f1ab0146ee3f5aa82b"
+  },
+  "not_performed": [
+    "Pi connection or deployment",
+    "Robot motion, encoder/drive calibration or firmware changes",
+    "Physical footprint, protrusion or caster-axis inspection",
+    "ROS/Nav2 runtime, Foxglove or live TF verification",
+    "Physical sensor-extrinsics or stopping-distance qualification",
+    "Commit, push or large CAD publication"
+  ]
+}

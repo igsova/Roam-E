@@ -130,3 +130,17 @@ def test_goal_timeout_and_bounded_tree_are_installed_and_wired():
     assert 'goal_handle.cancel_goal_async()' in bridge_source
     assert "'share/' + package_name + '/behavior_trees'" in setup_source
     assert "'behavior_trees/navigate_to_pose_bounded.xml'" in setup_source
+
+
+def test_r19_camera_forward_geometry():
+    # 14 Oct 2026: R19 camera-forward CAD hull (+X camera, caster rear).
+    config = load_navigation_parameters()
+    local = config['local_costmap']['local_costmap']['ros__parameters']
+    points = yaml.safe_load(local['footprint'])
+    assert min(p[0] for p in points) == -0.143811
+    assert max(p[0] for p in points) == 0.06965
+    assert min(p[1] for p in points) == -0.12
+    assert max(p[1] for p in points) == 0.11906
+    monitor = config['collision_monitor']['ros__parameters']
+    stop = yaml.safe_load(monitor['StopZone']['points'])
+    assert min(p[0] for p in stop) < min(p[0] for p in points) - 0.15

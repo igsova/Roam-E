@@ -15,7 +15,8 @@ from launch.substitutions import (
     LaunchConfiguration,
     PathJoinSubstitution,
 )
-from launch_ros.actions import Node
+from launch_ros.actions import ComposableNodeContainer, Node
+from launch_ros.descriptions import ComposableNode
 from launch_ros.parameter_descriptions import ParameterValue
 from launch_ros.substitutions import FindPackageShare
 
@@ -87,20 +88,58 @@ def generate_launch_description():
             [openni2_sdk_dir, '/OpenNI2/Drivers'],
         ),
 
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                PathJoinSubstitution([
-                    FindPackageShare('openni2_camera'),
-                    'launch',
-                    'camera_only.launch.py',
-                ])
-            ),
+        # Same driver and parameters as openni2_camera/camera_only.launch.py,
+        # but without its tfs.launch.py: that always prefixes frames with "/"
+        # ("/camera_link"), which tf2 strips but Foxglove shows as a separate,
+        # unconnected tree. The camera's static frames are published below
+        # under the same names the images use (no leading slash).
+        ComposableNodeContainer(
+            name='container',
+            namespace='camera',
+            package='rclcpp_components',
+            executable='component_container',
             condition=IfCondition(start_depth),
-            launch_arguments={
-                'namespace': 'camera',
-                'tf_prefix': '',
-            }.items(),
+            output='screen',
+            composable_node_descriptions=[
+                ComposableNode(
+                    package='openni2_camera',
+                    plugin='openni2_wrapper::OpenNI2Driver',
+                    name='driver',
+                    namespace='camera',
+                    parameters=[
+                        {'depth_registration': True},
+                        {'use_device_time': True},
+                        {'rgb_frame_id': 'camera_rgb_optical_frame'},
+                        {'depth_frame_id': 'camera_depth_optical_frame'},
+                        {'ir_frame_id': 'camera_ir_optical_frame'},
+                    ],
+                ),
+            ],
         ),
+        # Upstream openni2 offsets, children of the description's camera_link
+        # (the description itself excludes these optical frames by default).
+        *[
+            Node(
+                package='tf2_ros',
+                executable='static_transform_publisher',
+                name=name,
+                output='screen',
+                condition=IfCondition(start_depth),
+                arguments=arguments,
+            )
+            for name, arguments in (
+                ('camera_depth_frame_tf', ['--frame-id', 'camera_link',
+                    '--child-frame-id', 'camera_depth_frame', '--y', '-0.02']),
+                ('camera_rgb_frame_tf', ['--frame-id', 'camera_link',
+                    '--child-frame-id', 'camera_rgb_frame', '--y', '-0.045']),
+                ('camera_depth_optical_tf', ['--frame-id', 'camera_depth_frame',
+                    '--child-frame-id', 'camera_depth_optical_frame',
+                    '--roll', '-1.5707963267948966', '--yaw', '-1.5707963267948966']),
+                ('camera_rgb_optical_tf', ['--frame-id', 'camera_rgb_frame',
+                    '--child-frame-id', 'camera_rgb_optical_frame',
+                    '--roll', '-1.5707963267948966', '--yaw', '-1.5707963267948966']),
+            )
+        ],
 
         # The Astra Pro exposes RGB as a separate UVC device. OpenNI advertises
         # an RGB topic for this model but produces no frames, so publish color

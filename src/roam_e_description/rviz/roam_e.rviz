@@ -39,11 +39,11 @@ Visualization Manager:
     - Class: rviz_default_plugins/TF
       Enabled: true
       Frame Timeout: 15
-      Marker Scale: 0.08
+      Marker Scale: 0.025
       Name: TF
       Show Arrows: true
       Show Axes: true
-      Show Names: true
+      Show Names: false
       Tree: {}
       Update Interval: 0
     - Alpha: 1
@@ -79,7 +79,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 28; 30; 34
-    Fixed Frame: base_link
+    Fixed Frame: base_footprint
     Frame Rate: 30
   Name: root
   Tools:
@@ -111,4 +111,3 @@ Window Geometry:
   Width: 1440
   X: 40
   Y: 40
-
