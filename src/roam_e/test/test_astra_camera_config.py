@@ -11,7 +11,14 @@ BOOTSTRAP = PACKAGE_ROOT.parents[1] / 'scripts' / 'setup' / 'bootstrap_pi5.sh'
 def test_astra_launch_uses_verified_depth_and_color_drivers():
     source = CAMERA_LAUNCH.read_text(encoding='utf-8')
 
-    assert "FindPackageShare('openni2_camera')" in source
+    # Driver composed directly (not openni2's camera_only.launch.py, whose
+    # tfs.launch.py publishes "/camera_link"-style frames Foxglove cannot join).
+    assert "plugin='openni2_wrapper::OpenNI2Driver'" in source
+    assert "'camera_only.launch.py'" not in source
+    for frame in ('camera_depth_frame', 'camera_rgb_frame',
+                  'camera_depth_optical_frame', 'camera_rgb_optical_frame'):
+        assert f"'--child-frame-id', '{frame}'" in source
+    assert "'/camera" not in source.replace("'/camera/", "")
     assert "executable='mjpeg_camera_node'" in source
     assert "'OPENNI2_DRIVERS_PATH'" in source
     assert "'LD_LIBRARY_PATH'" in source
