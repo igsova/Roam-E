@@ -129,9 +129,11 @@ frames:
     - 0.129150003
     rpy:
     - 0.0
-    - -0.0
-    - 0.0
-    status: Provisional depth lens visual centre; optical detail in Blender is unmeasured
+    - -0.0367
+    - 0.0489
+    status: xyz is the provisional CAD depth-lens centre. rpy measured 2026-10-15 against
+      the lidar on a flat wall at 0.70/1.00/1.50 m (R19_CAMERA_WALL_CHECK_20261015.json),
+      camera pitched up 2.1 deg (+/-0.1) and turned left ~2.8 deg (spread 1.8-4.0 deg)
   camera_rgb_optical_frame:
     parent: camera_link
     xyz:
