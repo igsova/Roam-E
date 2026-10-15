@@ -368,7 +368,7 @@
   <joint name="camera_link_joint" type="fixed">
     <parent link="base_link"/>
     <child link="camera_link"/>
-    <origin rpy="0.0 -0.0 0.0" xyz="0.067083791 0.021466669 0.129150003"/>
+    <origin rpy="0.0 -0.0367 0.0489" xyz="0.067083791 0.021466669 0.129150003"/>
   </joint>
   <link name="hood_front_link">
     <visual name="hood_front_link_visual_0">
