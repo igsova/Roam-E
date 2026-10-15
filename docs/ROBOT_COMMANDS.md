@@ -52,6 +52,13 @@ Image panels: `/camera/color/image_raw/compressed` and
 `/camera/depth_preview/compressed`. The cameras add load on the Pi's 5 V supply.
 The Geekworm jumper (+0.2 V) fixed the freezes this caused before.
 
+With the cameras and navigation (section 3) both running, the depth camera
+marks low obstacles (5–35 cm high, 0.45–2.5 m away) in Nav2's local costmap.
+In Foxglove's 3D panel add `/local_costmap/costmap`,
+`/local_costmap/voxel_marked_cloud` (the 3D obstacle voxels) and
+`/camera/obstacle_points` (raw depth points). The local costmap covers only
+2 × 2 m around the robot.
+
 ## Stop / disable motors
 
 - **Ctrl+C** in the launch's terminal stops it. The Nano's watchdog stops the
