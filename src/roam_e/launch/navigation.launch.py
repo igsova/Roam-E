@@ -183,6 +183,16 @@ def generate_launch_description():
         }],
     )
 
+    # Converts the local costmap's camera voxel grid (nav2_msgs/VoxelGrid,
+    # which Foxglove cannot draw) into /local_costmap/voxel_marked_cloud.
+    local_voxel_cloud = Node(
+        package='nav2_costmap_2d',
+        executable='nav2_costmap_2d_cloud',
+        name='voxel_cloud',
+        namespace='local_costmap',
+        output='screen',
+    )
+
     lifecycle_manager = Node(
         package='nav2_lifecycle_manager',
         executable='lifecycle_manager',
@@ -287,4 +297,5 @@ def generate_launch_description():
         auto_localization_node,
         goal_pose_bridge,
         lifecycle_manager,
+        local_voxel_cloud,
     ])

@@ -178,6 +178,25 @@ def generate_launch_description():
             ),
         ]),
 
+        # Decimated XYZ cloud for Nav2's voxel obstacle layer (idle unless
+        # subscribed). 160x120 points at <=5 Hz, 0.45-3.0 m.
+        Node(
+            package='roam_e',
+            executable='depth_obstacle_cloud_node',
+            name='depth_obstacle_cloud',
+            output='screen',
+            condition=IfCondition(start_depth),
+            parameters=[{
+                'depth_topic': '/camera/depth_raw/image',
+                'info_topic': '/camera/depth_raw/camera_info',
+                'output_topic': '/camera/obstacle_points',
+                'publish_rate': 5.0,
+                'stride': 4,
+                'min_range_m': 0.45,
+                'max_range_m': 3.0,
+            }],
+        ),
+
         # compressed_depth_image_transport preserves metric depth, but its
         # custom wire format is not rendered by Foxglove's Image panel. This
         # low-rate preview keeps navigation-quality raw depth intact while

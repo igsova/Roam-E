@@ -60,6 +60,8 @@ setup(
             'roam_e.auto_localization_node:main',
             'bno055_imu_node = roam_e.imu_bno055_node:main',
             'depth_preview_node = roam_e.depth_preview_node:main',
+            'depth_obstacle_cloud_node = '
+            'roam_e.depth_obstacle_cloud_node:main',
             'mjpeg_camera_node = roam_e.mjpeg_camera_node:main',
             'encoder_odometry_node = roam_e.encoder_odometry_node:main',
             'goal_pose_bridge = roam_e.goal_pose_bridge:main',

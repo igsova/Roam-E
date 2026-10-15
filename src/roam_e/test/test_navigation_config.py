@@ -144,3 +144,27 @@ def test_r19_camera_forward_geometry():
     monitor = config['collision_monitor']['ros__parameters']
     stop = yaml.safe_load(monitor['StopZone']['points'])
     assert min(p[0] for p in stop) < min(p[0] for p in points) - 0.15
+
+
+def test_depth_camera_voxel_layer_marks_low_obstacles():
+    # 15 Oct 2026: Astra depth points feed a 3D voxel layer in the local
+    # costmap only; heights between the floor and the 24 cm lidar plane.
+    config = load_navigation_parameters()
+    local = config['local_costmap']['local_costmap']['ros__parameters']
+    assert local['plugins'] == [
+        'obstacle_layer', 'camera_voxel_layer', 'inflation_layer']
+    layer = local['camera_voxel_layer']
+    assert layer['plugin'] == 'nav2_costmap_2d::VoxelLayer'
+    camera = layer['camera']
+    assert camera['topic'] == '/camera/obstacle_points'
+    assert camera['data_type'] == 'PointCloud2'
+    assert 0.0 < camera['min_obstacle_height'] < 0.24
+    assert camera['max_obstacle_height'] <= layer['max_obstacle_height']
+    assert layer['z_voxels'] * layer['z_resolution'] >= layer['max_obstacle_height']
+    assert camera['obstacle_min_range'] >= 0.45
+    global_ = config['global_costmap']['global_costmap']['ros__parameters']
+    assert 'camera_voxel_layer' not in global_['plugins']
+
+    launch_source = NAVIGATION_LAUNCH.read_text(encoding='utf-8')
+    assert "executable='nav2_costmap_2d_cloud'" in launch_source
+    assert "namespace='local_costmap'" in launch_source
