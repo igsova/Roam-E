@@ -6,6 +6,7 @@ from launch.substitutions import (
     EnvironmentVariable,
     LaunchConfiguration,
     PathJoinSubstitution,
+    PythonExpression,
 )
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
@@ -26,6 +27,9 @@ def generate_launch_description():
     navigation_goal_timeout = LaunchConfiguration(
         'navigation_goal_timeout'
     )
+    localization = LaunchConfiguration('localization')
+    use_amcl = PythonExpression(["'", localization, "' == 'amcl'"])
+    use_rtabmap = PythonExpression(["'", localization, "' == 'rtabmap'"])
 
     localization_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -35,6 +39,7 @@ def generate_launch_description():
                 'localization.launch.py',
             ])
         ),
+        condition=IfCondition(use_amcl),
         launch_arguments={
             'arm_motors': arm_motors,
             'use_foxglove': use_foxglove,
@@ -43,6 +48,29 @@ def generate_launch_description():
             'map': map_file,
             'amcl_params_file': amcl_params_file,
             # Independent final clamps in the guarded motor node.
+            'max_linear_velocity': '0.08',
+            'max_angular_velocity': '0.35',
+        }.items(),
+    )
+
+    # RTAB-Map localization on its saved RGB-D/lidar database instead of
+    # AMCL on the 2D map. It serves the stored map on /map and map->odom.
+    rtabmap_localization_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([
+                FindPackageShare('roam_e'),
+                'launch',
+                'rtabmap_mapping.launch.py',
+            ])
+        ),
+        condition=IfCondition(use_rtabmap),
+        launch_arguments={
+            # Distinct name: included arguments share this launch's scope.
+            'localization_only': 'true',
+            'arm_motors': arm_motors,
+            'use_foxglove': use_foxglove,
+            'foxglove_port': foxglove_port,
+            'database_path': LaunchConfiguration('rtabmap_database'),
             'max_linear_velocity': '0.08',
             'max_angular_velocity': '0.35',
         }.items(),
@@ -144,7 +172,8 @@ def generate_launch_description():
         executable='auto_localization_node',
         name='auto_localization_node',
         output='screen',
-        condition=IfCondition(auto_localize),
+        condition=IfCondition(PythonExpression([
+            "'", auto_localize, "' == 'true' and ", use_amcl])),
         parameters=[{
             'use_sim_time': ParameterValue(
                 use_sim_time,
@@ -168,6 +197,18 @@ def generate_launch_description():
                 value_type=bool,
             ),
             'goal_topic': 'goal_pose',
+            'amcl_pose_topic': PythonExpression([
+                "'/rtabmap/localization_pose' if '", localization,
+                "' == 'rtabmap' else 'amcl_pose'"]),
+            # AMCL updates every few cm; RTAB-Map's pose arrives at ~1 Hz with
+            # gaps up to ~3 s, so consecutive samples legitimately differ by
+            # the robot's own motion (0.08 m/s, 0.35 rad/s clamps).
+            'max_position_jump': ParameterValue(PythonExpression([
+                "0.35 if '", localization, "' == 'rtabmap' else 0.15"]),
+                value_type=float),
+            'max_yaw_jump': ParameterValue(PythonExpression([
+                "1.2 if '", localization, "' == 'rtabmap' else 0.35"]),
+                value_type=float),
             'action_name': 'navigate_to_pose',
             'global_frame': 'map',
             'base_frame': 'base_footprint',
@@ -240,6 +281,20 @@ def generate_launch_description():
             ),
         ),
         DeclareLaunchArgument(
+            'localization',
+            default_value='amcl',
+            description=(
+                'amcl: AMCL on the 2D map (default). rtabmap: RTAB-Map '
+                'localization on rtabmap_database (auto_localize ignored).'
+            ),
+        ),
+        DeclareLaunchArgument(
+            'rtabmap_database',
+            default_value=PathJoinSubstitution([
+                EnvironmentVariable('HOME'), 'Roam-E', 'maps', 'rtabmap',
+                'office_rtabmap.db']),
+        ),
+        DeclareLaunchArgument(
             'map',
             default_value=PathJoinSubstitution([
                 EnvironmentVariable('HOME'),
@@ -287,6 +342,7 @@ def generate_launch_description():
             ),
         ),
         localization_launch,
+        rtabmap_localization_launch,
         controller_server,
         planner_server,
         behavior_server,

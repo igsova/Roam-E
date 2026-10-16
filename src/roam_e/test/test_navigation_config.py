@@ -91,7 +91,8 @@ def test_safety_chain_starts_before_automatic_localization_motion():
     assert "'node_names': [\n                'velocity_smoother'," in (
         launch_source
     )
-    assert "condition=IfCondition(auto_localize)" in launch_source
+    # The AMCL search maneuver runs only when requested and AMCL localizes.
+    assert '"\'", auto_localize, "\' == \'true\' and ", use_amcl' in launch_source
     assert "'allow_motion': ParameterValue(" in launch_source
     assert "default_value='false'" in launch_source
     assert "'cmd_vel_topic', 'cmd_vel_nav'" in localizer_source
@@ -168,3 +169,20 @@ def test_depth_camera_voxel_layer_marks_low_obstacles():
     launch_source = NAVIGATION_LAUNCH.read_text(encoding='utf-8')
     assert "executable='nav2_costmap_2d_cloud'" in launch_source
     assert "namespace='local_costmap'" in launch_source
+
+
+def test_rtabmap_localization_replaces_amcl_when_selected():
+    # 15 Oct 2026: localization:=rtabmap matches the saved RTAB-Map
+    # database instead of running AMCL; exactly one map->odom owner.
+    launch_source = NAVIGATION_LAUNCH.read_text(encoding='utf-8')
+    rtabmap_source = (
+        PACKAGE_ROOT / 'launch' / 'rtabmap_mapping.launch.py'
+    ).read_text(encoding='utf-8')
+    assert "default_value='amcl'" in launch_source
+    assert 'condition=IfCondition(use_amcl)' in launch_source
+    assert 'condition=IfCondition(use_rtabmap)' in launch_source
+    assert "'localization_only': 'true'" in launch_source
+    assert "'/rtabmap/localization_pose' if '" in launch_source
+    assert "IfCondition(localization), [], [('map', '/map')]" in rtabmap_source
+    assert "'Mem/IncrementalMemory': ParameterValue(PythonExpression(" in rtabmap_source
+    assert "'publish_tf': True" in rtabmap_source

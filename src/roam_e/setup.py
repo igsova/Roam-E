@@ -16,6 +16,7 @@ setup(
                 'launch/roam_e_imu.launch.py',
                 'launch/drive.launch.py',
                 'launch/mapping.launch.py',
+                'launch/rtabmap_mapping.launch.py',
                 'launch/localization.launch.py',
                 'launch/navigation.launch.py',
                 'launch/astra_camera.launch.py',
