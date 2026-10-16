@@ -4,6 +4,7 @@ import pytest
 
 from roam_e.localization_convergence import (
     ConvergenceTracker,
+    map_to_odom,
     normalize_angle,
     planar_distance,
     yaw_from_quaternion,
@@ -131,3 +132,20 @@ def test_converged_quality_stays_latched_until_a_new_bad_estimate():
         covariance=covariance(yaw=0.5),
     )
     assert not revoked.converged
+
+
+def test_map_to_odom_is_constant_while_the_robot_moves():
+    # map->odom = (1, 2, 90 deg); the robot drives 0.5 m and turns 1 rad in
+    # odom. The correction must not change although the map pose does.
+    correction = (1.0, 2.0, math.pi / 2.0)
+
+    def map_pose(ox, oy, oyaw):
+        cx, cy, cyaw = correction
+        c, s = math.cos(cyaw), math.sin(cyaw)
+        return (cx + c * ox - s * oy, cy + s * ox + c * oy, cyaw + oyaw)
+
+    for odom in ((0.0, 0.0, 0.0), (0.5, 0.0, 0.0), (0.5, 0.2, 1.0)):
+        result = map_to_odom(map_pose(*odom), odom)
+        assert result[0] == pytest.approx(1.0)
+        assert result[1] == pytest.approx(2.0)
+        assert normalize_angle(result[2] - math.pi / 2.0) == pytest.approx(0.0)

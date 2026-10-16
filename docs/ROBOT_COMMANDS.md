@@ -61,11 +61,16 @@ In Foxglove's 3D panel add `/local_costmap/costmap`,
 
 ## 5. 3D mapping and navigation with RTAB-Map
 
-Start the cameras with faster colour decoding first (RTAB-Map needs it):
+Start the cameras with faster colour decoding first (RTAB-Map needs it;
+10 gives about 8 colour frames per second):
 
 ```bash
-ros2 launch roam_e astra_camera.launch.py use_foxglove:=false color_decode_fps:=5.0
+ros2 launch roam_e astra_camera.launch.py use_foxglove:=false color_decode_fps:=10.0
 ```
+
+The RTAB-Map launch shifts the depth image onto the colour image
+(`depth_align_node`, 7 px left and 1 px up, measured 16 Oct 2026 with
+`tools/measure_r19_depth_color_offset.py`).
 
 Map by driving with Teleop (motors enabled, 0.10 m/s cap). `new_map:=true`
 deletes the old database; leave it out to extend the existing map.
@@ -84,6 +89,27 @@ Navigate on that map instead of office_02 (no automatic localization drive):
 ```bash
 ros2 launch roam_e navigation.launch.py localization:=rtabmap arm_motors:=true
 ```
+
+RTAB-Map cannot recognise places from this camera by itself, so the robot
+finds its start position with the XFeat visual relocalizer (motors not needed,
+about 10 s per attempt). It runs when RTAB-Map reports it is lost, or on
+demand with `ros2 service call /visual_relocalizer/relocalize std_srvs/srv/Trigger`.
+It needs the `~/venvs/lightglue` environment (PyTorch CPU, LightGlue, XFeat
+in `~/venvs/src/accelerated_features`) and a keyframe cache built from the
+map after every new map:
+
+```bash
+cd ~/Roam-E/tools
+~/venvs/lightglue/bin/python r19_visual_relocalizer.py --ros-args \
+  -p keyframes:=/home/robot/Roam-E/maps/rtabmap/office_rtabmap_xfeat.npz
+# after a new map (nothing running on the database):
+rtabmap-export --images_id --poses_camera --poses_format 10 --output_dir /tmp/kf map_copy.db
+~/venvs/lightglue/bin/python r19_visual_keyframes.py /tmp/kf/map_copy keyframes.npz --features xfeat
+```
+
+Keep `period` at 0 while the lidar runs: the lidar tracks within about 5 cm,
+the camera fix only within 15–30 cm, and a periodic camera correction above
+15 cm cancels the active goal.
 
 Dense export of the map (motors off, on a copy of the database):
 

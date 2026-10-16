@@ -17,6 +17,19 @@ def planar_distance(first, second):
     return math.hypot(second[0] - first[0], second[1] - first[1])
 
 
+def map_to_odom(map_base, odom_base):
+    """Planar map->odom from map->base and odom->base poses (x, y, yaw).
+
+    Tracking this correction instead of the robot pose separates real
+    localization jumps from the robot's own motion between updates.
+    """
+    mx, my, myaw = map_base
+    ox, oy, oyaw = odom_base
+    yaw = normalize_angle(myaw - oyaw)
+    c, s = math.cos(yaw), math.sin(yaw)
+    return (mx - (c * ox - s * oy), my - (s * ox + c * oy), yaw)
+
+
 @dataclass(frozen=True)
 class LocalizationQuality:
     x_variance: float

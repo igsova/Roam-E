@@ -13,6 +13,7 @@ from tf2_ros import Buffer, TransformListener
 
 from roam_e.localization_convergence import (
     ConvergenceTracker,
+    map_to_odom,
     yaw_from_quaternion,
 )
 
@@ -40,6 +41,10 @@ class GoalPoseBridge(Node):
         self.declare_parameter('max_position_jump', 0.15)
         self.declare_parameter('max_yaw_jump', 0.35)
         self.declare_parameter('goal_timeout', 180.0)
+        # '' checks jumps of the localized robot pose (AMCL updates every few
+        # cm). 'odom' checks jumps of the map->odom correction instead, for
+        # localizers that update rarely while the robot keeps moving.
+        self.declare_parameter('jump_check_frame', '')
 
         goal_topic = self.get_parameter('goal_topic').value
         action_name = self.get_parameter('action_name').value
@@ -77,6 +82,9 @@ class GoalPoseBridge(Node):
             max_yaw_jump=self.get_parameter('max_yaw_jump').value,
         )
         self._localization_ready = False
+        self._jump_frame = self.get_parameter('jump_check_frame').value
+        self._tf_buffer = Buffer()
+        self._tf_listener = TransformListener(self._tf_buffer, self)
         self.create_subscription(
             PoseWithCovarianceStamped,
             self.get_parameter('amcl_pose_topic').value,
@@ -103,8 +111,6 @@ class GoalPoseBridge(Node):
                 ManageLifecycleNodes,
                 self._startup_service,
             )
-            self._tf_buffer = Buffer()
-            self._tf_listener = TransformListener(self._tf_buffer, self)
             self._startup_timer = self.create_timer(
                 self.get_parameter('startup_check_period').value,
                 self._maybe_start_navigation,
@@ -117,13 +123,32 @@ class GoalPoseBridge(Node):
 
     def _on_localization(self, message):
         pose = message.pose.pose
+        x, y = pose.position.x, pose.position.y
+        yaw = yaw_from_quaternion(pose.orientation.z, pose.orientation.w)
+        if self._jump_frame:
+            try:
+                odom = self._tf_buffer.lookup_transform(
+                    self._jump_frame,
+                    self._base_frame,
+                    Time.from_msg(message.header.stamp),
+                    timeout=Duration(seconds=0.2),
+                )
+            except Exception as error:  # noqa: BLE001 - tf2 exceptions vary
+                self.get_logger().warning(
+                    f'Skipping localization sample without '
+                    f'{self._jump_frame} -> {self._base_frame}: {error}',
+                    throttle_duration_sec=10.0,
+                )
+                return
+            t, q = odom.transform.translation, odom.transform.rotation
+            x, y, yaw = map_to_odom(
+                (x, y, yaw),
+                (t.x, t.y, yaw_from_quaternion(q.z, q.w)),
+            )
         quality = self._localization_tracker.update(
-            x=pose.position.x,
-            y=pose.position.y,
-            yaw=yaw_from_quaternion(
-                pose.orientation.z,
-                pose.orientation.w,
-            ),
+            x=x,
+            y=y,
+            yaw=yaw,
             covariance=message.pose.covariance,
         )
         self._set_localization_ready(quality.converged)
