@@ -183,6 +183,9 @@ def test_rtabmap_localization_replaces_amcl_when_selected():
     assert 'condition=IfCondition(use_rtabmap)' in launch_source
     assert "'localization_only': 'true'" in launch_source
     assert "'/rtabmap/localization_pose' if '" in launch_source
+    # Jumps are checked on RTAB-Map's map->odom correction, not robot motion.
+    assert "'jump_check_frame': ParameterValue(PythonExpression([" in launch_source
+    assert "max_position_jump" not in launch_source
     assert "IfCondition(localization), [], [('map', '/map')]" in rtabmap_source
     assert "'Mem/IncrementalMemory': ParameterValue(PythonExpression(" in rtabmap_source
     assert "'publish_tf': True" in rtabmap_source

@@ -71,6 +71,7 @@ def generate_launch_description():
             'use_foxglove': use_foxglove,
             'foxglove_port': foxglove_port,
             'database_path': LaunchConfiguration('rtabmap_database'),
+            'feature_type': LaunchConfiguration('rtabmap_feature_type'),
             'max_linear_velocity': '0.08',
             'max_angular_velocity': '0.35',
         }.items(),
@@ -200,15 +201,12 @@ def generate_launch_description():
             'amcl_pose_topic': PythonExpression([
                 "'/rtabmap/localization_pose' if '", localization,
                 "' == 'rtabmap' else 'amcl_pose'"]),
-            # AMCL updates every few cm; RTAB-Map's pose arrives at ~1 Hz with
-            # gaps up to ~3 s, so consecutive samples legitimately differ by
-            # the robot's own motion (0.08 m/s, 0.35 rad/s clamps).
-            'max_position_jump': ParameterValue(PythonExpression([
-                "0.35 if '", localization, "' == 'rtabmap' else 0.15"]),
-                value_type=float),
-            'max_yaw_jump': ParameterValue(PythonExpression([
-                "1.2 if '", localization, "' == 'rtabmap' else 0.35"]),
-                value_type=float),
+            # RTAB-Map's pose arrives irregularly (gaps of several seconds
+            # under load), so check jumps in its map->odom correction, not in
+            # the robot pose, which also moves with the robot.
+            'jump_check_frame': ParameterValue(PythonExpression([
+                "'odom' if '", localization, "' == 'rtabmap' else ''"]),
+                value_type=str),
             'action_name': 'navigate_to_pose',
             'global_frame': 'map',
             'base_frame': 'base_footprint',
@@ -294,6 +292,9 @@ def generate_launch_description():
                 EnvironmentVariable('HOME'), 'Roam-E', 'maps', 'rtabmap',
                 'office_rtabmap.db']),
         ),
+        DeclareLaunchArgument(
+            'rtabmap_feature_type', default_value='8',
+            description='RTAB-Map visual features of rtabmap_database: 8 GFTT/ORB, 1 SIFT.'),
         DeclareLaunchArgument(
             'map',
             default_value=PathJoinSubstitution([

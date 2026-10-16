@@ -8,9 +8,9 @@ not run AMCL or slam_toolbox at the same time. The EKF keeps owning
 odom->base_footprint. In localization mode the stored map is published on
 /map for Nav2's static layer.
 
-Geometry comes from the registered depth image and its own intrinsics (the
-same ones the depth obstacle layer uses); the rectified colour image only
-textures the map. The lidar refines each link with ICP; Force3DoF keeps the
+The Astra's registered depth is shifted onto the calibrated colour image
+(depth_align_node, offset measured 16 Oct 2026), so every colour feature
+gets the depth under it and the colour calibration describes both. The lidar refines each link with ICP; Force3DoF keeps the
 robot on the floor plane.
 """
 from launch import LaunchDescription
@@ -82,6 +82,20 @@ def generate_launch_description():
         }.items(),
     )
 
+    depth_align = Node(
+        package='roam_e',
+        executable='depth_align_node',
+        name='depth_align',
+        namespace='rtabmap',
+        output='screen',
+        parameters=[{
+            'input_topic': '/camera/depth_raw/image',
+            'output_topic': '/camera/depth_aligned/image',
+            'shift_x_px': -7,
+            'shift_y_px': -1,
+        }],
+    )
+
     rgbd_sync = Node(
         package='rtabmap_sync',
         executable='rgbd_sync',
@@ -98,8 +112,8 @@ def generate_launch_description():
         }],
         remappings=[
             ('rgb/image', '/camera/color/image_rect'),
-            ('rgb/camera_info', '/camera/depth_raw/camera_info'),
-            ('depth/image', '/camera/depth_raw/image'),
+            ('rgb/camera_info', '/camera/color/camera_info'),
+            ('depth/image', '/camera/depth_aligned/image'),
         ],
     )
 
@@ -115,6 +129,12 @@ def generate_launch_description():
                 ["'false' if '", localization, "' == 'true' else 'true'"]),
                 value_type=str),
             'Mem/InitWMWithAllNodes': ParameterValue(localization, value_type=str),
+            # 8 = GFTT/ORB (RTAB-Map default), 1 = SIFT. A database must be
+            # used with the feature type it was built or reprocessed with.
+            'Kp/DetectorStrategy': ParameterValue(
+                LaunchConfiguration('feature_type'), value_type=str),
+            'Vis/FeatureType': ParameterValue(
+                LaunchConfiguration('feature_type'), value_type=str),
         },
     )]
 
@@ -165,9 +185,13 @@ def generate_launch_description():
             'new_map', default_value='false',
             description='true deletes database_path at start for a fresh map.'),
         DeclareLaunchArgument(
+            'feature_type', default_value='8',
+            description='Visual feature type: 8 GFTT/ORB (default), 1 SIFT.'),
+        DeclareLaunchArgument(
             'localization_only', default_value='false',
             description='true: match against the saved map without changing it.'),
         drive_launch,
+        depth_align,
         rgbd_sync,
         rtabmap_continue,
         rtabmap_new,
