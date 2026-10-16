@@ -59,6 +59,42 @@ In Foxglove's 3D panel add `/local_costmap/costmap`,
 `/camera/obstacle_points` (raw depth points). The local costmap covers only
 2 × 2 m around the robot.
 
+## 5. 3D mapping and navigation with RTAB-Map
+
+Start the cameras with faster colour decoding first (RTAB-Map needs it):
+
+```bash
+ros2 launch roam_e astra_camera.launch.py use_foxglove:=false color_decode_fps:=5.0
+```
+
+Map by driving with Teleop (motors enabled, 0.10 m/s cap). `new_map:=true`
+deletes the old database; leave it out to extend the existing map.
+
+```bash
+ros2 launch roam_e rtabmap_mapping.launch.py arm_motors:=true new_map:=true
+```
+
+Foxglove (fixed frame `map`): `/rtabmap/cloud_map`, `/rtabmap/map`,
+`/rtabmap/mapPath`. The map is saved continuously to
+`~/Roam-E/maps/rtabmap/office_rtabmap.db`. Drive slowly and finish where
+you started so loops close.
+
+Navigate on that map instead of office_02 (no automatic localization drive):
+
+```bash
+ros2 launch roam_e navigation.launch.py localization:=rtabmap arm_motors:=true
+```
+
+Dense export of the map (motors off, on a copy of the database):
+
+```bash
+rtabmap-export --cloud --decimation 2 --max_range 3.0 --voxel 0.01 office_copy.db
+rtabmap-export --mesh --texture --texture_size 4096 --decimation 2 --max_range 3.0 office_copy.db
+python3 ~/Roam-E/tools/publish_ply_cloud.py office_copy_cloud.ply --voxel 0.02
+```
+
+The last command shows the dense cloud in Foxglove on `/rtabmap/dense_cloud`.
+
 ## Stop / disable motors
 
 - **Ctrl+C** in the launch's terminal stops it. The Nano's watchdog stops the
