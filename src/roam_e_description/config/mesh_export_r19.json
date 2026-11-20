@@ -1,7 +1,7 @@
 {
   "revision": "R19",
   "source": "mechanical/roam_e.blend",
-  "source_sha256": "b5b6360d568ab5c79f65d23d1399e47ed0c22d680765c039d0ac5ad28a81081e",
+  "source_sha256": "c915229bf711569e83233a113ed52326fa62a0d15d6f3d59ea657ee1fa6d6892",
   "forward": "camera",
   "mesh_units": "metres",
   "mesh_scale": [
@@ -845,20 +845,20 @@
     ],
     "hood_side_link": [
       {
-        "mesh": "meshes/r19/hood_side_link_2ce5861c.stl",
-        "rgba": [
-          0.065,
-          0.2,
-          0.22,
-          1.0
-        ]
-      },
-      {
         "mesh": "meshes/r19/hood_side_link_041b0b7a.stl",
         "rgba": [
           0.12,
           0.14,
           0.16,
+          1.0
+        ]
+      },
+      {
+        "mesh": "meshes/r19/hood_side_link_69980e3e.stl",
+        "rgba": [
+          0.74,
+          0.8,
+          0.84,
           1.0
         ]
       }
@@ -1048,11 +1048,11 @@
     ],
     "skirt_side_link": [
       {
-        "mesh": "meshes/r19/skirt_side_link_2ce5861c.stl",
+        "mesh": "meshes/r19/skirt_side_link_610a8e2c.stl",
         "rgba": [
-          0.065,
-          0.2,
-          0.22,
+          0.025,
+          0.038,
+          0.051,
           1.0
         ]
       },
@@ -2485,25 +2485,6 @@
       ],
       "sha256": "04b97cdd5df9ca87ca792bb421ec8b4695fba41fbf72424690c17782ee44cc30"
     },
-    "hood_side_link_2ce5861c.stl": {
-      "triangles": 2930,
-      "bytes": 146584,
-      "bounds_m": [
-        [
-          -0.12445101886987686,
-          0.050449494272470474
-        ],
-        [
-          0.08590000122785568,
-          0.11293192207813263
-        ],
-        [
-          0.06950000673532486,
-          0.18460001051425934
-        ]
-      ],
-      "sha256": "573237646eb22f0d2a1ff3276cde86f4d6c1003ebf5ecc720f211aff910b5d38"
-    },
     "hood_side_link_041b0b7a.stl": {
       "triangles": 692,
       "bytes": 34684,
@@ -2522,6 +2503,25 @@
         ]
       ],
       "sha256": "2cba5c867139312757a9e38e287a3ae91b32858a115730ea87b9273afc6bc945"
+    },
+    "hood_side_link_69980e3e.stl": {
+      "triangles": 2930,
+      "bytes": 146584,
+      "bounds_m": [
+        [
+          -0.12445101886987686,
+          0.050449494272470474
+        ],
+        [
+          0.08590000122785568,
+          0.11293192207813263
+        ],
+        [
+          0.06950000673532486,
+          0.18460001051425934
+        ]
+      ],
+      "sha256": "573237646eb22f0d2a1ff3276cde86f4d6c1003ebf5ecc720f211aff910b5d38"
     },
     "imu_mount_link_92e2650b.stl": {
       "triangles": 188,
@@ -2884,7 +2884,7 @@
       ],
       "sha256": "7f41f80da6a9ebdf91b6954c106e7a3c3de169a839a38ee13f14c1aa285bf146"
     },
-    "skirt_side_link_2ce5861c.stl": {
+    "skirt_side_link_610a8e2c.stl": {
       "triangles": 4389,
       "bytes": 219534,
       "bounds_m": [
@@ -9448,37 +9448,7 @@
     }
   ],
   "excluded_objects": [
-    "Studio floor",
-    "Wheel clearance 3 mm -1",
-    "Wheel clearance 3 mm 1",
-    "P19 | ToF fit-test pocket",
-    "CHECK | Fan intake 30x30, first 12 mm clear",
-    "CHECK | USB-C output plug, 24 mm body estimate",
-    "CHECK | DC wire approach estimate",
-    "REFERENCE ONLY | Geekworm conservative envelope",
-    "CHECK | MUX jumper and wire bend",
-    "CHECK | MUX jumper and wire bend.001",
-    "Component | LIDAR",
-    "P11.1 | LIDAR spacer 4 mm",
-    "P11.2 | LIDAR spacer 4 mm",
-    "P11.3 | LIDAR spacer 4 mm",
-    "P11.4 | LIDAR spacer 4 mm",
-    "R19 ToF Front_L | housing reserve",
-    "R19 ToF Front_L | bend reserve",
-    "R19 ToF Front_C | housing reserve",
-    "R19 ToF Front_C | bend reserve",
-    "R19 ToF Front_R | housing reserve",
-    "R19 ToF Front_R | bend reserve",
-    "R19 ToF Rear_L | housing reserve",
-    "R19 ToF Rear_L | bend reserve",
-    "R19 ToF Rear_C | housing reserve",
-    "R19 ToF Rear_C | bend reserve",
-    "R19 ToF Rear_R | housing reserve",
-    "R19 ToF Rear_R | bend reserve",
-    "R19 ToF Left | housing reserve",
-    "R19 ToF Left | bend reserve",
-    "R19 ToF Right | housing reserve",
-    "R19 ToF Right | bend reserve"
+    "Studio floor"
   ],
   "assembled_bounds_m": [
     [

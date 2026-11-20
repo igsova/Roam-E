@@ -423,18 +423,18 @@
     <xacro:if value="${link == 'hood_side_link'}">
       <visual name="hood_side_link_visual_0">
         <geometry>
-          <mesh filename="package://roam_e_description/meshes/r19/hood_side_link_2ce5861c.stl" scale="1 1 1" />
+          <mesh filename="package://roam_e_description/meshes/r19/hood_side_link_041b0b7a.stl" scale="1 1 1" />
         </geometry>
         <material name="r19_hood_side_link_0">
-          <color rgba="0.065 0.2 0.22 1.0" />
+          <color rgba="0.12 0.14 0.16 1.0" />
         </material>
       </visual>
       <visual name="hood_side_link_visual_1">
         <geometry>
-          <mesh filename="package://roam_e_description/meshes/r19/hood_side_link_041b0b7a.stl" scale="1 1 1" />
+          <mesh filename="package://roam_e_description/meshes/r19/hood_side_link_69980e3e.stl" scale="1 1 1" />
         </geometry>
         <material name="r19_hood_side_link_1">
-          <color rgba="0.12 0.14 0.16 1.0" />
+          <color rgba="0.74 0.8 0.84 1.0" />
         </material>
       </visual>
     </xacro:if>
@@ -605,10 +605,10 @@
     <xacro:if value="${link == 'skirt_side_link'}">
       <visual name="skirt_side_link_visual_0">
         <geometry>
-          <mesh filename="package://roam_e_description/meshes/r19/skirt_side_link_2ce5861c.stl" scale="1 1 1" />
+          <mesh filename="package://roam_e_description/meshes/r19/skirt_side_link_610a8e2c.stl" scale="1 1 1" />
         </geometry>
         <material name="r19_skirt_side_link_0">
-          <color rgba="0.065 0.2 0.22 1.0" />
+          <color rgba="0.025 0.038 0.051 1.0" />
         </material>
       </visual>
       <visual name="skirt_side_link_visual_1">

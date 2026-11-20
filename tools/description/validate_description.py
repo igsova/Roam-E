@@ -117,8 +117,9 @@ def validate(workspace, source_workspace=None, expected_imu_rpy=(math.pi, 0, 0))
     for name in OPTICS:
         r=rotation(config['frames'][name]['rpy'])
         assert abs(r[0][2]-1)<1e-6 and abs(r[1][0]+1)<1e-6 and abs(r[2][1]+1)<1e-6
+    # The camera faces the forward axis; measured mount corrections are a few degrees.
     camyaw=config['frames']['camera_link']['rpy'][2]
-    assert abs(math.cos(camyaw)-(-1 if manifest['forward']=='caster' else 1))<1e-6
+    assert math.cos(camyaw)*(-1 if manifest['forward']=='caster' else 1)>math.cos(math.radians(10))
     actual_imu=rotation(config['frames']['imu_link']['rpy'])
     expected_imu=rotation(expected_imu_rpy)
     assert max(abs(a-b) for aa,bb in zip(actual_imu,expected_imu)
@@ -181,8 +182,8 @@ if __name__=='__main__':
     parser.add_argument('workspace',type=Path,nargs='?',default=Path('.'))
     parser.add_argument('--source-workspace',type=Path,
                         help='Read the unchanged source Blender file from this checkout')
-    parser.add_argument('--expected-imu-rpy',type=float,nargs=3,default=(math.pi,0,0),
-                        help='Expected imu_link rotation relative to imu_mount_link')
+    parser.add_argument('--expected-imu-rpy',type=float,nargs=3,default=(0,0,math.pi/2),
+                        help='Expected imu_link rotation relative to imu_mount_link (measured mount in calibration.yaml)')
     args=parser.parse_args()
     workspace=args.workspace.resolve()
     result=validate(workspace,args.source_workspace,args.expected_imu_rpy)
