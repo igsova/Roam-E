@@ -107,7 +107,7 @@ scripts/bno055/           IMU calibration tools
 scripts/camera/           RGB and depth camera calibration tools
 tools/                    Visual relocalizer, camera calibration checks, robot-model export from CAD
 config/                   IMU calibration and systemd units
-docs/                     Usage guide and research notes
+docs/                     Usage guide, command sheet, research notes and images
 ```
 
 ## Getting started
@@ -140,6 +140,8 @@ Driving, mapping, localization and navigation are covered step by step in
 
 - [Usage guide](docs/usage.md): driving, mapping, localization, navigation and
   Pi setup.
+- [Quick commands](docs/ROBOT_COMMANDS.md): one-page cheat sheet for driving,
+  Nav2, cameras, RTAB-Map 3D mapping and health checks.
 - [RGB-D camera setup](CAMERA_CAPTURE.md) and
   [camera calibration](scripts/camera/README.md).
 - [Visual SLAM research notes](docs/research/): what runs on a Pi 5 CPU and
