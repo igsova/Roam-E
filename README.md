@@ -37,21 +37,24 @@ the printed body.
 ## Hardware
 
 <p align="center">
-  <img src="docs/images/roam_e_sensors.jpg" alt="See-through render of Roam-E with its sensors highlighted: RPLIDAR A1, Astra Pro RGB-D camera, BNO055 IMU, drive motors with quadrature encoders and eight VL53L0X time-of-flight sensors" width="760">
+  <img src="docs/images/roam_e_tour.webp" alt="See-through renders of Roam-E cycling through its sensors, actuators, compute and power components" width="760">
 </p>
 
-| Component | Role |
-|---|---|
-| Raspberry Pi 5 (8 GB) | Main computer, Ubuntu 24.04 + ROS 2 Jazzy |
-| Arduino Nano | Wheel velocity control and encoder counting, USB serial to the Pi |
-| 2 × DRV8871 | Motor drivers |
-| 2 × 12 V geared DC motors with quadrature encoders | Differential drive, with a passive caster at the rear |
-| Slamtec RPLIDAR A1 | 360° 2D lidar |
-| Orbbec Astra Pro | RGB-D camera, facing forward |
-| Bosch BNO055 | IMU, used in IMU-only fusion mode (no magnetometer) |
-| 3S LiPo, 11.1 V, 3300 mAh | Battery, in a slide-out drawer |
-| Geekworm Pi5-5V5APD | 5 V / 5 A supply for the Pi |
-| 8 × VL53L0X + TCA9548A | Time-of-flight sensors around the base; mounted, not yet used by the software |
+| | Component | Role |
+|---|---|---|
+| **Sensors** | Slamtec RPLIDAR A1 | 360° 2D lidar |
+| | Orbbec Astra Pro | RGB-D camera, facing forward |
+| | Bosch BNO055 | IMU, used in IMU-only fusion mode (no magnetometer) |
+| | Quadrature encoders on both motors | Wheel odometry |
+| | 8 × VL53L0X | Time-of-flight sensors around the base; mounted, not yet used by the software |
+| **Actuators** | 2 × 12 V geared DC motors | Differential drive, with a passive caster at the rear |
+| | 2 × DRV8871 | H-bridge motor drivers |
+| **Compute** | Raspberry Pi 5 (8 GB) | Main computer, Ubuntu 24.04 + ROS 2 Jazzy |
+| | Arduino Nano | Wheel velocity control and encoder counting, USB serial to the Pi |
+| | TCA9548A | I²C multiplexer for the ToF sensors |
+| **Power** | 3S LiPo, 11.1 V, 3300 mAh | Battery, in a slide-out drawer |
+| | Geekworm Pi5-5V5APD | 5 V / 5 A supply for the Pi |
+| | 2 × rocker switches | Battery and wheel power |
 
 The body is about 240 × 215 × 235 mm and made of 47 different printed parts,
 mostly PETG, printed on a Creality K1C. The skirt panels slide off
