@@ -108,7 +108,7 @@ def hull(points):
 def main():
     args = sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else []
     parser=argparse.ArgumentParser()
-    parser.add_argument('--source',type=Path,default=ROOT/'mechanical/service_skirt_r19/roam_service_skirt_r19.blend')
+    parser.add_argument('--source',type=Path,default=ROOT/'mechanical/roam_e.blend')
     parser.add_argument('--package',type=Path,default=ROOT/'src/roam_e_description')
     parser.add_argument('--forward',choices=['caster','camera'],default='caster')
     opts=parser.parse_args(args)

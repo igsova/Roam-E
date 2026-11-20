@@ -1,0 +1,48 @@
+id,part,qty,file,size_mm,material,supports
+C01,raspberry pi carrier,1,stl/printed/C01_raspberry_pi_carrier_qty1.stl,63.4 x 94.1 x 2.0,PETG,no
+C02,geekworm base cradle,1,stl/printed/C02_geekworm_base_cradle_qty1.stl,62.0 x 62.4 x 7.0,PETG,check in slicer
+C03,arduino nano carrier,1,stl/printed/C03_arduino_nano_carrier_qty1.stl,49.3 x 30.0 x 2.0,PETG,no
+C05,lidar bridge carrier,1,stl/printed/C05_lidar_bridge_carrier_qty1.stl,46.8 x 25.0 x 2.0,PETG,no
+C06,drv8871 slotted carrier,2,stl/printed/C06_drv8871_slotted_carrier_qty2.stl,30.0 x 35.0 x 2.0,PETG,no
+C07,bno055 carrier,1,stl/printed/C07_bno055_carrier_qty1.stl,32.0 x 27.0 x 3.0,PETG,no
+C08,geekworm edge retainer,2,stl/printed/C08_geekworm_edge_retainer_qty2.stl,46.0 x 8.0 x 7.2,PETG,check in slicer
+C09,tca9548a carrier,1,stl/printed/C09_tca9548a_carrier_qty1.stl,36.4 x 38.1 x 8.5,PETG,check in slicer
+P01,wheel clearance chassis,1,stl/printed/P01_wheel_clearance_chassis_qty1.stl,190.0 x 194.5 x 4.0,PETG,no
+P03,chassis pylon,4,stl/printed/P03_chassis_pylon_qty4.stl,10.0 x 10.0 x 53.6,PETG,no
+P04,electronics deck with cable channels,1,stl/printed/P04_electronics_deck_with_cable_channels_qty1.stl,196.0 x 171.5 x 15.0,PETG,check in slicer
+P05,curved battery drawer,1,stl/printed/P05_curved_battery_drawer_qty1.stl,174.0 x 104.0 x 45.0,PETG,check in slicer
+P06L,curved drawer guide L,1,stl/printed/P06L_curved_drawer_guide_L_qty1.stl,18.7 x 95.1 x 28.9,PETG,check in slicer
+P06R,curved drawer guide R,1,stl/printed/P06R_curved_drawer_guide_R_qty1.stl,18.7 x 95.1 x 28.9,PETG,check in slicer
+P07L,sensor frame L,1,stl/printed/P07L_sensor_frame_L_qty1.stl,53.0 x 179.0 x 61.8,PETG,yes
+P07R,sensor frame R,1,stl/printed/P07R_sensor_frame_R_qty1.stl,53.0 x 179.0 x 61.8,PETG,yes
+P09,camera clamp cap,2,stl/printed/P09_camera_clamp_cap_qty2.stl,20.0 x 30.0 x 3.0,PETG,no
+P10,lidar adapter,1,stl/printed/P10_lidar_adapter_qty1.stl,182.0 x 110.0 x 4.0,PETG,no
+P15B,raised side panel retained nuts,1,stl/printed/P15B_raised_side_panel_retained_nuts_qty1.stl,115.1 x 174.9 x 30.0,PETG,check in slicer
+P15C,closed camera front hood,1,stl/printed/P15C_closed_camera_front_hood_qty1.stl,207.9 x 116.2 x 115.9,PETG,check in slicer
+P15D,raised lidar rear hood,1,stl/printed/P15D_raised_lidar_rear_hood_qty1.stl,207.8 x 109.9 x 115.9,PETG,check in slicer
+P16B,right skirt switch panel,1,stl/printed/P16B_right_skirt_switch_panel_qty1.stl,35.7 x 178.9 x 87.0,PETG,check in slicer
+P16C,front skirt,1,stl/printed/P16C_front_skirt_qty1.stl,211.4 x 102.5 x 87.0,PETG,check in slicer
+P16D,rear skirt,1,stl/printed/P16D_rear_skirt_qty1.stl,213.5 x 122.6 x 87.0,PETG,check in slicer
+P17,tof board retainer,8,stl/printed/P17_tof_board_retainer_qty8.stl,37.0 x 20.0 x 7.1,PETG,no
+P191,chassis cleat front left,1,stl/printed/P191_chassis_cleat_front_left_qty1.stl,24.0 x 13.5 x 24.1,PETG,check in slicer
+P192,chassis cleat front right,1,stl/printed/P192_chassis_cleat_front_right_qty1.stl,24.0 x 13.5 x 24.1,PETG,check in slicer
+P193,chassis cleat left,1,stl/printed/P193_chassis_cleat_left_qty1.stl,27.2 x 22.0 x 14.6,PETG,check in slicer
+P194,chassis cleat right,1,stl/printed/P194_chassis_cleat_right_qty1.stl,27.2 x 22.0 x 14.6,PETG,check in slicer
+P20,multiplexer end clip,2,stl/printed/P20_multiplexer_end_clip_qty2.stl,9.0 x 4.9 x 2.0,PETG,check in slicer
+P02,caster spacer 13p501mm,4,stl/spacers/P02_caster_spacer_13p501mm_qty4.stl,9.0 x 9.0 x 13.5,PETG,no
+P12,hood locating sleeve,4,stl/spacers/P12_hood_locating_sleeve_qty4.stl,9.0 x 9.0 x 2.0,PETG,no
+S01,lower spacer M2p5 h2p5,12,stl/spacers/S01_lower_spacer_M2p5_h2p5_qty12.stl,6.0 x 6.0 x 2.5,PETG,no
+S02,bridge lower spacer M2 h2p5,4,stl/spacers/S02_bridge_lower_spacer_M2_h2p5_qty4.stl,6.0 x 6.0 x 2.5,PETG,no
+S03,imu lower spacer M2p5 h2,4,stl/spacers/S03_imu_lower_spacer_M2p5_h2_qty4.stl,6.0 x 6.0 x 2.0,PETG,no
+S04,raspberry pi pcb spacer h4p1,4,stl/spacers/S04_raspberry_pi_pcb_spacer_h4p1_qty4.stl,5.5 x 5.5 x 4.1,PETG,no
+S07,lidar bridge pcb spacer h7p842,4,stl/spacers/S07_lidar_bridge_pcb_spacer_h7p842_qty4.stl,5.5 x 5.5 x 7.8,PETG,no
+S08,imu pcb spacer h3p7,4,stl/spacers/S08_imu_pcb_spacer_h3p7_qty4.stl,5.5 x 5.5 x 3.7,PETG,no
+S09,drv8871 pcb spacer h2p2,4,stl/spacers/S09_drv8871_pcb_spacer_h2p2_qty4.stl,5.5 x 5.5 x 2.2,PETG,no
+F01,camera lower pad,2,stl/soft/F01_camera_lower_pad_qty2.stl,20.0 x 14.0 x 0.8,"TPU, or cut foam/tape to the same thickness",no
+F02,camera rear pad,2,stl/soft/F02_camera_rear_pad_qty2.stl,20.0 x 21.8 x 0.5,"TPU, or cut foam/tape to the same thickness",no
+F03,camera upper pad 1p20mm,2,stl/soft/F03_camera_upper_pad_1p20mm_qty2.stl,20.0 x 14.0 x 1.2,"TPU, or cut foam/tape to the same thickness",check in slicer
+F04,battery liner,1,stl/soft/F04_battery_liner_qty1.stl,140.0 x 49.0 x 2.0,"TPU, or cut foam/tape to the same thickness",no
+F05,geekworm edge pad,2,stl/soft/F05_geekworm_edge_pad_qty2.stl,46.0 x 1.2 x 0.6,"TPU, or cut foam/tape to the same thickness",check in slicer
+F06,multiplexer soft pad,2,stl/soft/F06_multiplexer_soft_pad_qty2.stl,7.0 x 0.9 x 0.4,"TPU, or cut foam/tape to the same thickness",check in slicer
+P14,roof service plug,4,stl/soft/P14_roof_service_plug_qty4.stl,9.0 x 9.0 x 4.2,TPU,no
+P18,tof ear pad,16,stl/soft/P18_tof_ear_pad_qty16.stl,3.2 x 5.0 x 0.4,"TPU, or cut foam/tape to the same thickness",no

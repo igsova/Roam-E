@@ -1,6 +1,6 @@
 {
   "revision": "R19",
-  "source": "mechanical/service_skirt_r19/roam_service_skirt_r19.blend",
+  "source": "mechanical/roam_e.blend",
   "source_sha256": "b5b6360d568ab5c79f65d23d1399e47ed0c22d680765c039d0ac5ad28a81081e",
   "forward": "camera",
   "mesh_units": "metres",
