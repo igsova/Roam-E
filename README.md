@@ -37,7 +37,7 @@ the printed body.
 ## Hardware
 
 <p align="center">
-  <img src="docs/images/roam_e_open.jpg" alt="Roam-E with the hood removed, showing the lidar, camera and electronics deck" width="620">
+  <img src="docs/images/roam_e_sensors.jpg" alt="See-through render of Roam-E with its sensors highlighted: RPLIDAR A1, Astra Pro RGB-D camera, BNO055 IMU, drive motors with quadrature encoders and eight VL53L0X time-of-flight sensors" width="760">
 </p>
 
 | Component | Role |
