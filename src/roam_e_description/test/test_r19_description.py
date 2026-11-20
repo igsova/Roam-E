@@ -52,10 +52,10 @@ def test_all_tof_frames_exist():
     assert actual==expected
 
 
-@pytest.mark.skipif(not (WORKSPACE/'tools/build_r19_description.py').exists(),
+@pytest.mark.skipif(not (WORKSPACE/'tools/description/build_description.py').exists(),
     reason='Regeneration test requires the full source checkout, not just the standalone package ZIP')
 def test_regeneration_does_not_erase_calibration():
-    spec=importlib.util.spec_from_file_location('r19_builder',WORKSPACE/'tools/build_r19_description.py')
+    spec=importlib.util.spec_from_file_location('r19_builder',WORKSPACE/'tools/description/build_description.py')
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     import shutil
     with tempfile.TemporaryDirectory() as folder:

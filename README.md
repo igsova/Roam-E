@@ -96,13 +96,13 @@ telemetry back. Everything above the Nano is ROS 2.
 ```text
 src/roam_e/               ROS 2 package: nodes, launch files, EKF / SLAM / AMCL / Nav2 config
 src/roam_e_description/   URDF / xacro robot model, TF frames and RViz setup
-firmware/                 Arduino Nano motor controller and its host-side unit tests
+firmware/                 Arduino Nano motor controller, AVR build script and host-side unit tests
 mechanical/               Blender assembly, STL print files and parts list
 maps/                     Saved slam_toolbox maps
 scripts/setup/            Raspberry Pi 5 bootstrap, backup and hardware validation
 scripts/bno055/           IMU calibration tools
 scripts/camera/           RGB and depth camera calibration tools
-tools/                    Bench tests, calibration and analysis scripts, visual relocalizer
+tools/                    Visual relocalizer, camera calibration checks, robot-model export from CAD
 config/                   IMU calibration and systemd units
 docs/                     Usage guide and research notes
 ```

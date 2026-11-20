@@ -82,4 +82,4 @@ the right skirt panel.
 
 The visual meshes and sensor frames of the ROS description in
 [`src/roam_e_description`](../src/roam_e_description) are exported from this
-model with [`tools/export_blender_description.py`](../tools/export_blender_description.py).
+model with [`tools/description/export_blender_description.py`](../tools/description/export_blender_description.py).

@@ -2,7 +2,7 @@
 
 The Astra registers depth to its own model of the RGB sensor, but the UVC
 colour stream we use lands about 7 px to the left of it (measured 16 Oct
-2026 with tools/measure_r19_depth_color_offset.py, roughly constant from
+2026 with tools/calibration/measure_depth_color_offset.py, roughly constant from
 0.7 to 2.4 m). RTAB-Map takes each colour feature's 3D position from the
 depth pixel under it, so this offset breaks its visual matching. Pixels
 shifted in from outside the image are zero (invalid). Work happens only

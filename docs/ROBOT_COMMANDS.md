@@ -70,7 +70,7 @@ ros2 launch roam_e astra_camera.launch.py use_foxglove:=false color_decode_fps:=
 
 The RTAB-Map launch shifts the depth image onto the colour image
 (`depth_align_node`, 7 px left and 1 px up, measured 16 Oct 2026 with
-`tools/measure_r19_depth_color_offset.py`).
+`tools/calibration/measure_depth_color_offset.py`).
 
 Map by driving with Teleop (motors enabled, 0.10 m/s cap). `new_map:=true`
 deletes the old database; leave it out to extend the existing map.
@@ -99,12 +99,12 @@ in `~/venvs/src/accelerated_features`) and a keyframe cache built from the
 map after every new map:
 
 ```bash
-cd ~/Roam-E/tools
-~/venvs/lightglue/bin/python r19_visual_relocalizer.py --ros-args \
+cd ~/Roam-E/tools/rtabmap
+~/venvs/lightglue/bin/python visual_relocalizer.py --ros-args \
   -p keyframes:=/home/robot/Roam-E/maps/rtabmap/office_rtabmap_xfeat.npz
 # after a new map (nothing running on the database):
 rtabmap-export --images_id --poses_camera --poses_format 10 --output_dir /tmp/kf map_copy.db
-~/venvs/lightglue/bin/python r19_visual_keyframes.py /tmp/kf/map_copy keyframes.npz --features xfeat
+~/venvs/lightglue/bin/python visual_keyframes.py /tmp/kf/map_copy keyframes.npz --features xfeat
 ```
 
 Keep `period` at 0 while the lidar runs: the lidar tracks within about 5 cm,
@@ -116,7 +116,7 @@ Dense export of the map (motors off, on a copy of the database):
 ```bash
 rtabmap-export --cloud --decimation 2 --max_range 3.0 --voxel 0.01 office_copy.db
 rtabmap-export --mesh --texture --texture_size 4096 --decimation 2 --max_range 3.0 office_copy.db
-python3 ~/Roam-E/tools/publish_ply_cloud.py office_copy_cloud.ply --voxel 0.02
+python3 ~/Roam-E/tools/rtabmap/publish_ply_cloud.py office_copy_cloud.ply --voxel 0.02
 ```
 
 The last command shows the dense cloud in Foxglove on `/rtabmap/dense_cloud`.
