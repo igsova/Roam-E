@@ -1,3 +1,11 @@
+"""Forward goal poses from Foxglove or RViz to Nav2.
+
+Subscribes to goal_pose and sends each pose as a NavigateToPose action goal.
+Goals are only sent once localization has converged (stable covariance and no
+pose jumps), and a goal that runs longer than goal_timeout is cancelled.
+Optionally starts the Nav2 lifecycle nodes once the robot is localized.
+"""
+
 import time
 
 from rclpy.action import ActionClient

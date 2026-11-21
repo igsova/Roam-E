@@ -3,6 +3,7 @@
 Structures follow libuvc/libuvc.h. No camera firmware is changed. Payload
 reservation is negotiated for this stream only; uvc_close restores ownership.
 """
+
 import ctypes as C
 import ctypes.util
 import time
@@ -10,23 +11,36 @@ import time
 
 class StreamControl(C.Structure):
     _fields_ = [
-        ('bmHint', C.c_uint16), ('bFormatIndex', C.c_uint8),
-        ('bFrameIndex', C.c_uint8), ('dwFrameInterval', C.c_uint32),
-        ('wKeyFrameRate', C.c_uint16), ('wPFrameRate', C.c_uint16),
-        ('wCompQuality', C.c_uint16), ('wCompWindowSize', C.c_uint16),
-        ('wDelay', C.c_uint16), ('dwMaxVideoFrameSize', C.c_uint32),
-        ('dwMaxPayloadTransferSize', C.c_uint32), ('dwClockFrequency', C.c_uint32),
-        ('bmFramingInfo', C.c_uint8), ('bPreferredVersion', C.c_uint8),
-        ('bMinVersion', C.c_uint8), ('bMaxVersion', C.c_uint8),
+        ('bmHint', C.c_uint16),
+        ('bFormatIndex', C.c_uint8),
+        ('bFrameIndex', C.c_uint8),
+        ('dwFrameInterval', C.c_uint32),
+        ('wKeyFrameRate', C.c_uint16),
+        ('wPFrameRate', C.c_uint16),
+        ('wCompQuality', C.c_uint16),
+        ('wCompWindowSize', C.c_uint16),
+        ('wDelay', C.c_uint16),
+        ('dwMaxVideoFrameSize', C.c_uint32),
+        ('dwMaxPayloadTransferSize', C.c_uint32),
+        ('dwClockFrequency', C.c_uint32),
+        ('bmFramingInfo', C.c_uint8),
+        ('bPreferredVersion', C.c_uint8),
+        ('bMinVersion', C.c_uint8),
+        ('bMaxVersion', C.c_uint8),
         ('bInterfaceNumber', C.c_uint8),
     ]
 
 
 class FramePrefix(C.Structure):
     # Only read the prefix; libuvc allocates and owns the entire frame.
-    _fields_ = [('data', C.c_void_p), ('data_bytes', C.c_size_t),
-                ('width', C.c_uint32), ('height', C.c_uint32),
-                ('frame_format', C.c_int), ('step', C.c_size_t)]
+    _fields_ = [
+        ('data', C.c_void_p),
+        ('data_bytes', C.c_size_t),
+        ('width', C.c_uint32),
+        ('height', C.c_uint32),
+        ('frame_format', C.c_int),
+        ('step', C.c_size_t),
+    ]
 
 
 class UvcCapture:
@@ -44,12 +58,22 @@ class UvcCapture:
             'uvc_init': [C.POINTER(P), P],
             'uvc_find_device': [P, C.POINTER(P), C.c_int, C.c_int, C.c_char_p],
             'uvc_open': [P, C.POINTER(P)],
-            'uvc_get_stream_ctrl_format_size': [P, C.POINTER(StreamControl), C.c_int, C.c_int, C.c_int, C.c_int],
+            'uvc_get_stream_ctrl_format_size': [
+                P,
+                C.POINTER(StreamControl),
+                C.c_int,
+                C.c_int,
+                C.c_int,
+                C.c_int,
+            ],
             'uvc_stream_open_ctrl': [P, C.POINTER(P), C.POINTER(StreamControl)],
             'uvc_stream_start': [P, P, P, C.c_uint8],
             'uvc_stream_get_frame': [P, C.POINTER(C.POINTER(FramePrefix)), C.c_int32],
-            'uvc_stream_stop': [P], 'uvc_stream_close': [P],
-            'uvc_close': [P], 'uvc_unref_device': [P], 'uvc_exit': [P],
+            'uvc_stream_stop': [P],
+            'uvc_stream_close': [P],
+            'uvc_close': [P],
+            'uvc_unref_device': [P],
+            'uvc_exit': [P],
         }
         for name, args in signatures.items():
             fn = getattr(self.lib, name)
@@ -61,18 +85,29 @@ class UvcCapture:
         self.width, self.height = width, height
         try:
             self.check(self.lib.uvc_init(C.byref(self.ctx), None), 'initialize')
-            self.check(self.lib.uvc_find_device(self.ctx, C.byref(self.dev), 0x2bc5, 0x0502, None), 'find Astra RGB')
-            self.check(self.lib.uvc_open(self.dev, C.byref(self.handle)), 'open RGB (check video-group USB permissions)')
+            self.check(
+                self.lib.uvc_find_device(self.ctx, C.byref(self.dev), 0x2BC5, 0x0502, None),
+                'find Astra RGB',
+            )
+            self.check(
+                self.lib.uvc_open(self.dev, C.byref(self.handle)),
+                'open RGB (check video-group USB permissions)',
+            )
             ctrl = StreamControl()
-            for attempt in range(3):
-                result = self.lib.uvc_get_stream_ctrl_format_size(self.handle, C.byref(ctrl), 7, width, height, int(fps))
+            for _ in range(3):
+                result = self.lib.uvc_get_stream_ctrl_format_size(
+                    self.handle, C.byref(ctrl), 7, width, height, int(fps)
+                )
                 if result >= 0:
                     break
-                time.sleep(.3)
+                time.sleep(0.3)
             self.check(result, 'negotiate VGA MJPEG')
             self.negotiated_payload = ctrl.dwMaxPayloadTransferSize
             ctrl.dwMaxPayloadTransferSize = payload
-            self.check(self.lib.uvc_stream_open_ctrl(self.handle, C.byref(self.stream), C.byref(ctrl)), 'open stream')
+            self.check(
+                self.lib.uvc_stream_open_ctrl(self.handle, C.byref(self.stream), C.byref(ctrl)),
+                'open stream',
+            )
             self.check(self.lib.uvc_stream_start(self.stream, None, None, 0), 'start stream')
             self.started = True
         except Exception:

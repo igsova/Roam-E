@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-import math, time, threading
+"""ROS 2 driver for the Slamtec RPLIDAR A1.
+
+Reads full rotations from the rplidar library on a background thread, bins
+the measurements into fixed angular steps in the ROS counter-clockwise
+convention (lidar_scan.py) and publishes them as LaserScan on scan.
+"""
+
+import math
+import time
+import threading
 import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
@@ -8,6 +17,7 @@ from sensor_msgs.msg import LaserScan
 from rplidar import RPLidar, RPLidarException
 
 from .lidar_scan import bin_measurements, scan_geometry
+
 
 class RPLidarA1Node(Node):
     def __init__(self):
@@ -24,8 +34,9 @@ class RPLidarA1Node(Node):
         self.range_min = float(self.get_parameter('range_min').value)
         self.angle_increment = math.radians(float(self.get_parameter('angle_increment_deg').value))
 
-        qos = QoSProfile(reliability=ReliabilityPolicy.BEST_EFFORT,
-                         history=HistoryPolicy.KEEP_LAST, depth=1)
+        qos = QoSProfile(
+            reliability=ReliabilityPolicy.BEST_EFFORT, history=HistoryPolicy.KEEP_LAST, depth=1
+        )
         self.pub_scan = self.create_publisher(LaserScan, 'scan', qos)
 
         self.num_bins, self.angle_min, self.angle_max = scan_geometry(self.angle_increment)
@@ -50,7 +61,7 @@ class RPLidarA1Node(Node):
             self.lidar.start_motor()
             self._previous_scan_time_ns = None
         except RPLidarException as e:
-            self.get_logger().error(f"Error connecting to RPLidar: {e}")
+            self.get_logger().error(f'Error connecting to RPLidar: {e}')
             self.lidar = None
 
     def _read_loop(self):
@@ -118,6 +129,7 @@ class RPLidarA1Node(Node):
                 pass
         super().destroy_node()
 
+
 def main():
     rclpy.init()
     node = RPLidarA1Node()
@@ -129,6 +141,7 @@ def main():
         node.destroy_node()
         if rclpy.ok():
             rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()

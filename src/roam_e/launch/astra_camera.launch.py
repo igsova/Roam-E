@@ -8,7 +8,6 @@ from launch.actions import (
 from launch.conditions import IfCondition
 from launch.launch_description_sources import (
     AnyLaunchDescriptionSource,
-    PythonLaunchDescriptionSource,
 )
 from launch.substitutions import (
     EnvironmentVariable,
@@ -33,10 +32,10 @@ def generate_launch_description():
             'openni2_sdk_dir',
             default_value=EnvironmentVariable(
                 'ROAM_E_OPENNI2_SDK_DIR',
-                default_value=(
-                    '/home/robot/'
-                    'OpenNI-Linux-Arm64-2.3.0.65/Samples/Bin'
-                ),
+                default_value=[
+                    EnvironmentVariable('HOME'),
+                    '/OpenNI-Linux-Arm64-2.3.0.65/Samples/Bin',
+                ],
             ),
             description='Directory containing the legacy Orbbec OpenNI2 SDK.',
         ),

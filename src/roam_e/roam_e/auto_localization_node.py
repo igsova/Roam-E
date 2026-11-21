@@ -1,3 +1,12 @@
+"""Automatic AMCL global localization on a saved map.
+
+Asks AMCL to spread its particles over the whole map, then drives a short,
+guarded pattern (forward, a 90-degree turn, forward) on the Nav2 velocity input
+until the pose estimate converges. It checks sensor freshness, motion progress
+and pose jumps, stops on any failure, clears the costmaps on success and then
+exits. Motion is only allowed with allow_motion:=true.
+"""
+
 import math
 import time
 

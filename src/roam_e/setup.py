@@ -4,7 +4,7 @@ package_name = 'roam_e'
 
 setup(
     name=package_name,
-    version='0.0.1',
+    version='1.0.0',
     packages=find_packages(exclude=['test']),
     data_files=[
         ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
@@ -38,23 +38,16 @@ setup(
         ),
         ('share/' + package_name + '/rviz', ['rviz/sensors_viz.rviz']),
     ],
-    install_requires=[
-        'setuptools',
-        'rclpy',
-        'pyserial',
-        'rplidar',
-        'adafruit-blinka',
-        'adafruit-circuitpython-bno055',
-    ],
+    install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='you',
+    maintainer='Igor Vaz',
     maintainer_email='igorsouzavazz@gmail.com',
     description=(
-        'Sensor visualization, wheel odometry, and guarded differential '
-        'drive control for Roam-E'
+        'Roam-E robot bringup: sensor drivers, wheel control and odometry, '
+        'EKF, SLAM, AMCL, RTAB-Map and Nav2 configuration'
     ),
     license='MIT',
-    tests_require=['pytest'],
+    extras_require={'test': ['pytest']},
     entry_points={
         'console_scripts': [
             'auto_localization_node = '

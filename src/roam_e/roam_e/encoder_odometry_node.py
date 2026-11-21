@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-"""Read Arduino encoder telemetry and publish joint states plus wheel odometry."""
+"""Bridge between ROS and the Arduino wheel controller.
+
+Over USB serial it sends wheel velocity targets derived from cmd_vel (clamped,
+with a command timeout that stops the wheels) and reads the controller's
+encoder telemetry. From that it publishes wheel odometry, the wheel joint
+states and controller diagnostics. Motor output stays disabled unless
+enable_motor_control is true. The serial protocol is described in
+firmware/README.md.
+"""
 
 import math
 import time
@@ -80,7 +88,7 @@ class EncoderOdometryNode(Node):
         self.declare_parameter('max_linear_velocity', 0.43)
         self.declare_parameter('max_angular_velocity', 1.5)
         self.declare_parameter('max_wheel_ticks_per_second', 1500.0)
-        # R19 floor-measured defaults, 14 Oct 2026 (0.43 m/s max speed run).
+        # Floor-measured defaults, 14 Oct 2026 (0.43 m/s max speed run).
         self.declare_parameter('velocity_pid_kp', 0.200)
         self.declare_parameter('velocity_pid_ki', 0.800)
         self.declare_parameter('velocity_feedforward_kv', 0.090)

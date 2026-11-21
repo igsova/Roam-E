@@ -1,8 +1,11 @@
-"""Native UVC JPEG passthrough with optional calibrated CameraInfo.
+"""Astra Pro colour camera: native UVC MJPEG passthrough with CameraInfo.
 
-Timestamps are host receive times, not hardware exposure timestamps. Camera
-calibration and RGB/depth synchronization must be established before SLAM.
+Streams the camera's own JPEG frames without re-encoding (compressed topic),
+optionally decodes a reduced-rate raw image for consumers such as RTAB-Map, and
+publishes the calibrated CameraInfo from config/astra_rgb_640x480.yaml.
+Timestamps are host receive times, not hardware exposure times.
 """
+
 import threading
 import time
 import math
@@ -35,27 +38,44 @@ def decode_rgb(data):
 class MjpegCamera(Node):
     def __init__(self):
         super().__init__('color_camera')
-        for key, value in [('width', 640),
-                           ('height', 480), ('capture_fps', 30.0),
-                           ('preview_fps', 5.0), ('decode_fps', 2.0),
-                           ('usb_payload_bytes', 800),
-                           ('camera_frame_id', 'camera_rgb_optical_frame'),
-                           ('calibration_file', '')]:
+        for key, value in [
+            ('width', 640),
+            ('height', 480),
+            ('capture_fps', 30.0),
+            ('preview_fps', 5.0),
+            ('decode_fps', 2.0),
+            ('usb_payload_bytes', 800),
+            ('camera_frame_id', 'camera_rgb_optical_frame'),
+            ('calibration_file', ''),
+        ]:
             self.declare_parameter(key, value, ParameterDescriptor(read_only=True))
-        p = lambda name: self.get_parameter(name).value
+
+        def p(name):
+            return self.get_parameter(name).value
+
         self.preview_fps, self.decode_fps = p('preview_fps'), p('decode_fps')
-        if (not all(math.isfinite(v) for v in
-                    [self.preview_fps, self.decode_fps, p('capture_fps')])
-                or self.preview_fps <= 0 or self.decode_fps < 0 or p('capture_fps') <= 0):
+        if (
+            not all(math.isfinite(v) for v in [self.preview_fps, self.decode_fps, p('capture_fps')])
+            or self.preview_fps <= 0
+            or self.decode_fps < 0
+            or p('capture_fps') <= 0
+        ):
             raise ValueError('Rates must be positive; decode_fps may be zero')
         self.frame_id = p('camera_frame_id')
         self.width, self.height = p('width'), p('height')
-        self.calibration = (load_rgb_calibration(p('calibration_file'), (self.width, self.height))
-                            if p('calibration_file') else None)
-        self.info = (self.create_publisher(CameraInfo, 'camera_info', qos_profile_sensor_data)
-                     if self.calibration is not None else None)
+        self.calibration = (
+            load_rgb_calibration(p('calibration_file'), (self.width, self.height))
+            if p('calibration_file')
+            else None
+        )
+        self.info = (
+            self.create_publisher(CameraInfo, 'camera_info', qos_profile_sensor_data)
+            if self.calibration is not None
+            else None
+        )
         self.compressed = self.create_publisher(
-            CompressedImage, 'image_raw/compressed', qos_profile_sensor_data)
+            CompressedImage, 'image_raw/compressed', qos_profile_sensor_data
+        )
         self.raw = self.create_publisher(Image, 'image_raw', qos_profile_sensor_data)
         self.cap = UvcCapture(p('width'), p('height'), p('capture_fps'), p('usb_payload_bytes'))
         self.lock = threading.Lock()
@@ -69,11 +89,15 @@ class MjpegCamera(Node):
         self.create_timer(0.01, self.publish_latest)
         self.create_timer(30.0, self.report_capture)
         if self.calibration is not None:
-            self.get_logger().info(f'RGB calibration loaded: {p("calibration_file")}; '
-                                   'CameraInfo shares image stamps; depth alignment is unverified')
+            self.get_logger().info(
+                f'RGB calibration loaded: {p("calibration_file")}; '
+                'CameraInfo shares image stamps; depth alignment is unverified'
+            )
         else:
             self.get_logger().warning('No RGB calibration file; CameraInfo will not be published')
-        self.get_logger().info('Native MJPEG capture; host receive timestamps, not exposure synchronization')
+        self.get_logger().info(
+            'Native MJPEG capture; host receive timestamps, not exposure synchronization'
+        )
 
     def capture(self):
         last_frame = time.monotonic()
@@ -119,8 +143,11 @@ class MjpegCamera(Node):
             self.compressed.publish(msg)
             self.last_preview = now
             published = True
-        if (self.decode_fps > 0 and self.raw.get_subscription_count() > 0
-                and now - self.last_decode >= 1.0 / self.decode_fps):
+        if (
+            self.decode_fps > 0
+            and self.raw.get_subscription_count() > 0
+            and now - self.last_decode >= 1.0 / self.decode_fps
+        ):
             try:
                 rgb = decode_rgb(data)
             except ValueError:
@@ -143,7 +170,8 @@ class MjpegCamera(Node):
 
     def report_capture(self):
         self.get_logger().info(
-            f'Capture totals: {self.captured} JPEG frames, {self.invalid} invalid frames skipped')
+            f'Capture totals: {self.captured} JPEG frames, {self.invalid} invalid frames skipped'
+        )
 
     def close(self):
         self.stop.set()

@@ -133,8 +133,8 @@ def test_goal_timeout_and_bounded_tree_are_installed_and_wired():
     assert "'behavior_trees/navigate_to_pose_bounded.xml'" in setup_source
 
 
-def test_r19_camera_forward_geometry():
-    # 14 Oct 2026: R19 camera-forward CAD hull (+X camera, caster rear).
+def test_camera_forward_footprint():
+    # Footprint is the CAD hull with +X towards the camera and the caster at the rear.
     config = load_navigation_parameters()
     local = config['local_costmap']['local_costmap']['ros__parameters']
     points = yaml.safe_load(local['footprint'])

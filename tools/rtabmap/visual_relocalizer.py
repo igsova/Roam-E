@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Learned-feature visual relocalizer for RTAB-Map localization (R19).
+"""Learned-feature visual relocalizer for RTAB-Map localization.
 
 The Pi's RTAB-Map build cannot run learned features, and its own ORB/SIFT
 place recognition fails with the Astra Pro colour camera. This node matches

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Build a learned-feature keyframe cache from an RTAB-Map export, for the
-R19 visual relocalizer (tools/rtabmap/visual_relocalizer.py).
+visual relocalizer (tools/rtabmap/visual_relocalizer.py).
 
 Export first (on a copy of the database, nothing running on it):
   rtabmap-export --images_id --poses_camera --poses_format 10 --output_dir OUT map.db

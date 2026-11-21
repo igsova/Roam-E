@@ -1,3 +1,10 @@
+"""Colourized, compressed preview of the depth image for Foxglove.
+
+Maps depth in millimetres to a colour ramp between min_depth_m and max_depth_m,
+optionally downsamples it, and publishes JPEG frames at a capped rate so the
+preview can be watched over Wi-Fi without streaming raw depth.
+"""
+
 import time
 
 import cv2

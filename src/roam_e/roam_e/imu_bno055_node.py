@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+"""ROS 2 driver for the Bosch BNO055 IMU over I2C.
+
+Publishes orientation, angular velocity and linear acceleration on imu/data,
+the die temperature on imu/temperature, and sensor health on /diagnostics.
+The sensor runs in IMU-only fusion mode (gyro and accelerometer, no
+magnetometer). Its calibration is restored at boot by scripts/bno055/restore.py;
+the node checks the fusion state and waits for it before publishing.
+"""
 
 import math
 import time
@@ -12,7 +20,6 @@ from sensor_msgs.msg import Imu, Temperature
 from smbus2 import SMBus
 
 from .imu_health import (
-    IMUPLUS_MODE,
     fusion_state_is_healthy,
     physical_calibration_is_ready,
 )

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only camera-vs-lidar wall check for the R19 Astra mount and depth scale.
+"""Read-only camera-vs-lidar wall check for the Astra mount and depth scale.
 
 The robot faces a flat wall (or a large flat board) with the motors off. This
 script collects registered depth frames and lidar scans for a few seconds, fits
@@ -28,7 +28,7 @@ import numpy as np
 ROI_X = (0.30, 0.70)
 ROI_Y = (0.25, 0.65)
 LIDAR_HALF_ANGLE_DEG = 20.0
-FRONT_X_M = 0.06965  # R19 CAD hull front, base_footprint/base_link X
+FRONT_X_M = 0.06965  # CAD hull front, base_footprint/base_link X
 
 
 def quaternion_matrix(x: float, y: float, z: float, w: float) -> np.ndarray:

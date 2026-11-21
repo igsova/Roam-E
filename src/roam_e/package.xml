@@ -2,15 +2,16 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>roam_e</name>
-  <version>0.0.1</version>
-  <description>Sensor visualization, wheel odometry, and guarded differential drive control for Roam-E</description>
-  <maintainer email="you@example.com">you</maintainer>
+  <version>1.0.0</version>
+  <description>Roam-E robot bringup: sensor drivers, wheel control and odometry, EKF, SLAM, AMCL, RTAB-Map and Nav2 configuration</description>
+  <maintainer email="igorsouzavazz@gmail.com">Igor Vaz</maintainer>
   <license>MIT</license>
 
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>
   <exec_depend>lifecycle_msgs</exec_depend>
   <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>tf2_ros_py</exec_depend>
   <exec_depend>rclpy</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
   <exec_depend>nav_msgs</exec_depend>
@@ -26,6 +27,7 @@
   <exec_depend>nav2_behaviors</exec_depend>
   <exec_depend>nav2_velocity_smoother</exec_depend>
   <exec_depend>nav2_collision_monitor</exec_depend>
+  <exec_depend>nav2_costmap_2d</exec_depend>
   <exec_depend>nav2_navfn_planner</exec_depend>
   <exec_depend>nav2_regulated_pure_pursuit_controller</exec_depend>
   <exec_depend>std_msgs</exec_depend>
@@ -47,7 +49,12 @@
   <exec_depend>python3-yaml</exec_depend>
   <exec_depend>rcl_interfaces</exec_depend>
   <exec_depend>image_proc</exec_depend>
+  <exec_depend>rclcpp_components</exec_depend>
+  <exec_depend>rtabmap_slam</exec_depend>
+  <exec_depend>rtabmap_sync</exec_depend>
   <exec_depend>libuvc-dev</exec_depend>
+
+  <test_depend>python3-pytest</test_depend>
 
   <export>
     <build_type>ament_python</build_type>
