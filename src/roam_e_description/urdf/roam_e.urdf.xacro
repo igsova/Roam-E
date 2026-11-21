@@ -1,15 +1,16 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="roam_e">
-  <!-- R19 visualization/TF description. SI units throughout.
-       Edit a COPY of calibration.yaml for measured extrinsics.
-       Camera preview frames MUST be disabled when OpenNI owns optical TF. -->
+  <!-- Roam-E visual and TF model, in SI units. Frame poses and wheel geometry come from
+       calibration_file (default config/calibration.yaml). Keep
+       include_camera_optical_frames false when the camera driver publishes the optical
+       frames. -->
   <xacro:arg name="calibration_file" default="../config/calibration.yaml"/>
   <xacro:arg name="include_camera_optical_frames" default="false"/>
   <xacro:property name="calibration" value="${xacro.load_yaml('$(arg calibration_file)')}"/>
   <xacro:property name="wheel_radius" value="${calibration['physical_wheels']['radius']}"/>
   <xacro:property name="wheel_separation" value="${calibration['physical_wheels']['separation']}"/>
   <xacro:property name="wheel_width" value="${calibration['physical_wheels']['width']}"/>
-  <xacro:include filename="r19_visuals.xacro"/>
+  <xacro:include filename="visuals.xacro"/>
 
   <xacro:macro name="fixed_frame" params="child">
     <joint name="${child}_joint" type="fixed">
@@ -25,11 +26,11 @@
     <parent link="base_footprint"/><child link="base_link"/>
     <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0"/>
   </joint>
-  <xacro:r19_rigid_links/>
+  <xacro:rigid_links/>
 
   <xacro:macro name="wheel" params="side sign">
     <link name="${side}_wheel_link">
-      <xacro:r19_visuals link="${side}_wheel_link"/>
+      <xacro:link_visuals link="${side}_wheel_link"/>
       <collision>
         <origin xyz="0 0 0" rpy="1.5707963267948966 0 0"/>
         <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
@@ -47,7 +48,7 @@
 
   <link name="imu_link"/>
   <xacro:fixed_frame child="imu_link"/>
-  <!-- Explicitly nominal preview optics, not measured camera calibration. -->
+  <!-- CAD-nominal optical frames, for viewing the model without the camera driver. -->
   <xacro:if value="$(arg include_camera_optical_frames)">
     <link name="camera_rgb_optical_frame"/>
     <xacro:fixed_frame child="camera_rgb_optical_frame"/>

@@ -26,8 +26,21 @@ Both scripts only subscribe; run them on the Pi with the camera running.
 
 | Script | What it does |
 |---|---|
-| `export_blender_description.py` | Exports link-relative visual meshes and sensor frames from [`mechanical/roam_e.blend`](../mechanical/roam_e.blend). Run it inside Blender: `blender --background --python tools/description/export_blender_description.py` |
-| `build_description.py` | Generates the visual xacro and config files of `roam_e_description` from that export |
-| `validate_description.py` | Checks the meshes, the TF tree, both camera TF modes and the calibration overrides, without ROS running |
+| `export_blender_description.py` | Runs inside Blender. Exports the visual meshes, in link frames, and the CAD-nominal sensor frames from [`mechanical/roam_e.blend`](../mechanical/roam_e.blend) without saving it |
+| `build_description.py` | Generates `visuals.xacro`, the CAD-nominal calibration, `geometry.yaml` and the expanded `roam_e.urdf` from that export. Never overwrites `calibration.yaml` |
+| `validate_description.py` | Checks the meshes, the TF tree, both camera TF modes, the sensor frame conventions and the calibration overrides, without ROS running |
+
+Run them in order from the repository root. The last two need the `xacro` and
+`PyYAML` Python packages.
+
+```bash
+blender --background --python tools/description/export_blender_description.py
+python3 tools/description/build_description.py
+python3 tools/description/validate_description.py
+```
+
+On macOS, `blender` is `/Applications/Blender.app/Contents/MacOS/Blender`. The
+package README, [`src/roam_e_description`](../src/roam_e_description/README.md),
+describes the frames and the calibration file.
 
 The firmware build and host tests live in [`firmware/`](../firmware/).
