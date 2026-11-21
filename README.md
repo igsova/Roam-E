@@ -1,5 +1,8 @@
 <p align="center">
-  <img src="docs/images/roam_e.jpg" alt="Render of the Roam-E robot" width="760">
+  <img src="docs/images/roam_e.jpg" alt="Blender render of the Roam-E robot" width="49%">
+  <img src="docs/images/roam_e_photo.jpg" alt="The Roam-E robot as built" width="49%">
+  <br>
+  <sub>The Blender model (left) and the robot as built (right)</sub>
 </p>
 
 # Roam-E
