@@ -37,14 +37,22 @@ inline void digitalWrite(uint8_t pin, int value) {
   mockOutputs.at(pin) = value;
   mockWrites.push_back({pin, value});
 }
-inline int digitalRead(uint8_t pin) { return mockInputs.at(pin); }
-inline unsigned long millis() { return mockMillis; }
+inline int digitalRead(uint8_t pin) {
+  return mockInputs.at(pin);
+}
+inline unsigned long millis() {
+  return mockMillis;
+}
 inline unsigned long mockMicros = 0;
-inline unsigned long micros() { return mockMicros; }
+inline unsigned long micros() {
+  return mockMicros;
+}
 inline void pinMode(uint8_t, int) {}
 inline void noInterrupts() {}
 inline void interrupts() {}
-inline int digitalPinToInterrupt(uint8_t pin) { return pin; }
+inline int digitalPinToInterrupt(uint8_t pin) {
+  return pin;
+}
 inline void attachInterrupt(int, void (*)(), int) {}
 inline void delayMicroseconds(unsigned int duration) {
   mockDelays.push_back(duration);
@@ -55,15 +63,26 @@ struct MockSerial {
   std::ostringstream output;
   std::deque<char> input;
   void begin(unsigned long) {}
-  int available() { return static_cast<int>(input.size()); }
+  int available() {
+    return static_cast<int>(input.size());
+  }
   char read() {
     char next = input.front();
     input.pop_front();
     return next;
   }
-  template <class T> void print(T value) { output << value; }
-  template <class T> void println(T value) { output << value << '\n'; }
-  void clearOutput() { output.str(""); output.clear(); }
+  template <class T>
+  void print(T value) {
+    output << value;
+  }
+  template <class T>
+  void println(T value) {
+    output << value << '\n';
+  }
+  void clearOutput() {
+    output.str("");
+    output.clear();
+  }
 };
 
 inline MockSerial Serial;

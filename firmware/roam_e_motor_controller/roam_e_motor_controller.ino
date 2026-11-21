@@ -1,7 +1,11 @@
-// Production image from 2026-10-14 (promoted from candidate r19_dual_p230),
-// plus normal-mode breakaway assist (breakaway_assist.h, CAPS suffix BK1):
-// 90% running ceiling (230/255), opt-in bounded startup (START,1; default off)
-// with its boost capped at 153, and velocity defaults measured on the R19 body.
+// Roam-E wheel controller for an Arduino Nano (ATmega328P, 16 MHz).
+//
+// Closes a PI + feed-forward velocity loop per wheel on quadrature encoder
+// ticks, with a breakaway assist for starting from standstill
+// (breakaway_assist.h) and an opt-in bounded-startup mode (bounded_startup.h,
+// START,1; off by default). PWM runs up to 230/255, and the motors stop if
+// commands stop arriving. The serial protocol is described in
+// firmware/README.md.
 #include <Arduino.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,8 +18,8 @@ const uint8_t LEFT_IN2 = 5;
 const uint8_t RIGHT_IN1 = 9;
 const uint8_t RIGHT_IN2 = 6;
 
-// Logical PWM/velocity is camera-forward positive. On the R19 assembly,
-// positive right-channel PWM was visually confirmed backward (2026-10-11).
+// Logical PWM/velocity is camera-forward positive. As wired, positive
+// right-channel PWM turns the right wheel backward.
 // Invert only the electrical bridge output; encoder normalization and
 // reported PWM/velocity signs remain in the logical wheel convention.
 const int8_t LEFT_MOTOR_POLARITY = 1;
@@ -30,7 +34,7 @@ const uint8_t ENCODER_B_B = 12;
 // Measured using CHANGE interrupts on encoder channel A (x2 decoding).
 const long ENCODER_TICKS_PER_REVOLUTION = 748;
 
-// 90% duty ceiling (230/255) since 2026-10-14, replacing 60%.
+// 90% duty ceiling (230/255).
 // This ceiling is not a motor-current limit or a hardware safety rating.
 const int MAX_SAFE_PWM = 230;
 const long MAX_TARGET_TICKS_PER_SECOND = 2000;
@@ -45,8 +49,8 @@ const unsigned long TELEMETRY_INTERVAL_MS = 50;
 // Floor-tested DRV8871 starting values. They can be changed at runtime with:
 // PID,<kp_milli>,<ki_milli>,<kv_milli>,<static_pwm>
 // FF,<left_forward>,<left_reverse>,<right_forward>,<right_reverse>
-// R19 defaults (2026-10-14): PI 0.20/0.80 with Kv 0.09 PWM per tick/s and
-// per-wheel/direction static PWM from 13-14 Oct floor holds and speed steps.
+// Defaults: PI 0.20/0.80 with Kv 0.09 PWM per tick/s, and per-wheel and
+// per-direction static PWM measured with floor holds and speed steps.
 float velocityKp = 0.200f;
 float velocityKi = 0.800f;
 float velocityKv = 0.090f;
@@ -624,7 +628,7 @@ void handleCommand(const char *command) {
          ((targetLeftTicksPerSecond > 0) != (leftValue > 0))) ||
         (targetRightTicksPerSecond != 0 && rightValue != 0 &&
          ((targetRightTicksPerSecond > 0) != (rightValue > 0)));
-      // Opt-in V2 accepts only equal, same-direction paired targets (or all zero).
+      // Bounded mode accepts only equal, same-direction paired targets (or all zero).
       if ((leftValue != rightValue) ||
           (magnitude != 0 && (magnitude < BOUNDED_MIN_TARGET || magnitude > BOUNDED_MAX_TARGET)) ||
           reversal) {

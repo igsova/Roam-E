@@ -1,14 +1,15 @@
-// Opt-in V3: bounded paired straight-motion startup and PI handoff.
-// Equal same-sign targets only; six-second deadline and per-wheel1400-tick budget.
-// No voltage/current/cell sensing. Default disabled; not production calibration.
+// Opt-in bounded startup (START,1): a paired straight-line start that ramps
+// both wheels together, then hands over to the PI loop. Accepts equal,
+// same-sign targets only, with a six-second deadline and a 1400-tick budget per
+// wheel. There is no voltage or current sensing. Disabled by default.
 #pragma once
 #include <stdint.h>
 
 const int BOUNDED_START_PWM = 128;
 const int BOUNDED_START_PWM_STEP = 5;
-// Breakaway ramp keeps the V3 153 cap; only RUN output may use MAX_SAFE_PWM.
+// The startup ramp is capped at 153; only the RUN phase may use MAX_SAFE_PWM.
 const int BOUNDED_START_PWM_MAX = 153;
-// 2026-10-14: tolerate small backward wobble/noise; 3+ ticks backward faults.
+// Tolerate small backward wobble or noise; 3+ ticks backward is a fault.
 const long BOUNDED_MAX_BACKWARD_TICKS = 3;
 const uint32_t BOUNDED_START_TIMEOUT_MS = 300;
 const uint32_t BOUNDED_PROGRESS_TIMEOUT_MS = 250;

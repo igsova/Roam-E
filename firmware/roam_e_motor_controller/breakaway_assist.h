@@ -1,10 +1,10 @@
-// Breakaway assist for normal (START,0) velocity control, added 2026-10-14.
+// Breakaway assist for normal (START,0) velocity control.
 // Nav2 asks for small in-place turns that the PI output (~70 PWM) cannot start
 // from standstill, especially at low battery. When a commanded wheel shows no
 // encoder progress, ramp a duty floor from 100 by +5 per control step, capped at
 // the bounded-startup limit (153), until it moves. Give up after 500 ms, then
-// wait 500 ms before another attempt so a jammed wheel is not driven
-// continuously. The PI output is never reduced; only a floor is applied in the
+// wait 500 ms before another attempt so the floor is not applied continuously
+// to a jammed wheel. The PI output is never reduced; only a floor is applied in the
 // commanded direction. Opt-in bounded mode (START,1) is unaffected.
 #pragma once
 #include <stdint.h>
