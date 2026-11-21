@@ -2,7 +2,7 @@
 """Bounded, read-only ROS check of RGB rectification with concurrent depth.
 
 Does not open USB, alter parameters, publish commands, or launch motors. An
-optional NEW output directory saves one private raw/rectified pair plus metrics.
+optional new output directory receives one raw/rectified pair plus metrics.
 This verifies the processing pipeline, not physical RGB-depth registration.
 """
 import argparse
@@ -106,7 +106,7 @@ class RectificationCheck(Node):
                 for label, array in (('raw', source), ('rectified', actual)):
                     if not cv2.imwrite(str(self.output_dir / f'{label}.png'),
                                        cv2.cvtColor(array, cv2.COLOR_RGB2BGR)):
-                        raise ValueError('Failed to save private inspection image')
+                        raise ValueError('Failed to save inspection image')
                 self.saved_pair = True
         except (ValueError, cv2.error) as error:
             self.errors.add(str(error))
@@ -132,7 +132,7 @@ class RectificationCheck(Node):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--seconds', type=int, default=30)
-    parser.add_argument('--output-dir', type=Path, help='NEW private directory, outside the repository')
+    parser.add_argument('--output-dir', type=Path, help='New directory outside the repository')
     args = parser.parse_args()
     if not 10 <= args.seconds <= 90:
         parser.error('--seconds must be between 10 and 90')

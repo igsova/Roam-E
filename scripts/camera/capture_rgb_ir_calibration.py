@@ -87,7 +87,7 @@ def validate_output(path):
     path = Path(path).expanduser().resolve()
     repo = Path(__file__).resolve().parents[2]
     if path == repo or repo in path.parents:
-        raise ValueError('Private images must be outside the repository')
+        raise ValueError('Captured images must be saved outside the repository')
     if path.exists():
         raise ValueError('Output directory must be new')
     return path

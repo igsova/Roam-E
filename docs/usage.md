@@ -8,7 +8,8 @@ navigation and setting up a new Pi. For an overview of the project see the
 
 The Nano owns the time-critical wheel velocity loops and the Raspberry Pi
 converts ROS body velocity commands into left and right encoder targets. The
-serial protocol uses normalized forward-positive wheel values:
+serial protocol (described in full in [`firmware/README.md`](../firmware/README.md))
+uses normalized forward-positive wheel values:
 
 - `VEL,<left_ticks_per_second>,<right_ticks_per_second>` selects closed-loop
   velocity control.
@@ -100,8 +101,8 @@ output at PWM 230.
 For keyboard control, open a second SSH terminal and run:
 
 ```bash
-source /opt/ros/jazzy/setup.zsh
-source ~/Roam-E/install/setup.zsh
+source /opt/ros/jazzy/setup.bash
+source ~/Roam-E/install/setup.bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard \
   --ros-args -r cmd_vel:=/cmd_vel
 ```
@@ -137,8 +138,8 @@ the workspace after sourcing ROS and the workspace overlay:
 
 ```bash
 cd ~/Roam-E
-source /opt/ros/jazzy/setup.zsh
-source install/setup.zsh
+source /opt/ros/jazzy/setup.bash
+source install/setup.bash
 ```
 
 ### Start a new map
@@ -176,13 +177,13 @@ the workspace there, then save the lossless pose graph first:
 
 ```bash
 cd ~/Roam-E
-source /opt/ros/jazzy/setup.zsh
-source install/setup.zsh
-mkdir -p /home/robot/Roam-E/maps
+source /opt/ros/jazzy/setup.bash
+source install/setup.bash
+mkdir -p $HOME/Roam-E/maps
 
 ros2 service call /slam_toolbox/serialize_map \
   slam_toolbox/srv/SerializePoseGraph \
-  "{filename: '/home/robot/Roam-E/maps/MAP_NAME'}"
+  "{filename: '$HOME/Roam-E/maps/MAP_NAME'}"
 ```
 
 `result=0` means serialization succeeded. The filename is a base name without
@@ -191,7 +192,7 @@ Next export the occupancy image used by Nav2:
 
 ```bash
 ros2 run nav2_map_server map_saver_cli \
-  -f /home/robot/Roam-E/maps/MAP_NAME \
+  -f $HOME/Roam-E/maps/MAP_NAME \
   --ros-args \
   -p map_subscribe_transient_local:=true \
   -p save_map_timeout:=20.0
@@ -202,7 +203,7 @@ the decimal in `20.0` so ROS interprets it as a floating-point parameter.
 Verify the complete checkpoint before stopping the mapping launch:
 
 ```bash
-ls -lh /home/robot/Roam-E/maps/MAP_NAME.*
+ls -lh $HOME/Roam-E/maps/MAP_NAME.*
 ```
 
 A complete checkpoint contains `.posegraph`, `.data`, `.pgm`, and `.yaml`.
@@ -225,7 +226,7 @@ From a second sourced terminal, load the checkpoint using its base filename:
 ```bash
 ros2 service call /slam_toolbox/deserialize_map \
   slam_toolbox/srv/DeserializePoseGraph \
-  "{filename: '/home/robot/Roam-E/maps/MAP_NAME', match_type: 1, initial_pose: {x: 0.0, y: 0.0, theta: 0.0}}"
+  "{filename: '$HOME/Roam-E/maps/MAP_NAME', match_type: 1, initial_pose: {x: 0.0, y: 0.0, theta: 0.0}}"
 ```
 
 `match_type: 1` matches the current scan against the first pose-graph node. If
@@ -235,7 +236,7 @@ approximate pose in the map frame, in metres and radians:
 ```bash
 ros2 service call /slam_toolbox/deserialize_map \
   slam_toolbox/srv/DeserializePoseGraph \
-  "{filename: '/home/robot/Roam-E/maps/MAP_NAME', match_type: 2, initial_pose: {x: X_METRES, y: Y_METRES, theta: YAW_RADIANS}}"
+  "{filename: '$HOME/Roam-E/maps/MAP_NAME', match_type: 2, initial_pose: {x: X_METRES, y: Y_METRES, theta: YAW_RADIANS}}"
 ```
 
 In Foxglove, set the fixed frame to `map` and display `/map`, `/scan`, the
@@ -261,8 +262,8 @@ disabled unless it is explicitly armed:
 
 ```bash
 cd ~/Roam-E
-source /opt/ros/jazzy/setup.zsh
-source install/setup.zsh
+source /opt/ros/jazzy/setup.bash
+source install/setup.bash
 
 ros2 launch roam_e localization.launch.py arm_motors:=true
 ```
@@ -350,14 +351,14 @@ short Raspberry Pi load spikes. It starts with motor output disabled:
 
 ```bash
 cd ~/Roam-E
-source /opt/ros/jazzy/setup.zsh
-source install/setup.zsh
+source /opt/ros/jazzy/setup.bash
+source install/setup.bash
 ros2 launch roam_e navigation.launch.py
 ```
 
 The costmaps use the CAD-derived chassis-and-wheel polygon rather than a
-circle. Its physical extent is approximately `141 mm` front-to-back and
-`203 mm` across the wheels, with another `10 mm` of Nav2 padding. Collision
+circle. It spans about `213 mm` front-to-back and `239 mm` across, with
+another `10 mm` of Nav2 padding. Collision
 Monitor independently applies a slowdown zone around that footprint and a
 smaller stop zone. Its command path is:
 
@@ -372,8 +373,8 @@ Nav2 controller or recovery behavior
 ```
 
 The RPLIDAR A1 scan is filtered below `0.15 m`, creating a close-range blind
-area. The forward stop boundary is therefore `0.30 m` from `base_footprint`
-(about `0.20 m` beyond the robot's nose), and slowdown begins at `0.50 m`.
+area. The forward stop boundary is therefore `0.38 m` from `base_footprint`
+(about `0.31 m` beyond the robot's nose), and slowdown begins at `0.58 m`.
 The slowdown retains 75% of the requested velocity, which keeps the configured
 `0.08 m/s` navigation speed at the drivetrain's tested `0.06 m/s` reliable
 motion floor.
@@ -435,7 +436,7 @@ the launch after the visualization check.
 
 Camera setup, Linux packages, USB access rules, the separate legacy depth SDK,
 and the verified simultaneous VGA RGB/depth configuration are documented in
-[CAMERA_CAPTURE.md](../CAMERA_CAPTURE.md).
+[the camera setup guide](camera/setup.md).
 
 Roam-E uses a bounded navigation behavior tree for supervised indoor tests.
 When the controller cannot make progress, it may clear its local costmap and
@@ -481,29 +482,14 @@ failure, and global localization from several carried starting poses.
 Collision Monitor is an additional software layer, not a certified emergency
 stop and not a substitute for a physical power cutoff around people or pets.
 
-## Raspberry Pi 5 migration
+## Raspberry Pi 5 setup
 
-The supported target is a Raspberry Pi 5 with 8 GB of RAM running the 64-bit
-Ubuntu 24.04 Server image. Use active cooling and a stable 5 V / 5 A supply on
-the robot. Do not move the old Pi 3 filesystem or its generated `build/` and
-`install/` directories to the Pi 5; start with a clean OS and rebuild there.
+The target is a Raspberry Pi 5 with 8 GB of RAM running the 64-bit Ubuntu
+24.04 Server image, with active cooling and a stable 5 V / 5 A supply. Start
+from a clean OS and build the workspace on the Pi itself.
 
-Before replacing the Pi, create a migration backup on the working robot:
-
-```bash
-cd ~/Roam-E
-scripts/setup/backup_robot_state.sh
-```
-
-The archive is written outside the repository under `~/roam-e-backups`. It
-contains maps, calibration, firmware, the BNO055 systemd unit, Raspberry Pi
-boot settings, stable device names, package inventories, and checksums. It
-deliberately excludes Wi-Fi credentials, SSH private keys, build products,
-and ROS logs. Copy both the `.tar.gz` file and its `.sha256` file to another
-computer before removing the old storage.
-
-On a fresh Pi 5, create the same `robot` account, configure networking and
-SSH, then clone and bootstrap the repository:
+Create a user account, configure networking and SSH, then clone and bootstrap
+the repository:
 
 ```bash
 sudo apt-get update
@@ -517,7 +503,7 @@ sudo reboot
 The bootstrap is safe to rerun. It verifies Ubuntu Noble on 64-bit ARM,
 enables the `noble-updates` package pocket when a fresh Pi image omits it,
 installs the official ROS 2 Jazzy apt source, ROS Base and all dependencies
-declared by the workspace, installs the validated Python hardware drivers,
+declared by the workspace, installs the RPLIDAR Python driver,
 creates the small calibration virtual environment, enables I2C bus 3 on GPIO
 17/27, adds the current user to the hardware groups (including `video` for
 non-root `vcgencmd` checks), builds the workspace, and installs the BNO055
@@ -538,7 +524,7 @@ runtime validator likewise allows the RPLidar up to 20 seconds for its first
 scan because its USB handshake and reconnect cycle can outlast ordinary ROS
 topic discovery.
 
-The persistent USB names should still be:
+The persistent USB names are:
 
 - Arduino Nano: `/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0`
 - RPLidar: `/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0`
@@ -562,5 +548,10 @@ scripts/setup/validate_hardware.sh --runtime
 ```
 
 Only proceed to supervised motor and navigation tests after the static and
-runtime checks pass. The migration backup is a recovery copy; the committed
-`office_02` map and BNO055 calibration also arrive with the Git clone.
+runtime checks pass. The `office_02` map and the BNO055 calibration come with
+the repository.
+
+`scripts/setup/backup_robot_state.sh` archives the robot's state (maps,
+calibration, the BNO055 systemd unit, boot settings, stable device names and
+package inventories, with checksums) to `~/roam-e-backups`. It leaves out
+Wi-Fi credentials, SSH keys, build products and logs.

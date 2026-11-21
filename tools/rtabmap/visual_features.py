@@ -1,8 +1,8 @@
-"""Learned local features for the R19 visual relocalizer (XFeat or SuperPoint).
+"""Learned local features for the visual relocalizer (XFeat or SuperPoint).
 
 XFeat (verlab/accelerated_features) is the default: ~0.6 s per 640x480
 frame on the Pi 5 CPU versus ~6 s for SuperPoint, and it matched our indoor
-frames better (16 Oct 2026, docs/research/CPU_VISUAL_SLAM_2026-10.md).
+frames better (16 Oct 2026, docs/research/cpu_visual_slam.md).
 Both offer a fast mutual-nearest-neighbour match for retrieval and a learned
 LightGlue-family matcher for the final pose.
 """

@@ -2,7 +2,8 @@
 """Isolated RGB-D baseline adapter. No hardware commands or TF publication.
 
 Consumes existing JPEG RGB + firmware-registered metric depth. Does NOT open USB,
-change camera parameters, or start motors/navigation. See RGBD_FIRMWARE_TEST.md.
+change camera parameters, or start motors/navigation.
+See docs/camera/onboard_registration_test.md.
 """
 from collections import Counter, OrderedDict, deque
 import copy

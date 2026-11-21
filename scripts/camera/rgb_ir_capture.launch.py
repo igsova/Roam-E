@@ -3,6 +3,8 @@
 IR starts only while the paired recorder subscribes. Exclude depth CameraInfo
 from the bridge too: that subscription alone can keep depth streaming.
 """
+import os
+
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, SetEnvironmentVariable
 from launch.launch_description_sources import PythonLaunchDescriptionSource, AnyLaunchDescriptionSource
@@ -10,7 +12,7 @@ from launch.substitutions import PathJoinSubstitution, EnvironmentVariable
 from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
-    sdk = '/home/robot/OpenNI-Linux-Arm64-2.3.0.65/Samples/Bin'
+    sdk = os.path.expanduser('~/OpenNI-Linux-Arm64-2.3.0.65/Samples/Bin')
     return LaunchDescription([
         SetEnvironmentVariable('LD_LIBRARY_PATH', [sdk, ':', EnvironmentVariable('LD_LIBRARY_PATH',default_value='')]),
         SetEnvironmentVariable('OPENNI2_DRIVERS_PATH', sdk+'/OpenNI2/Drivers'),

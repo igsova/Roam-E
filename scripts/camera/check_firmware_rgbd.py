@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Bounded metadata/cloud/optional odometry observer. Never commands hardware.
 
-Writes private test artifacts only to an explicitly supplied NEW directory.
+Writes test outputs only to an explicitly supplied new directory.
 Cloud screenshots are projections of measured XYZ/RGB.
 """
 import argparse

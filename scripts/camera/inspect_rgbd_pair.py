@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Save one RGB/depth pair for registration inspection, never apply a transform.
 
-Subscribes to the existing ROS camera topics only. Output is private and must be
+Subscribes to the existing ROS camera topics only. Output must be a new directory
 outside the repository. Same-pixel edge overlays are deliberately NOT evidence
 of calibration by themselves; use identifiable stationary objects at several
 distances. Header proximity is not exposure synchronization.
@@ -114,7 +114,7 @@ def main():
     output = args.output_dir.expanduser().resolve()
     repo = Path(__file__).resolve().parents[2]
     if output.is_relative_to(repo):
-        parser.error('Private camera images must be outside the repository')
+        parser.error('Captured images must be saved outside the repository')
     if output.exists():
         parser.error('Output directory must be new; existing data will not be overwritten')
     cv2.setNumThreads(1)

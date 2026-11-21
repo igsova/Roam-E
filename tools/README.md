@@ -11,7 +11,7 @@ Scripts that run outside the ROS launch files.
 | `visual_features.py` | Feature extraction and matching shared by the two scripts above |
 | `publish_ply_cloud.py` | Publishes an RTAB-Map dense point-cloud export once as a latched `PointCloud2`, for Foxglove |
 
-Commands are in [`docs/ROBOT_COMMANDS.md`](../docs/ROBOT_COMMANDS.md).
+Commands are in [`docs/quick_commands.md`](../docs/quick_commands.md).
 
 ## `calibration/`: camera checks
 

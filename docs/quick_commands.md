@@ -1,6 +1,6 @@
-# Roam-E quick commands (R19, October 2026)
+# Roam-E quick commands
 
-Run these **on the Pi** (SSH in as `robot`). Start every new terminal with:
+Run these **on the Pi** over SSH. Start every new terminal with:
 
 ```bash
 cd ~/Roam-E && source /opt/ros/jazzy/setup.bash && source install/setup.bash
@@ -31,7 +31,7 @@ are 0.43 m/s and 0.6 rad/s.
 
 ```bash
 ros2 launch roam_e navigation.launch.py arm_motors:=true auto_localize:=true \
-  map:=/home/robot/Roam-E/maps/office_02.yaml
+  map:=$HOME/Roam-E/maps/office_02.yaml
 ```
 
 - `auto_localize:=true` **moves the robot** at startup (20 cm forward, a 90°
@@ -49,8 +49,8 @@ ros2 launch roam_e astra_camera.launch.py use_foxglove:=false
 ```
 
 Image panels: `/camera/color/image_raw/compressed` and
-`/camera/depth_preview/compressed`. The cameras add load on the Pi's 5 V supply.
-The Geekworm jumper (+0.2 V) fixed the freezes this caused before.
+`/camera/depth_preview/compressed`. The cameras add load on the Pi's 5 V supply;
+the Geekworm supply's +0.2 V output jumper keeps the Pi from browning out.
 
 With the cameras and navigation (section 3) both running, the depth camera
 marks low obstacles (5–35 cm high, 0.45–2.5 m away) in Nav2's local costmap.
@@ -101,19 +101,27 @@ map after every new map:
 ```bash
 cd ~/Roam-E/tools/rtabmap
 ~/venvs/lightglue/bin/python visual_relocalizer.py --ros-args \
-  -p keyframes:=/home/robot/Roam-E/maps/rtabmap/office_rtabmap_xfeat.npz
-# after a new map (nothing running on the database):
-rtabmap-export --images_id --poses_camera --poses_format 10 --output_dir /tmp/kf map_copy.db
-~/venvs/lightglue/bin/python visual_keyframes.py /tmp/kf/map_copy keyframes.npz --features xfeat
+  -p keyframes:=$HOME/Roam-E/maps/rtabmap/office_rtabmap_xfeat.npz
+```
+
+After a new map, rebuild the keyframe cache from a copy of the database
+(with nothing running on it):
+
+```bash
+cp ~/Roam-E/maps/rtabmap/office_rtabmap.db /tmp/office_copy.db
+rtabmap-export --images_id --poses_camera --poses_format 10 --output_dir /tmp/kf /tmp/office_copy.db
+~/venvs/lightglue/bin/python visual_keyframes.py /tmp/kf/office_copy \
+  ~/Roam-E/maps/rtabmap/office_rtabmap_xfeat.npz --features xfeat
 ```
 
 Keep `period` at 0 while the lidar runs: the lidar tracks within about 5 cm,
 the camera fix only within 15–30 cm, and a periodic camera correction above
 15 cm cancels the active goal.
 
-Dense export of the map (motors off, on a copy of the database):
+Dense export of the map (motors off, from the database copy made above):
 
 ```bash
+cd /tmp
 rtabmap-export --cloud --decimation 2 --max_range 3.0 --voxel 0.01 office_copy.db
 rtabmap-export --mesh --texture --texture_size 4096 --decimation 2 --max_range 3.0 office_copy.db
 python3 ~/Roam-E/tools/rtabmap/publish_ply_cloud.py office_copy_cloud.ply --voxel 0.02
@@ -133,17 +141,15 @@ The last command shows the dense cloud in Foxglove on `/rtabmap/dense_cloud`.
 pkill -INT -f "ros2 launch roam_e"
 ```
 
-## Foxglove on the Mac
+## Foxglove from a laptop
 
-- Same network: open Foxglove and connect to `ws://robot-pi5.local:8765`.
-- Through the SSH tunnel (your usual one on port 2222), run this in a Mac
-  terminal and keep it open, then connect to `ws://localhost:18765`:
+- Same network: open Foxglove and connect to `ws://<pi-host>.local:8765`.
+- Over SSH: forward the port, keep the command running, then connect to
+  `ws://localhost:8765`:
 
 ```bash
-ssh -N -p 2222 -L 127.0.0.1:18765:127.0.0.1:8765 robot@127.0.0.1
+ssh -N -L 8765:127.0.0.1:8765 <user>@<pi-host>.local
 ```
-
-(Port 18765 is used because the Mac's 8765 is taken by another app.)
 
 ## Health checks
 

@@ -3,13 +3,12 @@
 
 Requires native_depth_check.launch.py and a still, fully visible 7x7/35mm board.
 Reads images and the driver's registration parameter; never sets parameters.
-Outputs private native PNGs plus exact-stamp CameraInfo outside the repository.
+Saves native PNGs plus exact-stamp CameraInfo to a new directory outside the repository.
 """
 import argparse
 from collections import Counter, deque
 from datetime import datetime, timezone
 import json
-from pathlib import Path
 import time
 
 import cv2
