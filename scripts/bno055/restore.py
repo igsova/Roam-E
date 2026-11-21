@@ -1,4 +1,11 @@
-#!/home/robot/Roam-E/.venv/bin/python
+#!/usr/bin/env python3
+"""Load the saved BNO055 calibration profile into the sensor at boot.
+
+Validates config/bno055_calibration.json (format and SHA-256), soft-resets the
+sensor, writes the axis remap and the 22 calibration registers, and leaves it in
+IMU-only fusion mode (no magnetometer). Run by the roam-e-bno055-restore
+systemd unit; see scripts/setup/install_bno055_restore_service.sh.
+"""
 
 import hashlib
 import json
@@ -11,8 +18,8 @@ from smbus2 import SMBus
 BUS_NUMBER = 3
 ADDRESS = 0x29
 
-CALIBRATION_FILE = Path(
-    "/home/robot/Roam-E/config/bno055_calibration.json"
+CALIBRATION_FILE = (
+    Path(__file__).resolve().parents[2] / "config" / "bno055_calibration.json"
 )
 
 CHIP_ID = 0x00
@@ -430,8 +437,8 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
         print("\nCancelled.")
-        raise SystemExit(130)
+        raise SystemExit(130) from None
     except Exception as error:
         print()
         print(f"RESTORE FAILED: {error}")
-        raise SystemExit(1)
+        raise SystemExit(1) from None

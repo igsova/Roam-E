@@ -1,7 +1,6 @@
 [Unit]
 Description=Restore Roam-E BNO055 calibration
 After=local-fs.target
-Before=roam-e-imu.service
 
 [Service]
 Type=oneshot

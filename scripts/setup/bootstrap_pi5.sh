@@ -196,12 +196,13 @@ rosdep install \
     --rosdistro "${ROAM_E_ROS_DISTRO}" \
     -r -y
 
-# ROS Python executables use /usr/bin/python3 and therefore see this user's
-# site directory. Ubuntu 24.04 requires the explicit PEP 668 override.
+# The RPLIDAR driver is not packaged for ROS or Ubuntu. ROS Python executables
+# use /usr/bin/python3 and therefore see this user's site directory; Ubuntu
+# 24.04 requires the explicit PEP 668 override.
 python3 -m pip install \
     --user \
     --break-system-packages \
-    -r "${ROAM_E_PROJECT_ROOT}/requirements-hardware.txt"
+    'rplidar==0.9.2'
 
 # The calibration utilities intentionally use an isolated, tiny environment.
 if [[ ! -x "${ROAM_E_PROJECT_ROOT}/.venv/bin/python" ]]; then

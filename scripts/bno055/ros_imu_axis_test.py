@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+"""Check the IMU axis convention through ROS while you move the robot by hand.
+
+Subscribes to /imu/data and guides you through three moves: nose up, left side
+up, and a counter-clockwise turn. It prints the roll, pitch and yaw change for
+each, to compare with REP-103 (nose up is negative pitch, left side up is
+positive roll, counter-clockwise is positive yaw). Run it with the sensors
+launch running; it never commands motion.
+"""
 
 import math
 import threading
@@ -79,7 +87,7 @@ class AxisTestNode(Node):
             self.samples = []
             self.collecting = True
 
-        print('GO â€” move smoothly now, then HOLD that position.', flush=True)
+        print('GO - move smoothly now, then HOLD that position.', flush=True)
         time.sleep(duration)
 
         with self.lock:
@@ -166,7 +174,7 @@ def main():
 
         node.collect(
             'NOSE UP',
-            'Smoothly raise the FRONT of the robot by about 20â€“30 degrees '
+            'Smoothly raise the FRONT of the robot by about 20-30 degrees '
             'and hold it there. Do not lower it until collection finishes.',
         )
         input(
@@ -176,7 +184,7 @@ def main():
 
         node.collect(
             'LEFT SIDE UP',
-            'Smoothly raise the LEFT side of the robot by about 20â€“30 '
+            'Smoothly raise the LEFT side of the robot by about 20-30 '
             'degrees and hold it there.',
         )
         input(
