@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  ros:
+    name: ROS 2 packages and tools
+    runs-on: ubuntu-24.04
+    container: ros:jazzy-ros-base
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            python3-numpy python3-opencv python3-pytest python3-serial \
+            python3-smbus2 python3-yaml \
+            ros-jazzy-ament-cmake-pytest ros-jazzy-diagnostic-msgs \
+            ros-jazzy-nav2-msgs ros-jazzy-tf2-ros-py ros-jazzy-xacro
+
+      - name: Build
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          colcon build --event-handlers console_cohesion+
+
+      - name: Test
+        run: |
+          source install/setup.bash
+          python3 -m pytest -v
+
+      - name: Validate the robot description
+        run: |
+          source install/setup.bash
+          python3 tools/description/validate_description.py
+
+  firmware:
+    name: Wheel controller firmware
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install toolchains
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            g++ gcc-avr binutils-avr avr-libc arduino-core-avr
+
+      - name: Host-side tests
+        run: python3 -m unittest -v firmware/tests/test_firmware.py
+
+      - name: Build for the Nano
+        run: |
+          python3 firmware/build_avr.py --toolchain-root / --output-dir build/firmware
+          avr-size --mcu=atmega328p -C build/firmware/roam_e_motor_controller.elf
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/ruff-action@v3
+        with:
+          args: check

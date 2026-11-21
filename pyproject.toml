@@ -1,0 +1,27 @@
+# Lint and test settings for the Python code in this repository. The ROS
+# packages themselves are built by colcon from src/; this file holds no package.
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["build", "install", "log"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B"]
+# Long lines are left to the formatter; zip() over equal-length sequences is
+# common in the geometry code.
+ignore = ["E501", "B905"]
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.pytest.ini_options]
+testpaths = [
+    "src/roam_e/test",
+    "src/roam_e_description/test",
+    "scripts/bno055",
+    "scripts/camera",
+    "tools/calibration",
+    "tools/rtabmap",
+]
+addopts = "-p no:cacheprovider"

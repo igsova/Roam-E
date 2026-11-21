@@ -4,6 +4,10 @@
 
 # Roam-E
 
+[![CI](https://github.com/igsova/Roam-E/actions/workflows/ci.yml/badge.svg)](https://github.com/igsova/Roam-E/actions/workflows/ci.yml)
+![ROS 2 Jazzy](https://img.shields.io/badge/ROS%202-Jazzy-22314E)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 Roam-E is an indoor mobile robot built from scratch: a 3D-printed
 differential-drive base with a 2D lidar, an RGB-D camera and an IMU, running
 ROS 2 Jazzy on a Raspberry Pi 5. It maps rooms, localizes itself on a saved
@@ -12,6 +16,20 @@ map and drives to goals on its own while avoiding obstacles.
 This repository holds the whole robot: the ROS 2 software, the Arduino motor
 firmware, the robot description (URDF), and the Blender model and STL files of
 the printed body.
+
+**Highlights**
+
+- Designed and built end to end: CAD model, 3D-printed body, electronics,
+  wheel-control firmware and the ROS 2 navigation stack.
+- Autonomous navigation with Nav2 on 2D lidar maps (AMCL) and on 3D RTAB-Map
+  maps, with depth-camera obstacles below the lidar plane.
+- Learned-feature visual relocalization (XFeat + LighterGlue + PnP) that runs
+  on the Pi 5 CPU.
+- Measured calibration throughout: camera intrinsics, depth-to-colour
+  registration, camera mount angle against the lidar, IMU mounting and wheel
+  odometry.
+- Over 200 automated test cases in CI, including the firmware compiled against a
+  mocked Arduino API and a validator for the CAD-generated robot model.
 
 ## What it does
 
@@ -82,7 +100,8 @@ flowchart LR
 
 The Pi turns body velocity commands into wheel targets in ticks per second and
 sends them to the Nano, which closes the loop on the encoders and streams
-telemetry back. Everything above the Nano is ROS 2.
+telemetry back ([serial protocol](firmware/README.md#serial-protocol)).
+Everything above the Nano is ROS 2.
 
 | Launch file | Starts |
 |---|---|
@@ -94,20 +113,44 @@ telemetry back. Everything above the Nano is ROS 2.
 | `rtabmap_mapping.launch.py` | RTAB-Map 3D mapping, or localization on a saved database |
 | `astra_camera.launch.py` | RGB-D camera and the depth obstacle cloud |
 
+### Engineering notes
+
+- **Layered motion safety.** Velocity commands pass through Nav2's velocity
+  smoother and collision monitor, are clamped by the ROS bridge, and expire
+  after 250 ms there and after 350 ms in the firmware. Motors are disarmed
+  unless a launch argument arms them.
+- **Testable cores.** Kinematics, odometry, lidar binning, localization
+  convergence and IMU health checks are plain Python modules
+  (`motor_control.py`, `wheel_odometry.py`, `lidar_scan.py`, …) with unit tests;
+  the ROS nodes are thin wrappers around them. The firmware is tested the same
+  way, against a mocked Arduino API with a controllable clock.
+- **Robot model from CAD.** The URDF meshes and nominal sensor frames are
+  exported from the Blender assembly, and measured calibration (camera yaw, IMU
+  mounting, wheel geometry) overrides them in one YAML file. A validator checks
+  the TF tree, mesh integrity and that the generated URDF is up to date.
+- **Calibrated odometry.** The effective wheel radius and separation were
+  fitted against the IMU and floor runs and kept separate from the CAD
+  dimensions. Per-wheel, per-direction feed-forward in the firmware compensates
+  for the two gearmotors' different starting duty.
+- **Camera on demand.** The camera relocalizer is only used when RTAB-Map is
+  lost or on request: the lidar tracks within about 5 cm and the camera fix
+  only within 15–30 cm, so periodic camera corrections would add error and
+  interrupt active goals.
+
 ### Repository layout
 
 ```text
 src/roam_e/               ROS 2 package: nodes, launch files, EKF / SLAM / AMCL / Nav2 config
 src/roam_e_description/   URDF / xacro robot model, TF frames and RViz setup
-firmware/                 Arduino Nano motor controller, AVR build script and host-side unit tests
+firmware/                 Arduino Nano wheel controller, AVR build script and host-side tests
 mechanical/               Blender assembly, STL print files and parts list
-maps/                     Saved slam_toolbox maps
+maps/                     Saved slam_toolbox map
 scripts/setup/            Raspberry Pi 5 bootstrap, backup and hardware validation
-scripts/bno055/           IMU calibration tools
+scripts/bno055/           IMU calibration and checks
 scripts/camera/           RGB and depth camera calibration tools
-tools/                    Visual relocalizer, camera calibration checks, robot-model export from CAD
-config/                   IMU calibration and systemd units
-docs/                     Usage guide, command sheet, research notes and images
+tools/                    Visual relocalizer, camera checks, robot-model export from CAD
+config/                   IMU calibration and systemd unit
+docs/                     Usage guide, command sheet, camera and research notes, images
 ```
 
 ## Getting started
@@ -136,14 +179,34 @@ ros2 launch roam_e sensors_viz.launch.py use_rviz:=false
 Driving, mapping, localization and navigation are covered step by step in
 [`docs/usage.md`](docs/usage.md).
 
+## Tests
+
+CI builds both ROS packages in a ROS 2 Jazzy container, runs every test suite
+and the robot-model validator, runs the firmware tests and builds the firmware
+for the Nano. None of the tests need the robot. With ROS 2 Jazzy installed:
+
+```bash
+colcon build
+source install/setup.bash
+python3 -m pytest
+python3 -m unittest firmware/tests/test_firmware.py
+```
+
 ## Documentation
 
 - [Usage guide](docs/usage.md): driving, mapping, localization, navigation and
   Pi setup.
-- [Quick commands](docs/ROBOT_COMMANDS.md): one-page cheat sheet for driving,
+- [Quick commands](docs/quick_commands.md): one-page cheat sheet for driving,
   Nav2, cameras, RTAB-Map 3D mapping and health checks.
-- [RGB-D camera setup](CAMERA_CAPTURE.md) and
-  [camera calibration](scripts/camera/README.md).
-- [Visual SLAM research notes](docs/research/): what runs on a Pi 5 CPU and
-  measurements on this robot.
+- [Wheel controller firmware](firmware/README.md): control loop, wiring,
+  serial protocol, build and tests.
+- [Robot description](src/roam_e_description/README.md): TF frames,
+  calibration overrides and regenerating the model from CAD.
+- Camera: [setup on the Pi](docs/camera/setup.md),
+  [RGB calibration](docs/camera/rgb_calibration.md),
+  [depth-to-colour registration](docs/camera/depth_registration.md) and the
+  [calibration tools](scripts/camera/README.md).
+- [IMU calibration](scripts/bno055/README.md) and [maps](maps/README.md).
+- Visual SLAM research notes: [what runs on a Pi 5 CPU](docs/research/cpu_visual_slam.md)
+  and a [survey of current methods](docs/research/visual_slam_survey.md).
 - [Mechanical design](mechanical/README.md): parts, printing and assembly.
