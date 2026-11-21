@@ -55,6 +55,12 @@ the printed body.
 - **Teleoperation and visualization.** Foxglove for driving, sending goals and
   viewing the robot; keyboard teleop over SSH.
 
+<p align="center">
+  <img src="docs/images/roam_e_mapping.webp" alt="Mapping visualization in Foxglove: depth preview and the map growing around the robot" width="760">
+  <br>
+  <sub>Mapping visualization in Foxglove</sub>
+</p>
+
 ## Hardware
 
 <p align="center">
